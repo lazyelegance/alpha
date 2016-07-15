@@ -7,7 +7,6 @@ target 'alpha' do
   pod 'Material', '~> 1.0'
   pod 'Fabric'
   pod 'Crashlytics'
-  pod 'Digits'
   pod 'TwitterCore'
   pod 'Firebase'
   pod 'Firebase/Database'

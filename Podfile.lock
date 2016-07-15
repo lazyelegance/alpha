@@ -1,8 +1,6 @@
 PODS:
   - Crashlytics (3.7.2):
     - Fabric (~> 1.6.3)
-  - Digits (2.3.0):
-    - TwitterCore (= 2.3.0)
   - Fabric (1.6.7)
   - Firebase (3.3.0):
     - Firebase/Core (= 3.3.0)
@@ -45,7 +43,6 @@ PODS:
 
 DEPENDENCIES:
   - Crashlytics
-  - Digits
   - Fabric
   - Firebase
   - Firebase/Auth
@@ -55,7 +52,6 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Crashlytics: 130ab943f8c78cda7a814b434f270b2e2c8a3cba
-  Digits: af82d24ec38035cc555b60f55cca5abc68a76bed
   Fabric: caf7580c725e64db144f610ac65cd60956911dc7
   Firebase: 6250071f0e2440a5c4c67b8cb6b868f868237ac3
   FirebaseAnalytics: 0fd6532cb2c3d03cd5cf26ad295ccb091efd3104
@@ -70,6 +66,6 @@ SPEC CHECKSUMS:
   Material: 2d46a44719b1f19e52956518af8aea54ac714963
   TwitterCore: 817eae3e291fa4125b47789e26a4f6f024115c1f
 
-PODFILE CHECKSUM: 5cfe7df109e3554f620b3b31809dc3951ef74d7d
+PODFILE CHECKSUM: 45155fdecfe66f16126ced8a44d072e4149d5b83
 
 COCOAPODS: 1.0.1
