@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		630FB1E71D3A5114003534A0 /* AddExpenseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630FB1E61D3A5114003534A0 /* AddExpenseController.swift */; };
+		630FB1E91D3A51AE003534A0 /* AddExpenseStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630FB1E81D3A51AE003534A0 /* AddExpenseStep.swift */; };
+		63547D8D1D38C7E100A00434 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63547D8C1D38C7E100A00434 /* GoogleService-Info.plist */; };
+		63547D8F1D39DAE800A00434 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63547D8E1D39DAE800A00434 /* LoginViewController.swift */; };
+		63547D931D39F4F300A00434 /* AsyncImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63547D921D39F4F300A00434 /* AsyncImageView.m */; };
 		63CBEBCA1D38BACD0002DB65 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CBEBC91D38BACD0002DB65 /* AppDelegate.swift */; };
 		63CBEBCC1D38BACD0002DB65 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CBEBCB1D38BACD0002DB65 /* ViewController.swift */; };
 		63CBEBCF1D38BACD0002DB65 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63CBEBCD1D38BACD0002DB65 /* Main.storyboard */; };
@@ -44,6 +49,13 @@
 		1D3DE9B19B18A878CD6E1FFA /* Pods_alphaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_alphaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		47E11F33BA3B3E1CC6D5CF8E /* Pods-alpha.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-alpha.debug.xcconfig"; path = "Pods/Target Support Files/Pods-alpha/Pods-alpha.debug.xcconfig"; sourceTree = "<group>"; };
 		53D4A6299A9620992F2B1493 /* Pods-alphaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-alphaTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-alphaTests/Pods-alphaTests.debug.xcconfig"; sourceTree = "<group>"; };
+		630FB1E61D3A5114003534A0 /* AddExpenseController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddExpenseController.swift; sourceTree = "<group>"; };
+		630FB1E81D3A51AE003534A0 /* AddExpenseStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddExpenseStep.swift; sourceTree = "<group>"; };
+		63547D8B1D38C77F00A00434 /* alpha-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "alpha-Bridging-Header.h"; sourceTree = "<group>"; };
+		63547D8C1D38C7E100A00434 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		63547D8E1D39DAE800A00434 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		63547D911D39F4F300A00434 /* AsyncImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImageView.h; sourceTree = "<group>"; };
+		63547D921D39F4F300A00434 /* AsyncImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImageView.m; sourceTree = "<group>"; };
 		63CBEBC61D38BACD0002DB65 /* alpha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = alpha.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63CBEBC91D38BACD0002DB65 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63CBEBCB1D38BACD0002DB65 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -89,6 +101,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		63547D901D39F4F300A00434 /* AsyncImageView */ = {
+			isa = PBXGroup;
+			children = (
+				63547D911D39F4F300A00434 /* AsyncImageView.h */,
+				63547D921D39F4F300A00434 /* AsyncImageView.m */,
+			);
+			path = AsyncImageView;
+			sourceTree = "<group>";
+		};
 		63CBEBBD1D38BACD0002DB65 = {
 			isa = PBXGroup;
 			children = (
@@ -116,9 +137,15 @@
 			children = (
 				63CBEBC91D38BACD0002DB65 /* AppDelegate.swift */,
 				63CBEBCB1D38BACD0002DB65 /* ViewController.swift */,
+				630FB1E61D3A5114003534A0 /* AddExpenseController.swift */,
+				630FB1E81D3A51AE003534A0 /* AddExpenseStep.swift */,
+				63547D8E1D39DAE800A00434 /* LoginViewController.swift */,
+				63547D8B1D38C77F00A00434 /* alpha-Bridging-Header.h */,
 				63CBEBCD1D38BACD0002DB65 /* Main.storyboard */,
+				63547D901D39F4F300A00434 /* AsyncImageView */,
 				63CBEBD01D38BACD0002DB65 /* Assets.xcassets */,
 				63CBEBD21D38BACD0002DB65 /* LaunchScreen.storyboard */,
+				63547D8C1D38C7E100A00434 /* GoogleService-Info.plist */,
 				63CBEBD51D38BACD0002DB65 /* Info.plist */,
 			);
 			path = alpha;
@@ -279,6 +306,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63CBEBD41D38BACD0002DB65 /* LaunchScreen.storyboard in Resources */,
+				63547D8D1D38C7E100A00434 /* GoogleService-Info.plist in Resources */,
 				63CBEBD11D38BACD0002DB65 /* Assets.xcassets in Resources */,
 				63CBEBCF1D38BACD0002DB65 /* Main.storyboard in Resources */,
 			);
@@ -441,8 +469,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63547D8F1D39DAE800A00434 /* LoginViewController.swift in Sources */,
 				63CBEBCC1D38BACD0002DB65 /* ViewController.swift in Sources */,
 				63CBEBCA1D38BACD0002DB65 /* AppDelegate.swift in Sources */,
+				63547D931D39F4F300A00434 /* AsyncImageView.m in Sources */,
+				630FB1E91D3A51AE003534A0 /* AddExpenseStep.swift in Sources */,
+				630FB1E71D3A5114003534A0 /* AddExpenseController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -589,6 +621,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ezrabathini.alpha;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "alpha/alpha-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -601,6 +634,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ezrabathini.alpha;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "alpha/alpha-Bridging-Header.h";
 			};
 			name = Release;
 		};
