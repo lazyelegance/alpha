@@ -33,6 +33,11 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var userDisplayName: UILabel!
     
+    var currAmountOwing = "0.00"
+    var currUser = String()
+    var currGroup = String()
+    var currGroupMembers = [String]()
+    
     
     
     var alphaExpensesRef = FIRDatabaseReference.init()
@@ -70,7 +75,7 @@ class ViewController: UIViewController {
         btn3.pulseColor = MaterialColor.blue.accent3
         btn3.borderWidth = 1
         btn3.setTitle("See Expenses".uppercaseString, forState: .Normal)
-        btn3.addTarget(self, action: #selector(ViewController.toListExpenses), forControlEvents: .TouchUpInside)
+        btn3.addTarget(self, action: #selector(ViewController.addExpenseTemp), forControlEvents: .TouchUpInside)
         view.addSubview(btn3)
         
         let btn4: FlatButton = FlatButton()
@@ -88,6 +93,9 @@ class ViewController: UIViewController {
         flatMenu.spacing = 8
         flatMenu.itemSize = CGSizeMake(120, height)
         flatMenu.views = [btn1, btn2, btn3]
+        
+        
+        mainBalance.text = currAmountOwing
 
         
     }
@@ -111,22 +119,40 @@ class ViewController: UIViewController {
                 userDisplayName.text = "hi, \(name)"
                 
                 alphaExpensesRef.child("users").queryOrderedByChild("email").queryEqualToValue(email).observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-                    print("=========================")
+                    
                     
                     print(snapshot.value)
                     if let spdict = snapshot.value as? NSDictionary {
                         if let name = spdict.allKeys[0] as? String {
+                            self.currUser = name
+                            self.userDisplayName.text = "hi, \(name)"
                             self.alphaExpensesRef.child("users/\(name)/amountOwed").observeEventType(.Value, withBlock: { (snapshot) in
-                                self.userDisplayName.text = "hi, \(name)"
-                                self.mainBalance.text = "$\(snapshot.value!)"
+                                self.currAmountOwing = "$\(snapshot.value!)"
+                                
+                                self.mainBalance.text = self.currAmountOwing
                             })
                             
+                            self.alphaExpensesRef.child("users/\(name)/group").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                                self.currGroup = "\(snapshot.value!)"
+                                
+                                self.alphaExpensesRef.child("groups/\(self.currGroup)/members").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                                    print(snapshot.value)
+                                    if let membersDict = snapshot.value as? NSDictionary {
+                                        if let memberNames = membersDict.allKeys as? [String] {
+                                            self.currGroupMembers = memberNames
+                                        }
+                                    }
+    
+                                })
+                            })
                         }
+                        
+                        
                         
                     }
                     
                     
-                    print("=========================")
+                    
                 })
                 
             }
@@ -176,8 +202,11 @@ class ViewController: UIViewController {
 //        alphaExpensesRef.updateChildValues(["groups": ["alpha708": ["name": "Alpha 708", "members" : ["ezra": true, "ram": true]]]])
 //    
 //        
-//        
-//        alphaExpensesRef.updateChildValues(["expenses" : ["alpla708" : ["Total": 909.99, "addedBy": "ezra", "Description": "some desription"]]])
+        
+        
+        let key = alphaExpensesRef.child("expenses").childByAutoId().key
+        
+        alphaExpensesRef.child("expenses").updateChildValues([key : ["Total": 120.00, "addedBy": "ezra", "description": "some desription", "spent": ["ezra": 1, "ram": 0 ], "parity" : ["ezra" : 1, "ram": 1], "share": ["ezra": 60.00, "ram": 60.00 ], "settlemet": ["ezra": 60.00, "ram": -60.00 ]  ]])
         
 //        if let currentUser = FIRAuth.auth()?.currentUser?.displayName {
 //            let post = ["Total": 909.99, "addedBy": currentUser, "Description": "some desription"]
@@ -201,6 +230,12 @@ class ViewController: UIViewController {
         if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
             addExpenseVC.currentStep = AddExpenseStep.description
             
+            var newExpense = Expense(desc: "NewExpense")
+            newExpense.addedBy = currUser
+            newExpense.group = currGroup
+            newExpense.groupMembers = currGroupMembers
+            
+            addExpenseVC.newExpense = newExpense
             self.navigationController?.pushViewController(addExpenseVC, animated: true)
         }
     }

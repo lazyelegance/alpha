@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Material
 
 public enum AddExpenseStep {
     case description
@@ -51,6 +52,19 @@ public enum AddExpenseStep {
             return "parity"
         case .finish:
             return "Finish"
+        }
+    }
+    
+    func toColor() -> UIColor {
+        switch self {
+        case .description:
+            return MaterialColor.amber.accent1
+        case .billAmount:
+            return MaterialColor.deepOrange.accent1
+        case .parity:
+            return MaterialColor.lightBlue.accent1
+        case .finish:
+            return  MaterialColor.lightGreen.accent1
         }
     }
     
