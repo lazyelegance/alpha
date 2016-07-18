@@ -25,6 +25,8 @@ class ViewController: UIViewController {
     let btn1: FlatButton = FlatButton()
     let btn2: FlatButton = FlatButton()
     let btn3: FlatButton = FlatButton()
+    
+    var expenses = [Expense]()
 
     
     @IBOutlet weak var mainBalance: UILabel!
@@ -48,6 +50,15 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         self.navigationController?.navigationBar.hidden = true
+        
+        view.backgroundColor = MaterialColor.blue.lighten1
+        
+        mainBalance.backgroundColor = MaterialColor.blue.lighten2
+        mainBalance.textColor = MaterialColor.white
+        mainBalance.layer.cornerRadius = 30
+        mainBalance.layer.shadowColor = MaterialColor.blue.lighten3.CGColor
+        mainBalance.layer.shadowOpacity = 0.4
+        
         
         alphaExpensesRef = FIRDatabase.database().reference()
         
@@ -106,10 +117,10 @@ class ViewController: UIViewController {
         flatMenu.close()
         
         print(FIRAuth.auth()?.currentUser)
-        view.backgroundColor = MaterialColor.blueGrey.lighten3
+        view.backgroundColor = MaterialColor.blue.lighten1
         
         userImageView.layer.masksToBounds = true
-        userImageView.layer.cornerRadius = 40
+        userImageView.layer.cornerRadius = 10
         userImageView.layer.borderColor = MaterialColor.white.CGColor
         userImageView.layer.borderWidth = 4
         
@@ -133,7 +144,7 @@ class ViewController: UIViewController {
                             self.currUser = name
                             self.userDisplayName.text = "hi, \(name)"
                             self.alphaExpensesRef.child("users/\(name)/amountOwing").observeEventType(.Value, withBlock: { (snapshot) in
-                                self.currAmountOwing = "$\(snapshot.value!)"
+                                self.currAmountOwing = "\(snapshot.value!)$"
                                 
                                 self.mainBalance.text = self.currAmountOwing
                             })
@@ -156,6 +167,11 @@ class ViewController: UIViewController {
                                         }
                                     }
                                 })
+                                
+                                self.alphaExpensesRef.child("expenses/\(self.currGroup)").observeEventType(.Value, withBlock: { (snapshot) in
+                                    self.expenses = Expense.expensesFromFirebase(snapshot.value! as! NSDictionary, firebasereference: snapshot.ref)
+                                })
+                                
                             })
                         }
                     }
@@ -237,11 +253,11 @@ class ViewController: UIViewController {
             
             print(currGroupMembersOwing)
             
-            var newExpense = Expense(desc: "NewExpense")
+            var newExpense = Expense()
             newExpense.addedBy = currUser
             newExpense.group = currGroup
             newExpense.groupMembers = currGroupMembers
-            newExpense.groupMembersOwing = currGroupMembersOwing
+            newExpense.owing = currGroupMembersOwing
             newExpense.firebaseDBRef = self.alphaExpensesRef
             
             addExpenseVC.newExpense = newExpense

@@ -17,7 +17,7 @@ class FinishViewController: UIViewController {
     
     var parityText = "Shared Equally (1:1)"
     
-    var newExpense = Expense(desc: "new")
+    var newExpense = Expense()
     
     
     var nextButton: FlatButton!
@@ -102,14 +102,15 @@ class FinishViewController: UIViewController {
         print(newExpense)
         
         let firebaseUserRef = newExpense.firebaseDBRef.child("users")
-        let firebaseExpensesRef = newExpense.firebaseDBRef.child("expenses")
+        let firebaseGroupRef = newExpense.firebaseDBRef.child("groups").child(newExpense.group)
+        let groupExpensesRef = newExpense.firebaseDBRef.child("expenses").child(newExpense.group)
         
-        let key = firebaseExpensesRef.childByAutoId().key
+        let key = groupExpensesRef.childByAutoId().key
         
         
         //alphaExpensesRef.child("expenses").updateChildValues([key : ["Total": 120.00, "addedBy": "ezra", "description": "some desription", "spent": ["ezra": 1, "ram": 0 ], "parity" : ["ezra" : 1, "ram": 1], "share": ["ezra": 60.00, "ram": 60.00 ], "settlemet": ["ezra": 60.00, "ram": -60.00 ]  ]])
 
-        firebaseExpensesRef.updateChildValues([key : ["dateAdded": "\(currDate)","Total": newExpense.billAmount, "addedBy": newExpense.addedBy, "description": newExpense.description, "group": newExpense.group, "spent": newExpense.spent, "parity" : newExpense.parity, "share": newExpense.share, "settlement": newExpense.settlement, "owing": newExpense.groupMembersOwing  ]]) { (error, ref) in
+        groupExpensesRef.updateChildValues([key : ["dateAdded": "\(currDate)","billAmount": newExpense.billAmount, "addedBy": newExpense.addedBy, "description": newExpense.description, "group": newExpense.group, "spent": newExpense.spent, "parity" : newExpense.parity, "share": newExpense.share, "settlement": newExpense.settlement, "owing": newExpense.owing  ]]) { (error, ref) in
             if error != nil {
                 print(error?.localizedDescription)
             } else {
@@ -117,7 +118,15 @@ class FinishViewController: UIViewController {
             }
         }
         
-        for item in (newExpense.groupMembersOwing as? Dictionary)! {
+        firebaseGroupRef.child("lastExpense").setValue(["dateAdded": "\(currDate)","billAmount": newExpense.billAmount, "addedBy": newExpense.addedBy, "description": newExpense.description, "group": newExpense.group, "spent": newExpense.spent, "parity" : newExpense.parity, "share": newExpense.share, "settlement": newExpense.settlement, "owing": newExpense.owing]) { (error, ref) in
+            if error != nil {
+                print(error?.localizedDescription)
+            } else {
+                print("Success Saving Last Expense To Group")
+            }
+        }
+        
+        for item in (newExpense.owing as? Dictionary)! {
             print("printing KEY")
             print(item.0)
             print("printing VALUE : \(item.1)")

@@ -12,7 +12,7 @@ import Material
 class ParityViewController: UIViewController, MaterialSwitchDelegate {
     var currentStep = AddExpenseStep.description
     
-    var newExpense = Expense(desc: "NewExpense")
+    var newExpense = Expense()
     
     var parityText = "Shared Equally (1:1)"
     
@@ -111,7 +111,7 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate {
         view.addSubview(nextButton)
         view.addSubview(backButton)
         
-
+        parity = [1,1]
 
         // Do any additional setup after loading the view.
     }
@@ -219,12 +219,14 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate {
                 parityDictionary[currentMember] = currentParity
                 
                 if let currentMemberShare = amount * Float(currentParity) / Float(paritySum) as? Float {
+                    print("current Member SHare: \(currentMemberShare)")
                    
                     if let currentMemberSettlement = Float(memberSpent) * amount - Float(currentMemberShare) as? Float {
+                        print("current Member Settlemnt: \(currentMemberSettlement)")
                         let memberSettlement = [currentMember : currentMemberSettlement]
                         settlementDictionary[currentMember] = currentMemberSettlement
-                        if let currMemberOwing = expense.groupMembersOwing[currentMember] as Float! {
-                            currExpense.groupMembersOwing[currentMember] = currMemberOwing + currentMemberSettlement
+                        if let currMemberOwing = expense.owing[currentMember] as Float! {
+                            currExpense.owing[currentMember] = currMemberOwing + currentMemberSettlement
                         }
                         
                     }
