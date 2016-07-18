@@ -223,6 +223,10 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate {
                     if let currentMemberSettlement = Float(memberSpent) * amount - Float(currentMemberShare) as? Float {
                         let memberSettlement = [currentMember : currentMemberSettlement]
                         settlementDictionary[currentMember] = currentMemberSettlement
+                        if let currMemberOwing = expense.groupMembersOwing[currentMember] as Float! {
+                            currExpense.groupMembersOwing[currentMember] = currMemberOwing + currentMemberSettlement
+                        }
+                        
                     }
                     shareDictionary[currentMember] = currentMemberShare
                 }

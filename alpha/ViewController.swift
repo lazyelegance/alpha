@@ -36,8 +36,9 @@ class ViewController: UIViewController {
     var currAmountOwing = "0.00"
     var currUser = String()
     var currGroup = String()
-    var currGroupMembers = [String]()
     
+    var currGroupMembers = [String]()
+    var currGroupMembersOwing = [String: Float]()
     
     
     var alphaExpensesRef = FIRDatabaseReference.init()
@@ -101,6 +102,9 @@ class ViewController: UIViewController {
     }
 
     override func viewWillAppear(animated: Bool) {
+        
+        flatMenu.close()
+        
         print(FIRAuth.auth()?.currentUser)
         view.backgroundColor = MaterialColor.blueGrey.lighten3
         
@@ -115,6 +119,8 @@ class ViewController: UIViewController {
             print(currentUser.uid)
             userImageView.imageURL = currentUser.photoURL
             
+            currGroupMembersOwing.removeAll()
+            
             if let name = currentUser.displayName as String!, email = currentUser.email as String! {
                 userDisplayName.text = "hi, \(name)"
                 
@@ -126,7 +132,7 @@ class ViewController: UIViewController {
                         if let name = spdict.allKeys[0] as? String {
                             self.currUser = name
                             self.userDisplayName.text = "hi, \(name)"
-                            self.alphaExpensesRef.child("users/\(name)/amountOwed").observeEventType(.Value, withBlock: { (snapshot) in
+                            self.alphaExpensesRef.child("users/\(name)/amountOwing").observeEventType(.Value, withBlock: { (snapshot) in
                                 self.currAmountOwing = "$\(snapshot.value!)"
                                 
                                 self.mainBalance.text = self.currAmountOwing
@@ -140,21 +146,20 @@ class ViewController: UIViewController {
                                     if let membersDict = snapshot.value as? NSDictionary {
                                         if let memberNames = membersDict.allKeys as? [String] {
                                             self.currGroupMembers = memberNames
+                                            for member in memberNames {
+                                                self.alphaExpensesRef.child("users/\(member)/amountOwing").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                                                    if let amtOwing = snapshot.value as? Float {
+                                                        self.currGroupMembersOwing[member] = amtOwing
+                                                    }
+                                                })
+                                            }
                                         }
                                     }
-    
                                 })
                             })
                         }
-                        
-                        
-                        
                     }
-                    
-                    
-                    
                 })
-                
             }
             
             
@@ -230,10 +235,13 @@ class ViewController: UIViewController {
         if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
             addExpenseVC.currentStep = AddExpenseStep.description
             
+            print(currGroupMembersOwing)
+            
             var newExpense = Expense(desc: "NewExpense")
             newExpense.addedBy = currUser
             newExpense.group = currGroup
             newExpense.groupMembers = currGroupMembers
+            newExpense.groupMembersOwing = currGroupMembersOwing
             newExpense.firebaseDBRef = self.alphaExpensesRef
             
             addExpenseVC.newExpense = newExpense
