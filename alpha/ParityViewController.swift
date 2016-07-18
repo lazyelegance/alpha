@@ -15,13 +15,16 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate {
     var newExpense = Expense(desc: "NewExpense")
     
     var parityText = "Shared Equally (1:1)"
+    
+    var currAmountOwing = "0.00"
+    var currUser = String()
+    var currGroup = String()
+    var currGroupMembers = [String]()
 
+    var parity = [1,1]
    
     @IBOutlet weak var sharedEquallyLabel: UILabel!
-    
     @IBOutlet weak var paidForOtherLabel: UILabel!
-    
-    
     @IBOutlet weak var paidForSelfLabel: UILabel!
     
     var nextButton: FlatButton!
@@ -128,20 +131,24 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate {
         
         switch control.tag {
         case 100:
-            print("shared Equally")
+
             if control.on {
+                self.parity.removeAll()
+                self.parity = [1,1]
                 paidForOtherSwitch.setSwitchState(.Off)
                 paidForSelfSwitch.setSwitchState(.Off)
             }
         case 101:
-            print("paid for other")
             if control.on {
+                self.parity.removeAll()
+                self.parity = [0,1]
                 sharedEquallySwitch.setSwitchState(.Off)
                 paidForSelfSwitch.setSwitchState(.Off)
             }
         case 102:
-            print("paid for self")
             if control.on {
+                self.parity.removeAll()
+                self.parity = [1,0]
                 paidForOtherSwitch.setSwitchState(.Off)
                 sharedEquallySwitch.setSwitchState(.Off)
             }
@@ -155,6 +162,8 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate {
     
     func toNextInAddExpenseCycle()  {
         //
+        self.newExpense = updateExpenseWithParity(newExpense, parity: self.parity)
+        
         if let finishVC = self.storyboard?.instantiateViewControllerWithIdentifier("finishViewController") as? FinishViewController {
             finishVC.parityText = self.parityText
             finishVC.newExpense = self.newExpense
@@ -167,6 +176,66 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate {
     func backOneStep() {
         print("back button")
         navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func updateExpenseWithParity(expense: Expense, parity: [Int]) -> Expense {
+        
+        var currExpense = expense        
+        var parityDictionary: [String: Int] = [:]
+        var shareDictionary: [String: Float] = [:]
+        var spentDictionary: [String: Int] = [:]
+        var settlementDictionary: [String: Float] = [:]
+        
+        parityDictionary.removeAll()
+        shareDictionary.removeAll()
+        spentDictionary.removeAll()
+        settlementDictionary.removeAll()
+        
+        
+        
+        
+        var paritySum = 0
+        
+        for item in parity {
+            paritySum = paritySum + item
+        }
+        
+        print(paritySum)
+        
+        if let user = expense.addedBy as? String, group = expense.group as? String, groupMembers = expense.groupMembers as? [String], amount = expense.billAmount as? Float {
+            for (var i = 0; i < groupMembers.count; ++i) {
+                let currentParity = parity[i]
+                let currentMember = groupMembers[i]
+                //let memberParity = [currentMember : currentParity]
+                var memberSpent = 0
+                
+                if currentMember == user {
+                    memberSpent = 1
+                    
+                }
+                
+                
+                spentDictionary[currentMember] = memberSpent
+                parityDictionary[currentMember] = currentParity
+                
+                if let currentMemberShare = amount * Float(currentParity) / Float(paritySum) as? Float {
+                   
+                    if let currentMemberSettlement = Float(memberSpent) * amount - Float(currentMemberShare) as? Float {
+                        let memberSettlement = [currentMember : currentMemberSettlement]
+                        settlementDictionary[currentMember] = currentMemberSettlement
+                    }
+                    shareDictionary[currentMember] = currentMemberShare
+                }
+                
+            }
+        }
+
+        currExpense.parity = parityDictionary
+        currExpense.share = shareDictionary
+        currExpense.settlement = settlementDictionary
+        currExpense.spent = spentDictionary
+        
+        return currExpense
     }
 
     /*

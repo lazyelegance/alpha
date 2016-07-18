@@ -15,6 +15,9 @@ class AddExpenseController: UIViewController, UITextFieldDelegate {
     var nextPlaceHolder = "Bill Amount"
     var currentStep = AddExpenseStep.description
     
+    var currAmountOwing = "0.00"
+
+    
     var descriptionTextField: TextField!
     
     
