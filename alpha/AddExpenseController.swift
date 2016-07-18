@@ -27,7 +27,7 @@ class AddExpenseController: UIViewController, UITextFieldDelegate {
     
     var startOverButton: FlatButton!
     
-    var newExpense = Expense(desc: "New Expense")
+    var newExpense = Expense()
     
     
     override func viewDidLoad() {

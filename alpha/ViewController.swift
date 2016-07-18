@@ -25,6 +25,8 @@ class ViewController: UIViewController {
     let btn1: FlatButton = FlatButton()
     let btn2: FlatButton = FlatButton()
     let btn3: FlatButton = FlatButton()
+    
+    var expenses = [Expense]()
 
     
     @IBOutlet weak var mainBalance: UILabel!
@@ -36,8 +38,9 @@ class ViewController: UIViewController {
     var currAmountOwing = "0.00"
     var currUser = String()
     var currGroup = String()
-    var currGroupMembers = [String]()
     
+    var currGroupMembers = [String]()
+    var currGroupMembersOwing = [String: Float]()
     
     
     var alphaExpensesRef = FIRDatabaseReference.init()
@@ -47,6 +50,15 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         self.navigationController?.navigationBar.hidden = true
+        
+        view.backgroundColor = MaterialColor.blue.lighten1
+        
+        mainBalance.backgroundColor = MaterialColor.blue.lighten2
+        mainBalance.textColor = MaterialColor.white
+        mainBalance.layer.cornerRadius = 30
+        mainBalance.layer.shadowColor = MaterialColor.blue.lighten3.CGColor
+        mainBalance.layer.shadowOpacity = 0.4
+        
         
         alphaExpensesRef = FIRDatabase.database().reference()
         
@@ -101,11 +113,14 @@ class ViewController: UIViewController {
     }
 
     override func viewWillAppear(animated: Bool) {
+        
+        flatMenu.close()
+        
         print(FIRAuth.auth()?.currentUser)
-        view.backgroundColor = MaterialColor.blueGrey.lighten3
+        view.backgroundColor = MaterialColor.blue.lighten1
         
         userImageView.layer.masksToBounds = true
-        userImageView.layer.cornerRadius = 40
+        userImageView.layer.cornerRadius = 10
         userImageView.layer.borderColor = MaterialColor.white.CGColor
         userImageView.layer.borderWidth = 4
         
@@ -114,6 +129,8 @@ class ViewController: UIViewController {
             print(currentUser.photoURL)
             print(currentUser.uid)
             userImageView.imageURL = currentUser.photoURL
+            
+            currGroupMembersOwing.removeAll()
             
             if let name = currentUser.displayName as String!, email = currentUser.email as String! {
                 userDisplayName.text = "hi, \(name)"
@@ -126,8 +143,8 @@ class ViewController: UIViewController {
                         if let name = spdict.allKeys[0] as? String {
                             self.currUser = name
                             self.userDisplayName.text = "hi, \(name)"
-                            self.alphaExpensesRef.child("users/\(name)/amountOwed").observeEventType(.Value, withBlock: { (snapshot) in
-                                self.currAmountOwing = "$\(snapshot.value!)"
+                            self.alphaExpensesRef.child("users/\(name)/amountOwing").observeEventType(.Value, withBlock: { (snapshot) in
+                                self.currAmountOwing = "\(snapshot.value!)$"
                                 
                                 self.mainBalance.text = self.currAmountOwing
                             })
@@ -140,21 +157,25 @@ class ViewController: UIViewController {
                                     if let membersDict = snapshot.value as? NSDictionary {
                                         if let memberNames = membersDict.allKeys as? [String] {
                                             self.currGroupMembers = memberNames
+                                            for member in memberNames {
+                                                self.alphaExpensesRef.child("users/\(member)/amountOwing").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                                                    if let amtOwing = snapshot.value as? Float {
+                                                        self.currGroupMembersOwing[member] = amtOwing
+                                                    }
+                                                })
+                                            }
                                         }
                                     }
-    
                                 })
+                                
+                                self.alphaExpensesRef.child("expenses/\(self.currGroup)").observeEventType(.Value, withBlock: { (snapshot) in
+                                    self.expenses = Expense.expensesFromFirebase(snapshot.value! as! NSDictionary, firebasereference: snapshot.ref)
+                                })
+                                
                             })
                         }
-                        
-                        
-                        
                     }
-                    
-                    
-                    
                 })
-                
             }
             
             
@@ -230,10 +251,13 @@ class ViewController: UIViewController {
         if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
             addExpenseVC.currentStep = AddExpenseStep.description
             
-            var newExpense = Expense(desc: "NewExpense")
+            print(currGroupMembersOwing)
+            
+            var newExpense = Expense()
             newExpense.addedBy = currUser
             newExpense.group = currGroup
             newExpense.groupMembers = currGroupMembers
+            newExpense.owing = currGroupMembersOwing
             newExpense.firebaseDBRef = self.alphaExpensesRef
             
             addExpenseVC.newExpense = newExpense

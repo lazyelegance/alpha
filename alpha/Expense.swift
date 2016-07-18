@@ -12,10 +12,10 @@ import FirebaseDatabase
 
 struct Expense {
     //
-    
+    var expenseId = String()
     var description: String
     var billAmount: Float
-    var date = String()
+    var dateAdded = String()
     var spent = [String: Int]()
     var settlement = [String: Float]()
     var share = [String: Float]()
@@ -23,12 +23,72 @@ struct Expense {
     var addedBy = String()
     var group = String()
     var groupMembers = [String]()
+    var owing = [String: Float]()
     var firebaseDBRef = FIRDatabaseReference()
     
     
-    init(desc: String) {
-        self.description = desc
+    init() {
+        self.description = "New Expense"
         self.billAmount = 0.00
+    }
+    
+    
+    static func expensesFromFirebase(results: NSDictionary, firebasereference: FIRDatabaseReference) -> [Expense] {
+        var expenses = [Expense]()
+        
+        expenses.removeAll()
+        
+        
+        
+        
+        if results.count > 0 {
+            for result in results {
+                
+                if let valueDictionary = result.value as? NSDictionary {
+                    var expense = Expense()
+                    for value in valueDictionary {
+                        print("PRINTING id ===========\(value.key)")
+                        print("PRINTING value ===========:\(value.value)")
+                        
+                        expense.expenseId = result.key as! String
+                        expense.firebaseDBRef = firebasereference
+                        
+                        switch value.key as! String {
+                        case "description":
+                            expense.description = value.value as! String
+                        case "addedBy":
+                            expense.addedBy = value.value as! String
+                        case "dateAdded":
+                            expense.dateAdded = value.value as! String
+                        case "group":
+                            expense.group = value.value as! String
+                        case "billAmount":
+                            expense.billAmount = value.value as! Float
+                        case "parity":
+                            expense.parity = value.value as! [String: Int]
+                        case "share":
+                            expense.share = value.value as! [String: Float]
+                        case "settlement":
+                            expense.settlement = value.value as! [String: Float]
+                        case "spent":
+                            expense.spent = value.value as! [String: Int]
+                        case "owing":
+                            expense.owing = value.value as! [String: Float]
+                        default:
+                            break
+                        }
+                        
+                    }
+                    expenses.append(expense)
+                    
+                }
+            }
+            
+        }
+        print("=================================")
+        print(expenses)
+        print(expenses.count)
+        return expenses
     }
     
 }
