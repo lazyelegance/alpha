@@ -8,8 +8,12 @@
 
 import UIKit
 import Material
+import Firebase
+import FirebaseDatabase
 
 class FinishViewController: UIViewController {
+    
+    
     
     var parityText = "Shared Equally (1:1)"
     
@@ -32,13 +36,19 @@ class FinishViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = AddExpenseStep.finish.toColor()
+        
         descriptionLabel.text = newExpense.description
         billAmountLabel.text = "$ \(newExpense.billAmount)"
         paritylabel.text = parityText
+        
+        
+        nextButton = FlatButton(frame: CGRectMake(self.view.frame.width - 100, paritylabel.frame.origin.y + paritylabel.frame.size.height + 8 , 60, 60))
+        backButton = FlatButton(frame: CGRectMake(self.view.frame.width - 180, paritylabel.frame.origin.y + paritylabel.frame.size.height + 8, 60, 60))
 
         nextButton.backgroundColor = MaterialColor.white
         
-        nextButton.setTitle("FINISH", forState: .Normal)
+        nextButton.setTitle("🏁", forState: .Normal)
         
         
         nextButton.setTitleColor(MaterialColor.blue.accent1, forState: .Normal)
@@ -52,12 +62,11 @@ class FinishViewController: UIViewController {
         nextButton.layer.shadowOpacity = 0.1
         
         nextButton.addTarget(self, action: #selector(FinishViewController.saveExpense), forControlEvents: .TouchUpInside)
-        
-        nextButton.alpha = 0
+
         
         backButton.backgroundColor = MaterialColor.white
         
-        backButton.setTitle("RESTART", forState: .Normal)
+        backButton.setTitle("🔙", forState: .Normal)
         backButton.setTitleColor(MaterialColor.blue.accent1, forState: .Normal)
         backButton.titleLabel?.font = RobotoFont.regularWithSize(8)
         backButton.layer.cornerRadius = 30
@@ -84,6 +93,27 @@ class FinishViewController: UIViewController {
     
     
     func saveExpense()  {
+        print("SAVING")
+        
+        let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
+        
+        let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
+        
+        print(newExpense)
+        
+        let key = newExpense.firebaseDBRef.child("expenses").childByAutoId().key
+        
+        
+        //alphaExpensesRef.child("expenses").updateChildValues([key : ["Total": 120.00, "addedBy": "ezra", "description": "some desription", "spent": ["ezra": 1, "ram": 0 ], "parity" : ["ezra" : 1, "ram": 1], "share": ["ezra": 60.00, "ram": 60.00 ], "settlemet": ["ezra": 60.00, "ram": -60.00 ]  ]])
+
+        newExpense.firebaseDBRef.child("expenses").updateChildValues([key : ["dateAdded": "\(currDate)","Total": newExpense.billAmount, "addedBy": newExpense.addedBy, "description": newExpense.description, "group": newExpense.group, "spent": newExpense.spent, "parity" : newExpense.parity, "share": newExpense.share, "settlement": newExpense.settlement  ]]) { (error, ref) in
+            if error != nil {
+                print(error?.localizedDescription)
+            } else {
+                print("SUCCESSSSSS")
+            }
+        }
+        
         //
     }
     

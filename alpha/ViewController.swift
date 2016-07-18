@@ -234,6 +234,7 @@ class ViewController: UIViewController {
             newExpense.addedBy = currUser
             newExpense.group = currGroup
             newExpense.groupMembers = currGroupMembers
+            newExpense.firebaseDBRef = self.alphaExpensesRef
             
             addExpenseVC.newExpense = newExpense
             self.navigationController?.pushViewController(addExpenseVC, animated: true)

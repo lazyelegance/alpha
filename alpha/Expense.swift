@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import Firebase
+import FirebaseDatabase
 
 struct Expense {
     //
@@ -21,6 +23,8 @@ struct Expense {
     var addedBy = String()
     var group = String()
     var groupMembers = [String]()
+    var firebaseDBRef = FIRDatabaseReference()
+    
     
     init(desc: String) {
         self.description = desc
