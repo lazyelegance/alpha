@@ -28,6 +28,11 @@ class ViewController: UIViewController {
     
     var expenses = [Expense]()
 
+    @IBOutlet weak var youOweLabel: UILabel!
+    
+    @IBOutlet weak var groupButton: RaisedButton!
+    
+    
     
     @IBOutlet weak var mainBalance: UILabel!
     
@@ -35,7 +40,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var userDisplayName: UILabel!
     
-    var currAmountOwing = "0.00"
+    var currAmountOwing: Float = 0.00
     var currUser = String()
     var currGroup = String()
     
@@ -52,15 +57,11 @@ class ViewController: UIViewController {
         self.navigationController?.navigationBar.hidden = true
         
         view.backgroundColor = MaterialColor.blue.lighten1
-        
-        mainBalance.backgroundColor = MaterialColor.blue.lighten2
-        mainBalance.textColor = MaterialColor.white
-        mainBalance.layer.cornerRadius = 30
-        mainBalance.layer.shadowColor = MaterialColor.blue.lighten3.CGColor
-        mainBalance.layer.shadowOpacity = 0.4
-        
-        
+        groupButton.backgroundColor = MaterialColor.blue.lighten1
+                
         alphaExpensesRef = FIRDatabase.database().reference()
+        
+        var image: UIImage? = UIImage(named: "ic_add_white")?.imageWithRenderingMode(.AlwaysTemplate)
         
         btn1.addTarget(self, action: #selector(ViewController.handleFlatMenu), forControlEvents: .TouchUpInside)
         btn1.setTitleColor(MaterialColor.blue.accent3, forState: .Normal)
@@ -107,7 +108,7 @@ class ViewController: UIViewController {
         flatMenu.views = [btn1, btn2, btn3]
         
         
-        mainBalance.text = currAmountOwing
+        mainBalance.text = "\(currAmountOwing)"
 
         
     }
@@ -119,16 +120,10 @@ class ViewController: UIViewController {
         print(FIRAuth.auth()?.currentUser)
         view.backgroundColor = MaterialColor.blue.lighten1
         
-        userImageView.layer.masksToBounds = true
-        userImageView.layer.cornerRadius = 10
-        userImageView.layer.borderColor = MaterialColor.white.CGColor
-        userImageView.layer.borderWidth = 4
+
         
         if let currentUser = FIRAuth.auth()?.currentUser {
-            print(currentUser.displayName)
-            print(currentUser.photoURL)
-            print(currentUser.uid)
-            userImageView.imageURL = currentUser.photoURL
+    
             
             currGroupMembersOwing.removeAll()
             
@@ -144,13 +139,19 @@ class ViewController: UIViewController {
                             self.currUser = name
                             self.userDisplayName.text = "hi, \(name)"
                             self.alphaExpensesRef.child("users/\(name)/amountOwing").observeEventType(.Value, withBlock: { (snapshot) in
-                                self.currAmountOwing = "\(snapshot.value!)$"
+                                self.currAmountOwing = snapshot.value! as! Float
                                 
-                                self.mainBalance.text = self.currAmountOwing
+                                self.mainBalance.text = "\(self.currAmountOwing)"
+                                
+                                
+                                
                             })
                             
-                            self.alphaExpensesRef.child("users/\(name)/group").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                            self.alphaExpensesRef.child("users/\(name)/defaultGroup").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                                 self.currGroup = "\(snapshot.value!)"
+                                
+                                
+                                self.groupButton.setTitle(self.currGroup, forState: .Normal)
                                 
                                 self.alphaExpensesRef.child("groups/\(self.currGroup)/members").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                                     print(snapshot.value)
