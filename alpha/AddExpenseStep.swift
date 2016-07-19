@@ -58,7 +58,7 @@ public enum AddExpenseStep {
     func toColor() -> UIColor {
         switch self {
         case .description:
-            return MaterialColor.red.darken1
+            return MaterialColor.blue.lighten4
         case .billAmount:
             return MaterialColor.deepOrange.darken1
         case .parity:

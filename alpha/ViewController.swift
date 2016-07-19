@@ -56,39 +56,46 @@ class ViewController: UIViewController {
         
         self.navigationController?.navigationBar.hidden = true
         
-        view.backgroundColor = MaterialColor.blue.lighten1
-        groupButton.backgroundColor = MaterialColor.blue.lighten1
+        view.backgroundColor = MaterialColor.indigo.accent3
+        groupButton.backgroundColor = MaterialColor.indigo.accent4
+        groupButton.layer.shadowOpacity = 0.1
+        
+        mainBalance.font = RobotoFont.mediumWithSize(50)
                 
         alphaExpensesRef = FIRDatabase.database().reference()
         
-        var image: UIImage? = UIImage(named: "ic_add_white")?.imageWithRenderingMode(.AlwaysTemplate)
+    
         
         btn1.addTarget(self, action: #selector(ViewController.handleFlatMenu), forControlEvents: .TouchUpInside)
-        btn1.setTitleColor(MaterialColor.blue.accent3, forState: .Normal)
+        btn1.setTitleColor(MaterialColor.blue.accent1, forState: .Normal)
         btn1.titleLabel?.font = RobotoFont.regularWithSize(12)
         btn1.backgroundColor = MaterialColor.white
         btn1.pulseColor = MaterialColor.white
         btn1.setTitle("Menu".uppercaseString, forState: .Normal)
+        
+        
+        //btn1.setImage(MaterialIcon.menu, forState: .Normal)
+        
         view.addSubview(btn1)
         
         
         btn2.setTitleColor(MaterialColor.white, forState: .Normal)
-        btn2.titleLabel?.font = RobotoFont.regularWithSize(12)
-        btn2.borderColor = MaterialColor.white
+        btn2.titleLabel?.font = RobotoFont.boldWithSize(12)
+        //btn2.borderColor = MaterialColor.white
         btn2.pulseColor = MaterialColor.blue.accent3
-        btn2.borderWidth = 1
+        //btn2.borderWidth = 1
         btn2.setTitle("Add Expense".uppercaseString, forState: .Normal)
         btn2.addTarget(self, action: #selector(ViewController.toAddExpenseCycle), forControlEvents: .TouchUpInside)
         view.addSubview(btn2)
         
         
-        btn3.setTitleColor(MaterialColor.blueGrey.lighten1, forState: .Normal)
-        btn3.titleLabel?.font = RobotoFont.regularWithSize(12)
-        btn3.borderColor = MaterialColor.blueGrey.lighten1
+        btn3.setTitleColor(MaterialColor.white, forState: .Normal)
+        btn3.titleLabel?.font = RobotoFont.boldWithSize(12)
+//        btn3.borderColor = MaterialColor.blueGrey.lighten1
         btn3.pulseColor = MaterialColor.blue.accent3
-        btn3.borderWidth = 1
+//        btn3.borderWidth = 1
         btn3.setTitle("See Expenses".uppercaseString, forState: .Normal)
-        btn3.addTarget(self, action: #selector(ViewController.addExpenseTemp), forControlEvents: .TouchUpInside)
+        btn3.addTarget(self, action: #selector(ViewController.toListExpenses), forControlEvents: .TouchUpInside)
         view.addSubview(btn3)
         
         let btn4: FlatButton = FlatButton()
@@ -118,7 +125,7 @@ class ViewController: UIViewController {
         flatMenu.close()
         
         print(FIRAuth.auth()?.currentUser)
-        view.backgroundColor = MaterialColor.blue.lighten1
+        
         
 
         
@@ -215,20 +222,27 @@ class ViewController: UIViewController {
     func addExpenseTemp() {
         print("boom")
         
+        let key1 = alphaExpensesRef.child("users").childByAutoId().key
+        let key2 = alphaExpensesRef.child("users").childByAutoId().key
         
+        alphaExpensesRef.child("users").updateChildValues([key1 : ["name": "ezra", "title" : "Director of Awesomeness",
+            "amountOwing": 1600.09, "defaultGroup": "alpha708" ,"groups": ["alpha708": true], "email": "ezrabathini@gmail.com"]])
         
-//        alphaExpensesRef.updateChildValues(["users" : ["ezra" : ["name": "ezra", "title" : "Director of Awesomeness",
-//            "amountOwed": 1600.09, "groups": ["alpha708": true]], "ram" : ["name": "ram", "title" : "Director of BS",
-//                "amountOwed": -1600.09, "groups": ["alpha708": true]]]])
-//        
+        alphaExpensesRef.child("users").updateChildValues([key2 : ["name": "ram", "title" : "Director of BS",
+            "amountOwing": -1600.09, "defaultGroup": "alpha708", "groups": ["alpha708": true], "email": "ev.ramkumar@gmail.com"]])
+        
+//        alphaExpensesRef.child("users").updateChildValues([key1 : ["name": "ezra", "title" : "Director of Awesomeness",
+//            "amountOwing": 1600.09, "defaultGroup": "alpha708" ,"groups": ["alpha708": true], "email": "ezrabathini@gmail.com"], key2 : ["name": "ram", "title" : "Director of BS",
+//                "amountOwing": -1600.09, "defaultGroup": "alpha708", "groups": ["alpha708": true], "email": "ev.ramkumar@gmail.com"]])
+//
 //        alphaExpensesRef.updateChildValues(["groups": ["alpha708": ["name": "Alpha 708", "members" : ["ezra": true, "ram": true]]]])
 //    
 //        
         
         
-        let key = alphaExpensesRef.child("expenses").childByAutoId().key
-        
-        alphaExpensesRef.child("expenses").updateChildValues([key : ["Total": 120.00, "addedBy": "ezra", "description": "some desription", "spent": ["ezra": 1, "ram": 0 ], "parity" : ["ezra" : 1, "ram": 1], "share": ["ezra": 60.00, "ram": 60.00 ], "settlemet": ["ezra": 60.00, "ram": -60.00 ]  ]])
+//        let key = alphaExpensesRef.child("expenses").childByAutoId().key
+//        
+//        alphaExpensesRef.child("expenses").updateChildValues([key : ["Total": 120.00, "addedBy": "ezra", "description": "some desription", "spent": ["ezra": 1, "ram": 0 ], "parity" : ["ezra" : 1, "ram": 1], "share": ["ezra": 60.00, "ram": 60.00 ], "settlemet": ["ezra": 60.00, "ram": -60.00 ]  ]])
         
 //        if let currentUser = FIRAuth.auth()?.currentUser?.displayName {
 //            let post = ["Total": 909.99, "addedBy": currentUser, "Description": "some desription"]
@@ -242,10 +256,11 @@ class ViewController: UIViewController {
     }
 
     func toListExpenses() {
-//        if let listExpensesVC = self.storyboard?.instantiateViewControllerWithIdentifier("ListExpensesController") as? ListExpensesController {
-//            listExpensesVC.expenses = self.expenses
-//            self.navigationController?.pushViewController(listExpensesVC, animated: true)
-//        }
+        if let expensesListController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListController") as? ExpensesListController {
+            expensesListController.expenses = self.expenses
+            expensesListController.groupName = self.currGroup
+            self.navigationController?.pushViewController(expensesListController, animated: true)
+        }
     }
     
     func toAddExpenseCycle() {
@@ -256,6 +271,7 @@ class ViewController: UIViewController {
             
             var newExpense = Expense()
             newExpense.addedBy = currUser
+//            newExpense.addedBy = 
             newExpense.group = currGroup
             newExpense.groupMembers = currGroupMembers
             newExpense.owing = currGroupMembersOwing

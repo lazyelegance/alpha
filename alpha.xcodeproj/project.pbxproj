@@ -15,6 +15,9 @@
 		63547D8D1D38C7E100A00434 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63547D8C1D38C7E100A00434 /* GoogleService-Info.plist */; };
 		63547D8F1D39DAE800A00434 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63547D8E1D39DAE800A00434 /* LoginViewController.swift */; };
 		63547D931D39F4F300A00434 /* AsyncImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63547D921D39F4F300A00434 /* AsyncImageView.m */; };
+		63B71C441D3E1C9700087A8E /* ExpensesListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B71C431D3E1C9700087A8E /* ExpensesListController.swift */; };
+		63B71C461D3E1D7700087A8E /* ExpensesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B71C451D3E1D7600087A8E /* ExpensesCell.swift */; };
+		63B71C481D3E3BA500087A8E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B71C471D3E3BA500087A8E /* User.swift */; };
 		63CBEBCA1D38BACD0002DB65 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CBEBC91D38BACD0002DB65 /* AppDelegate.swift */; };
 		63CBEBCC1D38BACD0002DB65 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CBEBCB1D38BACD0002DB65 /* ViewController.swift */; };
 		63CBEBCF1D38BACD0002DB65 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63CBEBCD1D38BACD0002DB65 /* Main.storyboard */; };
@@ -62,6 +65,9 @@
 		63547D8E1D39DAE800A00434 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		63547D911D39F4F300A00434 /* AsyncImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImageView.h; sourceTree = "<group>"; };
 		63547D921D39F4F300A00434 /* AsyncImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImageView.m; sourceTree = "<group>"; };
+		63B71C431D3E1C9700087A8E /* ExpensesListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpensesListController.swift; sourceTree = "<group>"; };
+		63B71C451D3E1D7600087A8E /* ExpensesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpensesCell.swift; sourceTree = "<group>"; };
+		63B71C471D3E3BA500087A8E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		63CBEBC61D38BACD0002DB65 /* alpha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = alpha.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63CBEBC91D38BACD0002DB65 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63CBEBCB1D38BACD0002DB65 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -143,7 +149,10 @@
 			children = (
 				63CBEBC91D38BACD0002DB65 /* AppDelegate.swift */,
 				63CBEBCB1D38BACD0002DB65 /* ViewController.swift */,
+				63B71C451D3E1D7600087A8E /* ExpensesCell.swift */,
+				63B71C431D3E1C9700087A8E /* ExpensesListController.swift */,
 				633BC3121D3B1BF40015BAAA /* Expense.swift */,
+				63B71C471D3E3BA500087A8E /* User.swift */,
 				630FB1E61D3A5114003534A0 /* AddExpenseController.swift */,
 				630FB1E81D3A51AE003534A0 /* AddExpenseStep.swift */,
 				63547D8E1D39DAE800A00434 /* LoginViewController.swift */,
@@ -480,10 +489,13 @@
 			files = (
 				633BC3131D3B1BF40015BAAA /* Expense.swift in Sources */,
 				63547D8F1D39DAE800A00434 /* LoginViewController.swift in Sources */,
+				63B71C441D3E1C9700087A8E /* ExpensesListController.swift in Sources */,
 				633BC3171D3B7A8E0015BAAA /* FinishViewController.swift in Sources */,
 				63CBEBCC1D38BACD0002DB65 /* ViewController.swift in Sources */,
 				63CBEBCA1D38BACD0002DB65 /* AppDelegate.swift in Sources */,
 				63547D931D39F4F300A00434 /* AsyncImageView.m in Sources */,
+				63B71C461D3E1D7700087A8E /* ExpensesCell.swift in Sources */,
+				63B71C481D3E3BA500087A8E /* User.swift in Sources */,
 				633BC3151D3B6C520015BAAA /* ParityViewController.swift in Sources */,
 				630FB1E91D3A51AE003534A0 /* AddExpenseStep.swift in Sources */,
 				630FB1E71D3A5114003534A0 /* AddExpenseController.swift in Sources */,
