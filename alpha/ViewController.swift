@@ -40,19 +40,15 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var userDisplayName: UILabel!
     
-    var currAmountOwing: Float = 0.00
-    var currUser = String()
-    var currGroup = String()
-    
-    var currGroupMembers = [String]()
-    var currGroupMembersOwing = [String: Float]()
-    
+    var user = User()
+    var group = Group()
     
     var alphaExpensesRef = FIRDatabaseReference.init()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+      
         
         self.navigationController?.navigationBar.hidden = true
         
@@ -115,75 +111,45 @@ class ViewController: UIViewController {
         flatMenu.views = [btn1, btn2, btn3]
         
         
-        mainBalance.text = "\(currAmountOwing)"
+        mainBalance.text = "0.0 $"
+        
 
         
     }
 
+    
     override func viewWillAppear(animated: Bool) {
         
         flatMenu.close()
         
-        print(FIRAuth.auth()?.currentUser)
-        
-        
-
-        
         if let currentUser = FIRAuth.auth()?.currentUser {
-    
             
-            currGroupMembersOwing.removeAll()
             
             if let name = currentUser.displayName as String!, email = currentUser.email as String! {
                 userDisplayName.text = "hi, \(name)"
                 
                 alphaExpensesRef.child("users").queryOrderedByChild("email").queryEqualToValue(email).observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                     
+                    self.user = User.userFromFirebase(snapshot.value! as! NSDictionary)
                     
-                    print(snapshot.value)
-                    if let spdict = snapshot.value as? NSDictionary {
-                        if let name = spdict.allKeys[0] as? String {
-                            self.currUser = name
-                            self.userDisplayName.text = "hi, \(name)"
-                            self.alphaExpensesRef.child("users/\(name)/amountOwing").observeEventType(.Value, withBlock: { (snapshot) in
-                                self.currAmountOwing = snapshot.value! as! Float
-                                
-                                self.mainBalance.text = "\(self.currAmountOwing)"
-                                
-                                
-                                
-                            })
-                            
-                            self.alphaExpensesRef.child("users/\(name)/defaultGroup").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-                                self.currGroup = "\(snapshot.value!)"
-                                
-                                
-                                self.groupButton.setTitle(self.currGroup, forState: .Normal)
-                                
-                                self.alphaExpensesRef.child("groups/\(self.currGroup)/members").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-                                    print(snapshot.value)
-                                    if let membersDict = snapshot.value as? NSDictionary {
-                                        if let memberNames = membersDict.allKeys as? [String] {
-                                            self.currGroupMembers = memberNames
-                                            for member in memberNames {
-                                                self.alphaExpensesRef.child("users/\(member)/amountOwing").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-                                                    if let amtOwing = snapshot.value as? Float {
-                                                        self.currGroupMembersOwing[member] = amtOwing
-                                                    }
-                                                })
-                                            }
-                                        }
-                                    }
-                                })
-                                
-                                self.alphaExpensesRef.child("expenses/\(self.currGroup)").observeEventType(.Value, withBlock: { (snapshot) in
-                                    self.expenses = Expense.expensesFromFirebase(snapshot.value! as! NSDictionary, firebasereference: snapshot.ref)
-                                })
-                                
-                            })
-                        }
-                    }
+                    self.mainBalance.text = "\(self.user.amountOwing)"
+                    self.userDisplayName.text = "hi, \(self.user.name)"
+                    self.groupButton.setTitle(self.user.defaultGroupName, forState: .Normal)
+                    
+                    self.alphaExpensesRef.child("expenses/\(self.user.defaultGroupId)").observeEventType(.Value, withBlock: { (snapshot) in
+                        
+                        self.expenses = Expense.expensesFromFirebase(snapshot.value! as! NSDictionary, firebasereference: snapshot.ref)
+                    })
+                    
+                    self.alphaExpensesRef.child("groups/\(self.user.defaultGroupId)").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                        self.group = Group.groupFromFirebase(self.user.defaultGroupId, results: snapshot.value! as! NSDictionary)
+                    })
+
                 })
+                
+                
+                
+                
             }
             
             
@@ -196,7 +162,7 @@ class ViewController: UIViewController {
             }
         }
     }
-    
+ 
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -220,23 +186,23 @@ class ViewController: UIViewController {
     
     
     func addExpenseTemp() {
-        print("boom")
         
-        let key1 = alphaExpensesRef.child("users").childByAutoId().key
-        let key2 = alphaExpensesRef.child("users").childByAutoId().key
+        let ezrakey = alphaExpensesRef.child("groups").childByAutoId().key
+        let ramkey = alphaExpensesRef.child("groups").childByAutoId().key
+        let alphakey = alphaExpensesRef.child("users").childByAutoId().key
         
-        alphaExpensesRef.child("users").updateChildValues([key1 : ["name": "ezra", "title" : "Director of Awesomeness",
-            "amountOwing": 1600.09, "defaultGroup": "alpha708" ,"groups": ["alpha708": true], "email": "ezrabathini@gmail.com"]])
+        alphaExpensesRef.child("users").updateChildValues([ezrakey : ["name": "ezra", "title" : "Director of Awesomeness",
+            "amountOwing": 1600.09, "defaultGroup": "alpha708" ,"groups": [alphakey: true], "email": "ezrabathini@gmail.com"]])
         
-        alphaExpensesRef.child("users").updateChildValues([key2 : ["name": "ram", "title" : "Director of BS",
-            "amountOwing": -1600.09, "defaultGroup": "alpha708", "groups": ["alpha708": true], "email": "ev.ramkumar@gmail.com"]])
+        alphaExpensesRef.child("users").updateChildValues([ramkey : ["name": "ram", "title" : "Director of BS",
+            "amountOwing": -1600.09, "defaultGroup": "alpha708", "groups": [alphakey : true], "email": "ev.ramkumar@gmail.com"]])
         
 //        alphaExpensesRef.child("users").updateChildValues([key1 : ["name": "ezra", "title" : "Director of Awesomeness",
 //            "amountOwing": 1600.09, "defaultGroup": "alpha708" ,"groups": ["alpha708": true], "email": "ezrabathini@gmail.com"], key2 : ["name": "ram", "title" : "Director of BS",
 //                "amountOwing": -1600.09, "defaultGroup": "alpha708", "groups": ["alpha708": true], "email": "ev.ramkumar@gmail.com"]])
 //
-//        alphaExpensesRef.updateChildValues(["groups": ["alpha708": ["name": "Alpha 708", "members" : ["ezra": true, "ram": true]]]])
-//    
+        alphaExpensesRef.child("groups").updateChildValues([alphakey : ["name": "alpha708", "members" : [ezrakey: true, ramkey: true]]])
+//
 //        
         
         
@@ -258,7 +224,7 @@ class ViewController: UIViewController {
     func toListExpenses() {
         if let expensesListController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListController") as? ExpensesListController {
             expensesListController.expenses = self.expenses
-            expensesListController.groupName = self.currGroup
+            expensesListController.groupName = self.group.name
             self.navigationController?.pushViewController(expensesListController, animated: true)
         }
     }
@@ -267,14 +233,15 @@ class ViewController: UIViewController {
         if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
             addExpenseVC.currentStep = AddExpenseStep.description
             
-            print(currGroupMembersOwing)
+            
             
             var newExpense = Expense()
-            newExpense.addedBy = currUser
-//            newExpense.addedBy = 
-            newExpense.group = currGroup
-            newExpense.groupMembers = currGroupMembers
-            newExpense.owing = currGroupMembersOwing
+            newExpense.addedBy = user.name 
+            newExpense.group = user.defaultGroupName
+            newExpense.groupId = user.defaultGroupId
+            newExpense.groupMembers = group.members
+//TO DO
+//            newExpense.owing = group.membersOwing
             newExpense.firebaseDBRef = self.alphaExpensesRef
             
             addExpenseVC.newExpense = newExpense

@@ -22,6 +22,7 @@ struct Expense {
     var parity = [String: Int]()
     var addedBy = String()
     var group = String()
+    var groupId = String()
     var groupMembers = [String]()
     var owing = [String: Float]()
     var firebaseDBRef = FIRDatabaseReference()
@@ -47,8 +48,7 @@ struct Expense {
                 if let valueDictionary = result.value as? NSDictionary {
                     var expense = Expense()
                     for value in valueDictionary {
-                        print("PRINTING id ===========\(value.key)")
-                        print("PRINTING value ===========:\(value.value)")
+                        
                         
                         expense.expenseId = result.key as! String
                         expense.firebaseDBRef = firebasereference
@@ -85,9 +85,7 @@ struct Expense {
             }
             
         }
-        print("=================================")
-        print(expenses)
-        print(expenses.count)
+        
         return expenses
     }
     

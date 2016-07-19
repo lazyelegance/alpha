@@ -102,8 +102,8 @@ class FinishViewController: UIViewController {
         print(newExpense)
         
         let firebaseUserRef = newExpense.firebaseDBRef.child("users")
-        let firebaseGroupRef = newExpense.firebaseDBRef.child("groups").child(newExpense.group)
-        let groupExpensesRef = newExpense.firebaseDBRef.child("expenses").child(newExpense.group)
+        let firebaseGroupRef = newExpense.firebaseDBRef.child("groups").child(newExpense.groupId)
+        let groupExpensesRef = newExpense.firebaseDBRef.child("expenses").child(newExpense.groupId)
         
         let key = groupExpensesRef.childByAutoId().key
         
@@ -118,7 +118,7 @@ class FinishViewController: UIViewController {
             }
         }
         
-        firebaseGroupRef.child("lastExpense").setValue(["dateAdded": "\(currDate)","billAmount": newExpense.billAmount, "addedBy": newExpense.addedBy, "description": newExpense.description, "group": newExpense.group, "spent": newExpense.spent, "parity" : newExpense.parity, "share": newExpense.share, "settlement": newExpense.settlement, "owing": newExpense.owing]) { (error, ref) in
+        firebaseGroupRef.child("lastExpense").setValue(key) { (error, ref) in
             if error != nil {
                 print(error?.localizedDescription)
             } else {
