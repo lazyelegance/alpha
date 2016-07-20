@@ -42,6 +42,7 @@ class ViewController: UIViewController {
     
     var user = User()
     var group = Group()
+    var groupMembers = [User]()
     
     var alphaExpensesRef = FIRDatabaseReference.init()
     
@@ -142,10 +143,16 @@ class ViewController: UIViewController {
                     })
                     
                     self.alphaExpensesRef.child("groups/\(self.user.defaultGroupId)").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+//                        self.group = Group.groupFromFirebase(self.user.defaultGroupId, results: snapshot.value! as! NSDictionary)
                         self.group = Group.groupFromFirebase(self.user.defaultGroupId, results: snapshot.value! as! NSDictionary)
                     })
-
+                    
+                    self.alphaExpensesRef.child("users").queryOrderedByChild("defaultGroupId").queryEqualToValue(self.user.defaultGroupId).observeEventType(.Value, withBlock: { (snapshot) in
+                        self.groupMembers = User.usersFromResults(snapshot.value! as! NSDictionary)
+                    })
+                    
                 })
+                
                 
                 
                 
@@ -230,18 +237,26 @@ class ViewController: UIViewController {
     }
     
     func toAddExpenseCycle() {
+        print(self.user)
+        print(self.group)
         if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
             addExpenseVC.currentStep = AddExpenseStep.description
             
+            var owing = [String : Float]()
+            owing.removeAll()
             
+            for member in groupMembers {
+                owing[member.name] = member.amountOwing
+            }
+            
+            print(owing)
             
             var newExpense = Expense()
             newExpense.addedBy = user.name 
             newExpense.group = user.defaultGroupName
             newExpense.groupId = user.defaultGroupId
             newExpense.groupMembers = group.members
-//TO DO
-//            newExpense.owing = group.membersOwing
+            newExpense.owing = owing
             newExpense.firebaseDBRef = self.alphaExpensesRef
             
             addExpenseVC.newExpense = newExpense
