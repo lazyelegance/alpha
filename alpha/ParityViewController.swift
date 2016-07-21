@@ -9,7 +9,7 @@
 import UIKit
 import Material
 
-class ParityViewController: UIViewController, MaterialSwitchDelegate {
+class ParityViewController: UIViewController, MaterialSwitchDelegate, UITableViewDataSource, UITableViewDelegate {
     var currentStep = AddExpenseStep.description
     
     var newExpense = Expense()
@@ -23,50 +23,47 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate {
 
     var parity = [1,1]
    
-    @IBOutlet weak var sharedEquallyLabel: UILabel!
-    @IBOutlet weak var paidForOtherLabel: UILabel!
-    @IBOutlet weak var paidForSelfLabel: UILabel!
+    @IBOutlet weak var tableView: UITableView!
+
+    @IBOutlet weak var selectLabel: UILabel!
+    
+    @IBOutlet weak var shareEquallyQuestionLabel: UILabel!
+    
+    let shareEquallySwitch = MaterialSwitch(state: .On, style: .LightContent, size: .Large)
     
     var nextButton: FlatButton!
     
     var backButton: FlatButton!
     
-    let sharedEquallySwitch = MaterialSwitch(state: .On, style: .LightContent, size: .Large)
-    let paidForOtherSwitch = MaterialSwitch(state: .Off, style: .LightContent, size: .Large)
-    let paidForSelfSwitch = MaterialSwitch(state: .Off, style: .LightContent, size: .Large)
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        print(newExpense)
+        
         view.backgroundColor = currentStep.toColor()
         
-        CGRectMake(0, 0, 0, 0)
         
+        tableView.alpha = 0
+        tableView.frame.size.height = CGFloat((Float(newExpense.groupMembers.count) * 50))
+        tableView.delegate = self
+        tableView.dataSource = self
         
-        sharedEquallySwitch.frame.origin.x = view.frame.width - 60
-        sharedEquallySwitch.frame.origin.y = sharedEquallyLabel.frame.origin.y
-        sharedEquallySwitch.tag = 100
-        sharedEquallySwitch.delegate = self
+        shareEquallySwitch.frame.origin.x = view.frame.width - 60
+        shareEquallySwitch.center.y = shareEquallyQuestionLabel.center.y
         
+        shareEquallySwitch.tag = 100
+        shareEquallySwitch.delegate = self
         
-        paidForOtherSwitch.frame.origin.x = view.frame.width - 60
-        paidForOtherSwitch.frame.origin.y = paidForOtherLabel.frame.origin.y
-        paidForOtherSwitch.tag = 101
-        paidForOtherSwitch.delegate = self
+        view.addSubview(shareEquallySwitch)
         
+        shareEquallyQuestionLabel.text = "Do you want to split $\(newExpense.billAmount) equally?"
+        selectLabel.text = "Select group members to split $\(newExpense.billAmount) with"
         
-        paidForSelfSwitch.frame.origin.x = view.frame.width - 60
-        paidForSelfSwitch.frame.origin.y = paidForSelfLabel.frame.origin.y
-        paidForSelfSwitch.tag = 102
-        paidForSelfSwitch.delegate = self
-
-        
-        view.addSubview(sharedEquallySwitch)
-        view.addSubview(paidForOtherSwitch)
-        view.addSubview(paidForSelfSwitch)
-        
-        nextButton = FlatButton(frame: CGRectMake(self.view.frame.width - 100, paidForSelfLabel.frame.origin.y + paidForSelfLabel.frame.size.height + 8 , 60, 60))
-        backButton = FlatButton(frame: CGRectMake(self.view.frame.width - 180, paidForSelfLabel.frame.origin.y + paidForSelfLabel.frame.size.height + 8, 60, 60))
+        nextButton = FlatButton(frame: CGRectMake(self.view.frame.width - 100, shareEquallyQuestionLabel.frame.origin.y + shareEquallyQuestionLabel.frame.size.height + 8 , 60, 60))
+        backButton = FlatButton(frame: CGRectMake(self.view.frame.width - 180, shareEquallyQuestionLabel.frame.origin.y + shareEquallyQuestionLabel.frame.size.height + 8, 60, 60))
         
         nextButton.backgroundColor = MaterialColor.white
         
@@ -129,40 +126,28 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate {
     func materialSwitchStateChanged(control: MaterialSwitch) {
         print("control tag: \(control.tag)")
         
-        switch control.tag {
-        case 100:
-
+        if control.tag == 100 {
             if control.on {
-                self.parity.removeAll()
-                self.parity = [1,1]
-                paidForOtherSwitch.setSwitchState(.Off)
-                paidForSelfSwitch.setSwitchState(.Off)
-            }
-        case 101:
-            if control.on {
-                self.parity.removeAll()
-                self.parity = [0,1]
-                sharedEquallySwitch.setSwitchState(.Off)
-                paidForSelfSwitch.setSwitchState(.Off)
-            }
-        case 102:
-            if control.on {
-                self.parity.removeAll()
-                self.parity = [1,0]
-                paidForOtherSwitch.setSwitchState(.Off)
-                sharedEquallySwitch.setSwitchState(.Off)
+                self.tableView.alpha = 0
+                self.selectLabel.alpha = 0
+                let buttonsNewYPosition = self.shareEquallyQuestionLabel.frame.origin.y + self.shareEquallyQuestionLabel.frame.size.height + 10
+                self.nextButton.frame.origin.y = buttonsNewYPosition
+                self.backButton.frame.origin.y = buttonsNewYPosition
+            } else {
+                self.tableView.alpha = 1
+                self.selectLabel.alpha = 1
+                let buttonsNewYPosition = self.tableView.frame.origin.y + self.tableView.frame.size.height + 10
+                self.nextButton.frame.origin.y = buttonsNewYPosition
+                self.backButton.frame.origin.y = buttonsNewYPosition
             }
             
-            
-        default:
-            return
         }
         
     }
     
     func toNextInAddExpenseCycle()  {
         //
-        self.newExpense = updateExpenseWithParity(newExpense, parity: self.parity)
+        //self.newExpense = updateExpenseWithParity(newExpense, parity: self.parity)
         
         if let finishVC = self.storyboard?.instantiateViewControllerWithIdentifier("finishViewController") as? FinishViewController {
             finishVC.parityText = self.parityText
@@ -177,6 +162,8 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate {
         print("back button")
         navigationController?.popViewControllerAnimated(true)
     }
+    
+    /*
     
     func updateExpenseWithParity(expense: Expense, parity: [Int]) -> Expense {
         
@@ -243,7 +230,48 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate {
         
         return currExpense
     }
-
+ */
+    
+    //MARK:- Table View
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return newExpense.groupMembers.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("parityCell", forIndexPath: indexPath) as! ParitySelectionCell
+        
+        if let user = newExpense.groupMembers[indexPath.row] as User? {
+            cell.user = user
+            cell.isClicked = false
+        }
+        
+        return cell
+    }
+    
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        updateParity(indexPath)
+        
+        
+    }
+    
+    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        updateParity(indexPath)
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 50
+    }
+    
+    
+    func updateParity(indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! ParitySelectionCell
+        cell.isClicked = !(cell.isClicked!)
+        
+        
+    }
     /*
     // MARK: - Navigation
 

@@ -32,13 +32,14 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var groupButton: RaisedButton!
     
+    @IBOutlet weak var userButton: RaisedButton!
     
     
     @IBOutlet weak var mainBalance: UILabel!
     
     @IBOutlet weak var userImageView: AsyncImageView!
     
-    @IBOutlet weak var userDisplayName: UILabel!
+    @IBOutlet weak var helloLabel: UILabel!
     
     var user = User()
     var group = Group()
@@ -57,7 +58,12 @@ class ViewController: UIViewController {
         groupButton.backgroundColor = MaterialColor.indigo.accent4
         groupButton.layer.shadowOpacity = 0.1
         
-        mainBalance.font = RobotoFont.mediumWithSize(50)
+        userButton.backgroundColor = MaterialColor.indigo.accent4
+        userButton.layer.shadowOpacity = 0.1
+        
+        
+        
+        mainBalance.font = RobotoFont.lightWithSize(50)
                 
         alphaExpensesRef = FIRDatabase.database().reference()
         
@@ -116,6 +122,8 @@ class ViewController: UIViewController {
         
 
         
+
+        
     }
 
     
@@ -127,15 +135,23 @@ class ViewController: UIViewController {
             
             
             if let name = currentUser.displayName as String!, email = currentUser.email as String! {
-                userDisplayName.text = "hi, \(name)"
+                helloLabel.text = "Welcome"
+                helloLabel.alpha = 1
+                
+                print(currentUser.photoURL)
                 
                 alphaExpensesRef.child("users").queryOrderedByChild("email").queryEqualToValue(email).observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                     
                     self.user = User.userFromFirebase(snapshot.value! as! NSDictionary)
                     
-                    self.mainBalance.text = "\(self.user.amountOwing)"
-                    self.userDisplayName.text = "hi, \(self.user.name)"
+                    self.mainBalance.text = "\(self.user.amountOwing) $"
+                    self.helloLabel.text = "Hello, "
+                    self.userButton.setTitle(self.user.name, forState: .Normal)
                     self.groupButton.setTitle(self.user.defaultGroupName, forState: .Normal)
+                    self.userButton.alpha = 1
+                    self.groupButton.alpha = 1
+                    self.mainBalance.alpha = 1
+                    self.youOweLabel.alpha = 1
                     
                     self.alphaExpensesRef.child("expenses/\(self.user.defaultGroupId)").observeEventType(.Value, withBlock: { (snapshot) in
                         
@@ -255,7 +271,7 @@ class ViewController: UIViewController {
             newExpense.addedBy = user.name 
             newExpense.group = user.defaultGroupName
             newExpense.groupId = user.defaultGroupId
-            newExpense.groupMembers = group.members
+            newExpense.groupMembers = groupMembers
             newExpense.owing = owing
             newExpense.firebaseDBRef = self.alphaExpensesRef
             

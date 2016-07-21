@@ -23,7 +23,7 @@ struct Expense {
     var addedBy = String()
     var group = String()
     var groupId = String()
-    var groupMembers = [String]()
+    var groupMembers = [User]()
     var owing = [String: Float]()
     var firebaseDBRef = FIRDatabaseReference()
     
