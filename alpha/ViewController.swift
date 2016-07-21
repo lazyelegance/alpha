@@ -32,13 +32,14 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var groupButton: RaisedButton!
     
+    @IBOutlet weak var userButton: RaisedButton!
     
     
     @IBOutlet weak var mainBalance: UILabel!
     
     @IBOutlet weak var userImageView: AsyncImageView!
     
-    @IBOutlet weak var userDisplayName: UILabel!
+    @IBOutlet weak var helloLabel: UILabel!
     
     var user = User()
     var group = Group()
@@ -49,6 +50,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+
       
         
         self.navigationController?.navigationBar.hidden = true
@@ -57,7 +59,12 @@ class ViewController: UIViewController {
         groupButton.backgroundColor = MaterialColor.indigo.accent4
         groupButton.layer.shadowOpacity = 0.1
         
-        mainBalance.font = RobotoFont.mediumWithSize(50)
+        userButton.backgroundColor = MaterialColor.indigo.accent4
+        userButton.layer.shadowOpacity = 0.1
+        
+        
+        
+        mainBalance.font = RobotoFont.lightWithSize(50)
                 
         alphaExpensesRef = FIRDatabase.database().reference()
         
@@ -116,6 +123,8 @@ class ViewController: UIViewController {
         
 
         
+
+        
     }
 
     
@@ -126,16 +135,26 @@ class ViewController: UIViewController {
         if let currentUser = FIRAuth.auth()?.currentUser {
             
             
+            
+            
             if let name = currentUser.displayName as String!, email = currentUser.email as String! {
-                userDisplayName.text = "hi, \(name)"
+                helloLabel.text = "Welcome"
+                helloLabel.alpha = 1
+                
+                print(currentUser.photoURL)
                 
                 alphaExpensesRef.child("users").queryOrderedByChild("email").queryEqualToValue(email).observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                     
                     self.user = User.userFromFirebase(snapshot.value! as! NSDictionary)
                     
-                    self.mainBalance.text = "\(self.user.amountOwing)"
-                    self.userDisplayName.text = "hi, \(self.user.name)"
+                    self.mainBalance.text = "\(self.user.amountOwing) $"
+                    self.helloLabel.text = "Hello, "
+                    self.userButton.setTitle(self.user.name, forState: .Normal)
                     self.groupButton.setTitle(self.user.defaultGroupName, forState: .Normal)
+                    self.userButton.alpha = 1
+                    self.groupButton.alpha = 1
+                    self.mainBalance.alpha = 1
+                    self.youOweLabel.alpha = 1
                     
                     self.alphaExpensesRef.child("expenses/\(self.user.defaultGroupId)").observeEventType(.Value, withBlock: { (snapshot) in
                         
@@ -147,7 +166,7 @@ class ViewController: UIViewController {
                         self.group = Group.groupFromFirebase(self.user.defaultGroupId, results: snapshot.value! as! NSDictionary)
                     })
                     
-                    self.alphaExpensesRef.child("users").queryOrderedByChild("defaultGroupId").queryEqualToValue(self.user.defaultGroupId).observeEventType(.Value, withBlock: { (snapshot) in
+                    self.alphaExpensesRef.child("users").queryOrderedByChild("defaultGroupId").queryEqualToValue(self.user.defaultGroupId).observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                         self.groupMembers = User.usersFromResults(snapshot.value! as! NSDictionary)
                     })
                     
@@ -196,13 +215,13 @@ class ViewController: UIViewController {
         
         let ezrakey = alphaExpensesRef.child("groups").childByAutoId().key
         let ramkey = alphaExpensesRef.child("groups").childByAutoId().key
-        let alphakey = alphaExpensesRef.child("users").childByAutoId().key
+        let alphakey = "-KN2R518jhzzednYYZ73"
         
         alphaExpensesRef.child("users").updateChildValues([ezrakey : ["name": "ezra", "title" : "Director of Awesomeness",
-            "amountOwing": 1600.09, "defaultGroup": "alpha708" ,"groups": [alphakey: true], "email": "ezrabathini@gmail.com"]])
+            "amountOwing": 1600, "defaultGroup": "alpha708" ,"groups": [alphakey: true], "email": "ezrabathini@gmail.com"]])
         
         alphaExpensesRef.child("users").updateChildValues([ramkey : ["name": "ram", "title" : "Director of BS",
-            "amountOwing": -1600.09, "defaultGroup": "alpha708", "groups": [alphakey : true], "email": "ev.ramkumar@gmail.com"]])
+            "amountOwing": -1600, "defaultGroup": "alpha708", "groups": [alphakey : true], "email": "ev.ramkumar@gmail.com"]])
         
 //        alphaExpensesRef.child("users").updateChildValues([key1 : ["name": "ezra", "title" : "Director of Awesomeness",
 //            "amountOwing": 1600.09, "defaultGroup": "alpha708" ,"groups": ["alpha708": true], "email": "ezrabathini@gmail.com"], key2 : ["name": "ram", "title" : "Director of BS",
@@ -255,7 +274,7 @@ class ViewController: UIViewController {
             newExpense.addedBy = user.name 
             newExpense.group = user.defaultGroupName
             newExpense.groupId = user.defaultGroupId
-            newExpense.groupMembers = group.members
+            newExpense.groupMembers = groupMembers
             newExpense.owing = owing
             newExpense.firebaseDBRef = self.alphaExpensesRef
             

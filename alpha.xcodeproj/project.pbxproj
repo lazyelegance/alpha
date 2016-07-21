@@ -12,6 +12,7 @@
 		633BC3131D3B1BF40015BAAA /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633BC3121D3B1BF40015BAAA /* Expense.swift */; };
 		633BC3151D3B6C520015BAAA /* ParityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633BC3141D3B6C520015BAAA /* ParityViewController.swift */; };
 		633BC3171D3B7A8E0015BAAA /* FinishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633BC3161D3B7A8E0015BAAA /* FinishViewController.swift */; };
+		634B4B121D3F974D0022B3D2 /* ParitySelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634B4B111D3F974D0022B3D2 /* ParitySelectionCell.swift */; };
 		63547D8D1D38C7E100A00434 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63547D8C1D38C7E100A00434 /* GoogleService-Info.plist */; };
 		63547D8F1D39DAE800A00434 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63547D8E1D39DAE800A00434 /* LoginViewController.swift */; };
 		63547D931D39F4F300A00434 /* AsyncImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63547D921D39F4F300A00434 /* AsyncImageView.m */; };
@@ -61,6 +62,7 @@
 		633BC3121D3B1BF40015BAAA /* Expense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
 		633BC3141D3B6C520015BAAA /* ParityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParityViewController.swift; sourceTree = "<group>"; };
 		633BC3161D3B7A8E0015BAAA /* FinishViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinishViewController.swift; sourceTree = "<group>"; };
+		634B4B111D3F974D0022B3D2 /* ParitySelectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParitySelectionCell.swift; sourceTree = "<group>"; };
 		63547D8B1D38C77F00A00434 /* alpha-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "alpha-Bridging-Header.h"; sourceTree = "<group>"; };
 		63547D8C1D38C7E100A00434 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		63547D8E1D39DAE800A00434 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				633BC3161D3B7A8E0015BAAA /* FinishViewController.swift */,
 				63547D8B1D38C77F00A00434 /* alpha-Bridging-Header.h */,
 				63CBEBCD1D38BACD0002DB65 /* Main.storyboard */,
+				634B4B111D3F974D0022B3D2 /* ParitySelectionCell.swift */,
 				63547D901D39F4F300A00434 /* AsyncImageView */,
 				63CBEBD01D38BACD0002DB65 /* Assets.xcassets */,
 				63CBEBD21D38BACD0002DB65 /* LaunchScreen.storyboard */,
@@ -501,6 +504,7 @@
 				63B71C461D3E1D7700087A8E /* ExpensesCell.swift in Sources */,
 				63B71C481D3E3BA500087A8E /* User.swift in Sources */,
 				633BC3151D3B6C520015BAAA /* ParityViewController.swift in Sources */,
+				634B4B121D3F974D0022B3D2 /* ParitySelectionCell.swift in Sources */,
 				630FB1E91D3A51AE003534A0 /* AddExpenseStep.swift in Sources */,
 				630FB1E71D3A5114003534A0 /* AddExpenseController.swift in Sources */,
 			);

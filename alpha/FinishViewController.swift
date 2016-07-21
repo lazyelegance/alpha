@@ -126,23 +126,19 @@ class FinishViewController: UIViewController {
             }
         }
         
-        for item in (newExpense.owing as? Dictionary)! {
-            print("printing KEY")
-            print(item.0)
-            print("printing VALUE : \(item.1)")
+        for member in newExpense.groupMembers {
+            let currentUserRef = firebaseUserRef.child(member.userUID)
+            let currentUserOwing = newExpense.owing[member.name]
             
-            firebaseUserRef.child(item.0).child("amountOwing").setValue(item.1, withCompletionBlock: { (error, ref) in
+            currentUserRef.child("amountOwing").setValue(currentUserOwing, withCompletionBlock: { (error, ref) in
                 if error != nil {
                     print(error?.localizedDescription)
                 } else {
-                    print("Success saving \(item.0) owing amount")
+                    print("Success saving \(member.name) owing amount")
                 }
             })
-            
-            
-            
-            
         }
+
         
         
         

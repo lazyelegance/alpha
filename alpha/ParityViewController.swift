@@ -9,7 +9,7 @@
 import UIKit
 import Material
 
-class ParityViewController: UIViewController, MaterialSwitchDelegate {
+class ParityViewController: UIViewController, MaterialSwitchDelegate, UITableViewDataSource, UITableViewDelegate {
     var currentStep = AddExpenseStep.description
     
     var newExpense = Expense()
@@ -21,52 +21,56 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate {
     var currGroup = String()
     var currGroupMembers = [String]()
 
-    var parity = [1,1]
+    var parity = [Int]()
    
-    @IBOutlet weak var sharedEquallyLabel: UILabel!
-    @IBOutlet weak var paidForOtherLabel: UILabel!
-    @IBOutlet weak var paidForSelfLabel: UILabel!
+    @IBOutlet weak var tableView: UITableView!
+
+    @IBOutlet weak var selectLabel: UILabel!
+    
+    @IBOutlet weak var shareEquallyQuestionLabel: UILabel!
+    
+    let shareEquallySwitch = MaterialSwitch(state: .On, style: .LightContent, size: .Large)
     
     var nextButton: FlatButton!
     
     var backButton: FlatButton!
     
-    let sharedEquallySwitch = MaterialSwitch(state: .On, style: .LightContent, size: .Large)
-    let paidForOtherSwitch = MaterialSwitch(state: .Off, style: .LightContent, size: .Large)
-    let paidForSelfSwitch = MaterialSwitch(state: .Off, style: .LightContent, size: .Large)
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        print(newExpense)
+        parity.removeAll()
+        for _ in newExpense.groupMembers {
+            parity.append(1)
+        }
+        
+        updateParity(NSIndexPath(index: 0))
+            
+            
         view.backgroundColor = currentStep.toColor()
         
-        CGRectMake(0, 0, 0, 0)
         
+        tableView.alpha = 0
+        tableView.frame.size.height = CGFloat((Float(newExpense.groupMembers.count) * 50))
+        tableView.delegate = self
+        tableView.dataSource = self
         
-        sharedEquallySwitch.frame.origin.x = view.frame.width - 60
-        sharedEquallySwitch.frame.origin.y = sharedEquallyLabel.frame.origin.y
-        sharedEquallySwitch.tag = 100
-        sharedEquallySwitch.delegate = self
+        shareEquallySwitch.frame.origin.x = view.frame.width - 60
+        shareEquallySwitch.center.y = shareEquallyQuestionLabel.center.y
         
+        shareEquallySwitch.tag = 100
+        shareEquallySwitch.delegate = self
         
-        paidForOtherSwitch.frame.origin.x = view.frame.width - 60
-        paidForOtherSwitch.frame.origin.y = paidForOtherLabel.frame.origin.y
-        paidForOtherSwitch.tag = 101
-        paidForOtherSwitch.delegate = self
+        view.addSubview(shareEquallySwitch)
         
+        shareEquallyQuestionLabel.text = "Do you want to split $\(newExpense.billAmount) equally?"
+        selectLabel.text = "Select group members to split $\(newExpense.billAmount) with"
         
-        paidForSelfSwitch.frame.origin.x = view.frame.width - 60
-        paidForSelfSwitch.frame.origin.y = paidForSelfLabel.frame.origin.y
-        paidForSelfSwitch.tag = 102
-        paidForSelfSwitch.delegate = self
-
-        
-        view.addSubview(sharedEquallySwitch)
-        view.addSubview(paidForOtherSwitch)
-        view.addSubview(paidForSelfSwitch)
-        
-        nextButton = FlatButton(frame: CGRectMake(self.view.frame.width - 100, paidForSelfLabel.frame.origin.y + paidForSelfLabel.frame.size.height + 8 , 60, 60))
-        backButton = FlatButton(frame: CGRectMake(self.view.frame.width - 180, paidForSelfLabel.frame.origin.y + paidForSelfLabel.frame.size.height + 8, 60, 60))
+        nextButton = FlatButton(frame: CGRectMake(self.view.frame.width - 100, shareEquallyQuestionLabel.frame.origin.y + shareEquallyQuestionLabel.frame.size.height + 8 , 60, 60))
+        backButton = FlatButton(frame: CGRectMake(self.view.frame.width - 180, shareEquallyQuestionLabel.frame.origin.y + shareEquallyQuestionLabel.frame.size.height + 8, 60, 60))
         
         nextButton.backgroundColor = MaterialColor.white
         
@@ -129,43 +133,100 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate {
     func materialSwitchStateChanged(control: MaterialSwitch) {
         print("control tag: \(control.tag)")
         
-        switch control.tag {
-        case 100:
-
+        if control.tag == 100 {
             if control.on {
-                self.parity.removeAll()
-                self.parity = [1,1]
-                paidForOtherSwitch.setSwitchState(.Off)
-                paidForSelfSwitch.setSwitchState(.Off)
-            }
-        case 101:
-            if control.on {
-                self.parity.removeAll()
-                self.parity = [0,1]
-                sharedEquallySwitch.setSwitchState(.Off)
-                paidForSelfSwitch.setSwitchState(.Off)
-            }
-        case 102:
-            if control.on {
-                self.parity.removeAll()
-                self.parity = [1,0]
-                paidForOtherSwitch.setSwitchState(.Off)
-                sharedEquallySwitch.setSwitchState(.Off)
+                self.tableView.alpha = 0
+                self.selectLabel.alpha = 0
+                let buttonsNewYPosition = self.shareEquallyQuestionLabel.frame.origin.y + self.shareEquallyQuestionLabel.frame.size.height + 10
+                self.nextButton.frame.origin.y = buttonsNewYPosition
+                self.backButton.frame.origin.y = buttonsNewYPosition
+                parity.removeAll()
+                for _ in newExpense.groupMembers {
+                    parity.append(1)
+                }
+            } else {
+                self.tableView.alpha = 1
+                self.selectLabel.alpha = 1
+                let buttonsNewYPosition = self.tableView.frame.origin.y + self.tableView.frame.size.height + 10
+                self.nextButton.frame.origin.y = buttonsNewYPosition
+                self.backButton.frame.origin.y = buttonsNewYPosition
+                parity.removeAll()
+                for _ in newExpense.groupMembers {
+                    parity.append(0)
+                }
+                tableView.reloadData()
             }
             
-            
-        default:
-            return
         }
         
     }
     
     func toNextInAddExpenseCycle()  {
-        //
-        self.newExpense = updateExpenseWithParity(newExpense, parity: self.parity)
+        
+        //Update Expense
+
+        
+        newExpense.parity.removeAll()
+        newExpense.spent.removeAll()
+        
+        var paritySum = 0
+        
+        for i in parity {
+            paritySum = paritySum + i
+        }
+        
+        for i in 0 ..< newExpense.groupMembers.count {
+            let member = newExpense.groupMembers[i]
+            let memberParity = parity[i]
+            
+            //parity
+            newExpense.parity[member.name] = parity[i]
+            
+            //spent
+            if member.name == newExpense.addedBy {
+                newExpense.spent[member.name] = 1
+            } else {
+                newExpense.spent[member.name] = 0
+            }
+            
+            //share
+            if paritySum != 0 {
+                newExpense.share[member.name] = newExpense.billAmount * Float(memberParity) / Float(paritySum)
+            }
+            
+            //settlemet
+            if newExpense.spent.count > 0 {
+                if newExpense.share[member.name] != nil && newExpense.spent[member.name] != nil {
+                    newExpense.settlement[member.name] = (newExpense.billAmount * Float(newExpense.spent[member.name]!)) - newExpense.share[member.name]!
+                }
+            }
+            
+            //owing
+            if newExpense.settlement.count > 0 {
+                if newExpense.settlement[member.name] != nil {
+                    newExpense.owing[member.name] = newExpense.owing[member.name]! - newExpense.settlement[member.name]!
+                }
+            }
+        }
+        
+        
+        print(newExpense)
+        
+        
         
         if let finishVC = self.storyboard?.instantiateViewControllerWithIdentifier("finishViewController") as? FinishViewController {
-            finishVC.parityText = self.parityText
+            
+            if paritySum == parity.count {
+                finishVC.parityText = "shared equally"
+            } else {
+                finishVC.parityText = "spent on "
+                for member in newExpense.parity {
+                    if member.1 == 1 {
+                        finishVC.parityText = finishVC.parityText + member.0
+                    }
+                }
+            }
+            
             finishVC.newExpense = self.newExpense
             self.navigationController?.pushViewController(finishVC, animated: true)
         }
@@ -178,72 +239,64 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate {
         navigationController?.popViewControllerAnimated(true)
     }
     
-    func updateExpenseWithParity(expense: Expense, parity: [Int]) -> Expense {
+    func prepareParity() {
         
-        var currExpense = expense        
-        var parityDictionary: [String: Int] = [:]
-        var shareDictionary: [String: Float] = [:]
-        var spentDictionary: [String: Int] = [:]
-        var settlementDictionary: [String: Float] = [:]
-        
-        parityDictionary.removeAll()
-        shareDictionary.removeAll()
-        spentDictionary.removeAll()
-        settlementDictionary.removeAll()
-        
-        
-        
-        
-        var paritySum = 0
-        
-        for item in parity {
-            paritySum = paritySum + item
-        }
-        
-        print(paritySum)
-        
-        if let user = expense.addedBy as? String, group = expense.group as? String, groupMembers = expense.groupMembers as? [String], amount = expense.billAmount as? Float {
-            for (var i = 0; i < groupMembers.count; ++i) {
-                let currentParity = parity[i]
-                let currentMember = groupMembers[i]
-                //let memberParity = [currentMember : currentParity]
-                var memberSpent = 0
-                
-                if currentMember == user {
-                    memberSpent = 1
-                    
-                }
-                
-                
-                spentDictionary[currentMember] = memberSpent
-                parityDictionary[currentMember] = currentParity
-                
-                if let currentMemberShare = amount * Float(currentParity) / Float(paritySum) as? Float {
-                    print("current Member SHare: \(currentMemberShare)")
-                   
-                    if let currentMemberSettlement = Float(memberSpent) * amount - Float(currentMemberShare) as? Float {
-                        print("current Member Settlemnt: \(currentMemberSettlement)")
-                        let memberSettlement = [currentMember : currentMemberSettlement]
-                        settlementDictionary[currentMember] = currentMemberSettlement
-                        if let currMemberOwing = expense.owing[currentMember] as Float! {
-                            currExpense.owing[currentMember] = currMemberOwing + currentMemberSettlement
-                        }
-                        
-                    }
-                    shareDictionary[currentMember] = currentMemberShare
-                }
-                
-            }
-        }
-
-        currExpense.parity = parityDictionary
-        currExpense.share = shareDictionary
-        currExpense.settlement = settlementDictionary
-        currExpense.spent = spentDictionary
-        
-        return currExpense
     }
 
+    
+    //MARK:- Table View
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return newExpense.groupMembers.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("parityCell", forIndexPath: indexPath) as! ParitySelectionCell
+        
+        if let user = newExpense.groupMembers[indexPath.row] as User? {
+            cell.user = user
+            cell.isClicked = false
+        }
+        
+        return cell
+    }
+    
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        updateParity(indexPath)
+        
+        
+    }
+    
+    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        updateParity(indexPath)
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 50
+    }
+    
+    
+    func updateParity(indexPath: NSIndexPath) {
+        
+        if !shareEquallySwitch.on {
+            let cell = tableView.cellForRowAtIndexPath(indexPath) as! ParitySelectionCell
+            
+            
+            cell.isClicked = !(cell.isClicked!)
+            
+            if cell.isClicked == true {
+                parity[indexPath.row] = 1
+            } else {
+                parity[indexPath.row] = 0
+            }
+        }
+        
+        print(parity)
+        
+        
+    }
     /*
     // MARK: - Navigation
 
