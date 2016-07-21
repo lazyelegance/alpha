@@ -75,6 +75,7 @@ class ViewController: UIViewController {
         btn1.titleLabel?.font = RobotoFont.regularWithSize(12)
         btn1.backgroundColor = MaterialColor.white
         btn1.pulseColor = MaterialColor.white
+
         btn1.setTitle("Menu".uppercaseString, forState: .Normal)
         
         

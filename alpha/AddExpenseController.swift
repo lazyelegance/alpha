@@ -9,21 +9,23 @@
 import UIKit
 import Material
 
-class AddExpenseController: UIViewController, UITextFieldDelegate {
+class AddExpenseController: UIViewController, TextFieldDelegate {
     
-    var placeHolderText = "Description"
-    var nextPlaceHolder = "Bill Amount"
+
     var currentStep = AddExpenseStep.description
     
     var currAmountOwing = "0.00"
 
+
     
-    var descriptionTextField: TextField!
+    @IBOutlet weak var expenseTextField: TextField!
+    @IBOutlet weak var nextButton: RaisedButton!
     
+    @IBOutlet weak var backButton: FabButton!
     
-    var nextButton: FlatButton!
-    
-    var backButton: FlatButton!
+//    var nextButton: FlatButton!
+//    
+//    var backButton: FlatButton!
     
     var startOverButton: FlatButton!
     
@@ -34,59 +36,48 @@ class AddExpenseController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         view.backgroundColor = currentStep.toColor()
+
+        
+        expenseTextField.placeholder = currentStep.toString()
+//        expenseTextField.placeholderColor = MaterialColor.white
+//        expenseTextField.backgroundColor = currentStep.toColor()
+        expenseTextField.textColor = MaterialColor.white
+        expenseTextField.font = RobotoFont.lightWithSize(20)
+        expenseTextField.dividerColor = MaterialColor.white
         
         
-        descriptionTextField = TextField(frame: CGRectMake(10, 100, self.view.frame.width - 20, 50))
-        nextButton = FlatButton(frame: CGRectMake(self.view.frame.width - 100, 160 , 60, 60))
-        backButton = FlatButton(frame: CGRectMake(self.view.frame.width - 180, 160, 60, 60))
+//        expenseTextField.delegate = self
+        
+        expenseTextField.addTarget(self, action: #selector(AddExpenseController.toNextInAddExpenseCycle), forControlEvents: .EditingDidEndOnExit)
+        expenseTextField.addTarget(self, action: #selector(AddExpenseController.showNextButton), forControlEvents: .EditingChanged)
         
         
-        
-        descriptionTextField.placeholder = currentStep.toString()
-        descriptionTextField.placeholderColor = MaterialColor.white
-        descriptionTextField.backgroundColor = currentStep.toColor()
-        descriptionTextField.textColor = MaterialColor.white
-        descriptionTextField.font = RobotoFont.lightWithSize(20)
-        
-        descriptionTextField.delegate = self
-        
-        descriptionTextField.addTarget(self, action: #selector(AddExpenseController.toNextInAddExpenseCycle), forControlEvents: .EditingDidEndOnExit)
-        descriptionTextField.addTarget(self, action: #selector(AddExpenseController.showNextButton), forControlEvents: .EditingChanged)
-        
-        descriptionTextField.becomeFirstResponder()
-        
-        nextButton.backgroundColor = MaterialColor.white
-        
-        if currentStep == .finish {
-            nextButton.setTitle("FINISH", forState: .Normal)
-        } else {
-            nextButton.setTitle("NEXT", forState: .Normal)
-        }
+        expenseTextField.keyboardType = UIKeyboardType.Alphabet
+        expenseTextField.keyboardAppearance = .Light
         
         
         
-        nextButton.setTitleColor(MaterialColor.blue.accent1, forState: .Normal)
-        nextButton.titleLabel?.font = RobotoFont.regularWithSize(8)
-        nextButton.pulseColor = MaterialColor.blue.accent3
-        
-        nextButton.tintColor = MaterialColor.blue.accent3
-        
-        nextButton.layer.cornerRadius = 30
-        
-        nextButton.layer.shadowOpacity = 0.1
-        
-        nextButton.addTarget(self, action: #selector(AddExpenseController.toNextInAddExpenseCycle), forControlEvents: .TouchUpInside)
+        backButton.setImage(MaterialIcon.arrowBack, forState: .Normal)
         
         nextButton.alpha = 0
         
-        backButton.backgroundColor = MaterialColor.white
-    
-        backButton.setTitle("BACK", forState: .Normal)
-        backButton.setTitleColor(MaterialColor.blue.accent1, forState: .Normal)
-        backButton.titleLabel?.font = RobotoFont.regularWithSize(8)
-        backButton.layer.cornerRadius = 30
+        if currentStep == .billAmount {
+            nextButton.setTitle("next".uppercaseString, forState: .Normal)
+            expenseTextField.keyboardType = UIKeyboardType.DecimalPad
+            nextButton.backgroundColor = MaterialColor.amber.darken2
+        } else {
+            nextButton.setTitle("add expense amount".uppercaseString, forState: .Normal)
+            nextButton.backgroundColor = MaterialColor.blue.darken2
+        }
         
+        nextButton.setTitleColor(MaterialColor.white, forState: .Normal)
+        nextButton.backgroundColor = view.backgroundColor
+        
+        expenseTextField.becomeFirstResponder()
+        
+        nextButton.addTarget(self, action: #selector(AddExpenseController.toNextInAddExpenseCycle), forControlEvents: .TouchUpInside)
         backButton.addTarget(self, action: #selector(AddExpenseController.backOneStep), forControlEvents: .TouchUpInside)
+        
 
         let image = UIImage(named: "ic_close_white")?.imageWithRenderingMode(.Automatic)
         let clearButton: FlatButton = FlatButton()
@@ -94,14 +85,7 @@ class AddExpenseController: UIViewController, UITextFieldDelegate {
         clearButton.tintColor = MaterialColor.grey.base
         clearButton.setImage(image, forState: .Normal)
         clearButton.setImage(image, forState: .Highlighted)
-        
-        view.addSubview(descriptionTextField)
-        view.addSubview(nextButton)
-        view.addSubview(backButton)
-        
-//        descriptionTextField.clearIconButton = clearButton
 
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
@@ -116,14 +100,14 @@ class AddExpenseController: UIViewController, UITextFieldDelegate {
     
     func toNextInAddExpenseCycle() {
         
-        descriptionTextField.resignFirstResponder()
+        expenseTextField.resignFirstResponder()
         
-        if descriptionTextField.text?.isEmpty == false {
+        if expenseTextField.text?.isEmpty == false {
             switch currentStep {
             case .description:
-                newExpense.description = descriptionTextField.text!
+                newExpense.description = expenseTextField.text!
             case .billAmount:
-                newExpense.billAmount = (descriptionTextField.text! as NSString).floatValue
+                newExpense.billAmount = (expenseTextField.text! as NSString).floatValue
             default:
                 return
             }

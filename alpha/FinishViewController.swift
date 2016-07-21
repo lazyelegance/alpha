@@ -19,15 +19,15 @@ class FinishViewController: UIViewController {
     
     var newExpense = Expense()
     
-    
-    var nextButton: FlatButton!
-    
-    var backButton: FlatButton!
 
+    @IBOutlet weak var backButton: FabButton!
+
+    @IBOutlet weak var saveButton: RaisedButton!
     
     @IBOutlet weak var descriptionLabel: UILabel!
     
-    @IBOutlet weak var billAmountLabel: UILabel!
+    
+    @IBOutlet weak var titleLabel: UILabel!
     
     
     @IBOutlet weak var paritylabel: UILabel!
@@ -39,56 +39,28 @@ class FinishViewController: UIViewController {
         view.backgroundColor = AddExpenseStep.finish.toColor()
         
         descriptionLabel.text = newExpense.description
-        billAmountLabel.text = "$ \(newExpense.billAmount)"
+        titleLabel.text = "You are about to add expense of $\(newExpense.billAmount)"
         paritylabel.text = parityText
         
+        saveButton.backgroundColor = view.backgroundColor
+        saveButton.setTitle("SAVE EXPENSE", forState: .Normal)
+        backButton.setImage(MaterialIcon.arrowBack, forState: .Normal)
         
-        nextButton = FlatButton(frame: CGRectMake(self.view.frame.width - 100, paritylabel.frame.origin.y + paritylabel.frame.size.height + 8 , 60, 60))
-        backButton = FlatButton(frame: CGRectMake(self.view.frame.width - 180, paritylabel.frame.origin.y + paritylabel.frame.size.height + 8, 60, 60))
+        backButton.addTarget(self, action: #selector(self.backOneStep), forControlEvents: .TouchUpInside)
+        saveButton.addTarget(self, action: #selector(self.saveExpense), forControlEvents: .TouchUpInside)
+        saveButton.setTitleColor(MaterialColor.white, forState: .Normal)
 
-        nextButton.backgroundColor = MaterialColor.white
-        
-        nextButton.setTitle("🏁", forState: .Normal)
-        
-        
-        nextButton.setTitleColor(MaterialColor.blue.accent1, forState: .Normal)
-        nextButton.titleLabel?.font = RobotoFont.regularWithSize(8)
-        nextButton.pulseColor = MaterialColor.blue.accent3
-        
-        nextButton.tintColor = MaterialColor.blue.accent3
-        
-        nextButton.layer.cornerRadius = 30
-        
-        nextButton.layer.shadowOpacity = 0.1
-        
-        nextButton.addTarget(self, action: #selector(FinishViewController.saveExpense), forControlEvents: .TouchUpInside)
-
-        
-        backButton.backgroundColor = MaterialColor.white
-        
-        backButton.setTitle("🔙", forState: .Normal)
-        backButton.setTitleColor(MaterialColor.blue.accent1, forState: .Normal)
-        backButton.titleLabel?.font = RobotoFont.regularWithSize(8)
-        backButton.layer.cornerRadius = 30
-        
-        backButton.addTarget(self, action: #selector(FinishViewController.restartAddExpense), forControlEvents: .TouchUpInside)
-        
-        let image = UIImage(named: "ic_close_white")?.imageWithRenderingMode(.Automatic)
-        let clearButton: FlatButton = FlatButton()
-        clearButton.pulseColor = MaterialColor.grey.base
-        clearButton.tintColor = MaterialColor.grey.base
-        clearButton.setImage(image, forState: .Normal)
-        clearButton.setImage(image, forState: .Highlighted)
-        
-        
-        view.addSubview(nextButton)
-        view.addSubview(backButton)
         // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func backOneStep() {
+        print("back button")
+        navigationController?.popViewControllerAnimated(true)
     }
     
     

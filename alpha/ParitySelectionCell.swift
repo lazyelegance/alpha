@@ -49,7 +49,7 @@ class ParitySelectionCell: UITableViewCell {
                 
                 
                 profileImageView.layer.masksToBounds = true
-                profileImageView.layer.cornerRadius = 25
+                profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
                 
                 
                 profileImageView.imageURL = NSURL(string: "https://lh3.googleusercontent.com/-r0dVVRlY-DE/AAAAAAAAAAI/AAAAAAAAADw/F5ns-7HdrkE/photo.jpg")
