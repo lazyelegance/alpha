@@ -21,7 +21,7 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate, UITableVie
     var currGroup = String()
     var currGroupMembers = [String]()
 
-    var parity = [1,1]
+    var parity = [Int]()
    
     @IBOutlet weak var tableView: UITableView!
 
@@ -42,7 +42,14 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate, UITableVie
         
         
         print(newExpense)
+        parity.removeAll()
+        for _ in newExpense.groupMembers {
+            parity.append(1)
+        }
         
+        updateParity(NSIndexPath(index: 0))
+            
+            
         view.backgroundColor = currentStep.toColor()
         
         
@@ -133,12 +140,21 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate, UITableVie
                 let buttonsNewYPosition = self.shareEquallyQuestionLabel.frame.origin.y + self.shareEquallyQuestionLabel.frame.size.height + 10
                 self.nextButton.frame.origin.y = buttonsNewYPosition
                 self.backButton.frame.origin.y = buttonsNewYPosition
+                parity.removeAll()
+                for _ in newExpense.groupMembers {
+                    parity.append(1)
+                }
             } else {
                 self.tableView.alpha = 1
                 self.selectLabel.alpha = 1
                 let buttonsNewYPosition = self.tableView.frame.origin.y + self.tableView.frame.size.height + 10
                 self.nextButton.frame.origin.y = buttonsNewYPosition
                 self.backButton.frame.origin.y = buttonsNewYPosition
+                parity.removeAll()
+                for _ in newExpense.groupMembers {
+                    parity.append(0)
+                }
+                tableView.reloadData()
             }
             
         }
@@ -146,11 +162,71 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate, UITableVie
     }
     
     func toNextInAddExpenseCycle()  {
-        //
-        //self.newExpense = updateExpenseWithParity(newExpense, parity: self.parity)
+        
+        //Update Expense
+
+        
+        newExpense.parity.removeAll()
+        newExpense.spent.removeAll()
+        
+        var paritySum = 0
+        
+        for i in parity {
+            paritySum = paritySum + i
+        }
+        
+        for i in 0 ..< newExpense.groupMembers.count {
+            let member = newExpense.groupMembers[i]
+            let memberParity = parity[i]
+            
+            //parity
+            newExpense.parity[member.name] = parity[i]
+            
+            //spent
+            if member.name == newExpense.addedBy {
+                newExpense.spent[member.name] = 1
+            } else {
+                newExpense.spent[member.name] = 0
+            }
+            
+            //share
+            if paritySum != 0 {
+                newExpense.share[member.name] = newExpense.billAmount * Float(memberParity) / Float(paritySum)
+            }
+            
+            //settlemet
+            if newExpense.spent.count > 0 {
+                if newExpense.share[member.name] != nil && newExpense.spent[member.name] != nil {
+                    newExpense.settlement[member.name] = (newExpense.billAmount * Float(newExpense.spent[member.name]!)) - newExpense.share[member.name]!
+                }
+            }
+            
+            //owing
+            if newExpense.settlement.count > 0 {
+                if newExpense.settlement[member.name] != nil {
+                    newExpense.owing[member.name] = newExpense.owing[member.name]! - newExpense.settlement[member.name]!
+                }
+            }
+        }
+        
+        
+        print(newExpense)
+        
+        
         
         if let finishVC = self.storyboard?.instantiateViewControllerWithIdentifier("finishViewController") as? FinishViewController {
-            finishVC.parityText = self.parityText
+            
+            if paritySum == parity.count {
+                finishVC.parityText = "shared equally"
+            } else {
+                finishVC.parityText = "spent on "
+                for member in newExpense.parity {
+                    if member.1 == 1 {
+                        finishVC.parityText = finishVC.parityText + member.0
+                    }
+                }
+            }
+            
             finishVC.newExpense = self.newExpense
             self.navigationController?.pushViewController(finishVC, animated: true)
         }
@@ -163,74 +239,10 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate, UITableVie
         navigationController?.popViewControllerAnimated(true)
     }
     
-    /*
-    
-    func updateExpenseWithParity(expense: Expense, parity: [Int]) -> Expense {
+    func prepareParity() {
         
-        var currExpense = expense        
-        var parityDictionary: [String: Int] = [:]
-        var shareDictionary: [String: Float] = [:]
-        var spentDictionary: [String: Int] = [:]
-        var settlementDictionary: [String: Float] = [:]
-        
-        parityDictionary.removeAll()
-        shareDictionary.removeAll()
-        spentDictionary.removeAll()
-        settlementDictionary.removeAll()
-        
-        
-        
-        
-        var paritySum = 0
-        
-        for item in parity {
-            paritySum = paritySum + item
-        }
-        
-        print(paritySum)
-        
-        if let user = expense.addedBy as? String, group = expense.group as? String, groupMembers = expense.groupMembers as? [String], amount = expense.billAmount as? Float {
-            for (var i = 0; i < groupMembers.count; ++i) {
-                let currentParity = parity[i]
-                let currentMember = groupMembers[i]
-                //let memberParity = [currentMember : currentParity]
-                var memberSpent = 0
-                
-                if currentMember == user {
-                    memberSpent = 1
-                    
-                }
-                
-                
-                spentDictionary[currentMember] = memberSpent
-                parityDictionary[currentMember] = currentParity
-                
-                if let currentMemberShare = amount * Float(currentParity) / Float(paritySum) as? Float {
-                    print("current Member SHare: \(currentMemberShare)")
-                   
-                    if let currentMemberSettlement = Float(memberSpent) * amount - Float(currentMemberShare) as? Float {
-                        print("current Member Settlemnt: \(currentMemberSettlement)")
-                        let memberSettlement = [currentMember : currentMemberSettlement]
-                        settlementDictionary[currentMember] = currentMemberSettlement
-                        if let currMemberOwing = expense.owing[currentMember] as Float! {
-                            currExpense.owing[currentMember] = currMemberOwing + currentMemberSettlement
-                        }
-                        
-                    }
-                    shareDictionary[currentMember] = currentMemberShare
-                }
-                
-            }
-        }
-
-        currExpense.parity = parityDictionary
-        currExpense.share = shareDictionary
-        currExpense.settlement = settlementDictionary
-        currExpense.spent = spentDictionary
-        
-        return currExpense
     }
- */
+
     
     //MARK:- Table View
     
@@ -267,8 +279,21 @@ class ParityViewController: UIViewController, MaterialSwitchDelegate, UITableVie
     
     
     func updateParity(indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! ParitySelectionCell
-        cell.isClicked = !(cell.isClicked!)
+        
+        if !shareEquallySwitch.on {
+            let cell = tableView.cellForRowAtIndexPath(indexPath) as! ParitySelectionCell
+            
+            
+            cell.isClicked = !(cell.isClicked!)
+            
+            if cell.isClicked == true {
+                parity[indexPath.row] = 1
+            } else {
+                parity[indexPath.row] = 0
+            }
+        }
+        
+        print(parity)
         
         
     }

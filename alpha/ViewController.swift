@@ -50,6 +50,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+
       
         
         self.navigationController?.navigationBar.hidden = true
@@ -134,6 +135,8 @@ class ViewController: UIViewController {
         if let currentUser = FIRAuth.auth()?.currentUser {
             
             
+            
+            
             if let name = currentUser.displayName as String!, email = currentUser.email as String! {
                 helloLabel.text = "Welcome"
                 helloLabel.alpha = 1
@@ -163,7 +166,7 @@ class ViewController: UIViewController {
                         self.group = Group.groupFromFirebase(self.user.defaultGroupId, results: snapshot.value! as! NSDictionary)
                     })
                     
-                    self.alphaExpensesRef.child("users").queryOrderedByChild("defaultGroupId").queryEqualToValue(self.user.defaultGroupId).observeEventType(.Value, withBlock: { (snapshot) in
+                    self.alphaExpensesRef.child("users").queryOrderedByChild("defaultGroupId").queryEqualToValue(self.user.defaultGroupId).observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                         self.groupMembers = User.usersFromResults(snapshot.value! as! NSDictionary)
                     })
                     
@@ -212,13 +215,13 @@ class ViewController: UIViewController {
         
         let ezrakey = alphaExpensesRef.child("groups").childByAutoId().key
         let ramkey = alphaExpensesRef.child("groups").childByAutoId().key
-        let alphakey = alphaExpensesRef.child("users").childByAutoId().key
+        let alphakey = "-KN2R518jhzzednYYZ73"
         
         alphaExpensesRef.child("users").updateChildValues([ezrakey : ["name": "ezra", "title" : "Director of Awesomeness",
-            "amountOwing": 1600.09, "defaultGroup": "alpha708" ,"groups": [alphakey: true], "email": "ezrabathini@gmail.com"]])
+            "amountOwing": 1600, "defaultGroup": "alpha708" ,"groups": [alphakey: true], "email": "ezrabathini@gmail.com"]])
         
         alphaExpensesRef.child("users").updateChildValues([ramkey : ["name": "ram", "title" : "Director of BS",
-            "amountOwing": -1600.09, "defaultGroup": "alpha708", "groups": [alphakey : true], "email": "ev.ramkumar@gmail.com"]])
+            "amountOwing": -1600, "defaultGroup": "alpha708", "groups": [alphakey : true], "email": "ev.ramkumar@gmail.com"]])
         
 //        alphaExpensesRef.child("users").updateChildValues([key1 : ["name": "ezra", "title" : "Director of Awesomeness",
 //            "amountOwing": 1600.09, "defaultGroup": "alpha708" ,"groups": ["alpha708": true], "email": "ezrabathini@gmail.com"], key2 : ["name": "ram", "title" : "Director of BS",
