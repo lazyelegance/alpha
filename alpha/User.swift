@@ -12,7 +12,7 @@ import FirebaseDatabase
 
 struct User {
     //
-    var userUID: String
+    var userId: String
     var name: String
     var email = String()
     var amountOwing = Float()
@@ -23,7 +23,7 @@ struct User {
     var current = false
     
     init() {
-        self.userUID = "1"
+        self.userId = "1"
         self.name = "New User"
     }
     
@@ -38,7 +38,7 @@ struct User {
             for result in results {
                 
                 if let valueDictionary = result.value as? NSDictionary {
-                    user.userUID = result.key as! String
+                    user.userId = result.key as! String
                     
                     for value in valueDictionary {
                         switch value.key as! String {
@@ -67,7 +67,7 @@ struct User {
             }
         }
         
-        print(users)
+
         return users
     }
     
@@ -76,36 +76,29 @@ struct User {
         
         
         if results.count > 0 {
-            for result in results {
-                
-                if let valueDictionary = result.value as? NSDictionary {
-                    user.userUID = result.key as! String
-                    for value in valueDictionary {
-                        switch value.key as! String {
-                        case "amountOwing":
-                            user.amountOwing = value.value as! Float
-                        case "name":
-                            user.name = value.value as! String
-                        case "defaultGroup":
-                            user.defaultGroupName = value.value as! String
-                        case "defaultGroupId":
-                            user.defaultGroupId = value.value as! String
-                        case "email":
-                            user.email = value.value as! String
-                        case "title":
-                            user.title = value.value as! String
-                        case "groups":
-                            user.groups = value.value as! [String:Bool]
-                        default:
-                            break
-                        }
-                    }
-                    
+            for value in results {
+                switch value.key as! String {
+                case "userId":
+                    user.userId = value.value as! String
+                case "amountOwing":
+                    user.amountOwing = value.value as! Float
+                case "name":
+                    user.name = value.value as! String
+                case "defaultGroup":
+                    user.defaultGroupName = value.value as! String
+                case "defaultGroupId":
+                    user.defaultGroupId = value.value as! String
+                case "email":
+                    user.email = value.value as! String
+                case "title":
+                    user.title = value.value as! String
+                case "groups":
+                    user.groups = value.value as! [String:Bool]
+                default:
+                    break
                 }
             }
         }
-        
-        
         return user
     }
     
