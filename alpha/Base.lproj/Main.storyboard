@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="16A254g" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="cbv-fS-GSu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="16A254g" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="6gG-tM-LuD">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="Roboto-Medium.ttf">
@@ -156,12 +157,66 @@
                     <view key="view" contentMode="scaleToFill" id="F5M-8I-dH6">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="alpha" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mdt-vS-Rgd">
+                                <rect key="frame" x="0.0" y="120" width="600" height="68"/>
+                                <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="58"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bookmark_new_white" translatesAutoresizingMaskIntoConstraints="NO" id="7kD-Fj-Mhc" customClass="AsyncImageView">
+                                <rect key="frame" x="275" y="70" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="9Fy-wO-00g"/>
+                                    <constraint firstAttribute="width" secondItem="7kD-Fj-Mhc" secondAttribute="height" multiplier="4:3" id="eW4-bG-muk"/>
+                                    <constraint firstAttribute="width" secondItem="7kD-Fj-Mhc" secondAttribute="height" multiplier="1:1" id="tO4-XG-VHx"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="eW4-bG-muk"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.65447690042996842" green="0.51802859284857961" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="mdt-vS-Rgd" firstAttribute="leading" secondItem="F5M-8I-dH6" secondAttribute="leadingMargin" constant="-20" id="0yN-5d-PXg"/>
+                            <constraint firstItem="7kD-Fj-Mhc" firstAttribute="leading" secondItem="F5M-8I-dH6" secondAttribute="leadingMargin" constant="-20" id="4QO-xk-qOR"/>
+                            <constraint firstItem="mdt-vS-Rgd" firstAttribute="top" secondItem="7kD-Fj-Mhc" secondAttribute="bottom" id="5Lc-Pm-jUQ"/>
+                            <constraint firstItem="mdt-vS-Rgd" firstAttribute="leading" secondItem="F5M-8I-dH6" secondAttribute="leadingMargin" constant="-20" id="5xO-am-Q1r"/>
+                            <constraint firstItem="7kD-Fj-Mhc" firstAttribute="width" secondItem="F5M-8I-dH6" secondAttribute="height" multiplier="14:15" id="7Jr-hQ-Lom"/>
+                            <constraint firstItem="7kD-Fj-Mhc" firstAttribute="top" secondItem="F5M-8I-dH6" secondAttribute="topMargin" constant="100" id="D2L-ea-IyQ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="mdt-vS-Rgd" secondAttribute="trailing" constant="-20" id="Gi4-vT-vIE"/>
+                            <constraint firstItem="myC-dd-NeF" firstAttribute="top" secondItem="7kD-Fj-Mhc" secondAttribute="bottom" constant="237" id="KMj-nj-EWN"/>
+                            <constraint firstItem="7kD-Fj-Mhc" firstAttribute="top" secondItem="nmT-mq-veD" secondAttribute="bottom" id="LnQ-Wl-JAY"/>
+                            <constraint firstItem="mdt-vS-Rgd" firstAttribute="top" secondItem="nmT-mq-veD" secondAttribute="bottom" constant="60" id="QRO-y0-Zpg"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="7kD-Fj-Mhc" secondAttribute="trailing" constant="-20" id="XRm-Gg-6lD"/>
+                            <constraint firstItem="7kD-Fj-Mhc" firstAttribute="trailing" secondItem="F5M-8I-dH6" secondAttribute="trailingMargin" id="Xxr-If-2M6"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="mdt-vS-Rgd" secondAttribute="trailing" constant="-20" id="aTE-kG-qwE"/>
+                            <constraint firstItem="7kD-Fj-Mhc" firstAttribute="centerX" secondItem="F5M-8I-dH6" secondAttribute="centerX" id="cwI-f4-UxD"/>
+                            <constraint firstItem="7kD-Fj-Mhc" firstAttribute="height" secondItem="F5M-8I-dH6" secondAttribute="height" multiplier="1:2" id="dQj-dd-Jfw"/>
+                            <constraint firstItem="7kD-Fj-Mhc" firstAttribute="top" secondItem="nmT-mq-veD" secondAttribute="bottom" constant="50" id="znE-zo-Phd"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="0yN-5d-PXg"/>
+                                <exclude reference="Gi4-vT-vIE"/>
+                                <exclude reference="QRO-y0-Zpg"/>
+                                <exclude reference="4QO-xk-qOR"/>
+                                <exclude reference="7Jr-hQ-Lom"/>
+                                <exclude reference="D2L-ea-IyQ"/>
+                                <exclude reference="LnQ-Wl-JAY"/>
+                                <exclude reference="XRm-Gg-6lD"/>
+                                <exclude reference="Xxr-If-2M6"/>
+                                <exclude reference="dQj-dd-Jfw"/>
+                                <exclude reference="KMj-nj-EWN"/>
+                            </mask>
+                        </variation>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aMC-jY-Mvr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1542" y="-508"/>
+            <point key="canvasLocation" x="1535" y="-507"/>
         </scene>
         <!--Add Expense Controller-->
         <scene sceneID="qKx-CR-hjJ">
@@ -723,4 +778,7 @@
             <point key="canvasLocation" x="139" y="136"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="bookmark_new_white" width="48" height="48"/>
+    </resources>
 </document>
