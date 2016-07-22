@@ -99,7 +99,7 @@ class FinishViewController: UIViewController {
         }
         
         for member in newExpense.groupMembers {
-            let currentUserRef = firebaseUserRef.child(member.userUID)
+            let currentUserRef = firebaseUserRef.child(member.userId)
             let currentUserOwing = newExpense.owing[member.name]
             
             currentUserRef.child("amountOwing").setValue(currentUserOwing, withCompletionBlock: { (error, ref) in

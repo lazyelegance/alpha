@@ -45,7 +45,7 @@ class ViewController: UIViewController {
     var group = Group()
     var groupMembers = [User]()
     
-    var alphaExpensesRef = FIRDatabaseReference.init()
+    var alphaRef = FIRDatabaseReference.init()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,7 +66,7 @@ class ViewController: UIViewController {
         
         mainBalance.font = RobotoFont.lightWithSize(50)
                 
-        alphaExpensesRef = FIRDatabase.database().reference()
+        alphaRef = FIRDatabase.database().reference()
         
     
         
@@ -134,17 +134,13 @@ class ViewController: UIViewController {
         flatMenu.close()
         
         if let currentUser = FIRAuth.auth()?.currentUser {
+            helloLabel.text = "Welcome"
+            helloLabel.alpha = 1
+            print(currentUser.uid)
             
-            
-            
-            
-            if let name = currentUser.displayName as String!, email = currentUser.email as String! {
-                helloLabel.text = "Welcome"
-                helloLabel.alpha = 1
+            if let userRef = alphaRef.child("users/\(currentUser.uid)") as FIRDatabaseReference? {
                 
-                print(currentUser.photoURL)
-                
-                alphaExpensesRef.child("users").queryOrderedByChild("email").queryEqualToValue(email).observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                userRef.observeEventType(.Value, withBlock: { (snapshot) in
                     
                     self.user = User.userFromFirebase(snapshot.value! as! NSDictionary)
                     
@@ -157,30 +153,29 @@ class ViewController: UIViewController {
                     self.mainBalance.alpha = 1
                     self.youOweLabel.alpha = 1
                     
-                    self.alphaExpensesRef.child("expenses/\(self.user.defaultGroupId)").observeEventType(.Value, withBlock: { (snapshot) in
+                    
+                    if let groupId = self.user.defaultGroupId as String? {
+                        if let expensesRef = self.alphaRef.child("expenses/\(groupId)") as FIRDatabaseReference? {
+                            expensesRef.observeEventType(.Value, withBlock: { (expSnapshot) in
+                                self.expenses = Expense.expensesFromFirebase(expSnapshot.value! as! NSDictionary, firebasereference: expSnapshot.ref)
+                            })
+                        }
                         
-                        self.expenses = Expense.expensesFromFirebase(snapshot.value! as! NSDictionary, firebasereference: snapshot.ref)
-                    })
-                    
-                    self.alphaExpensesRef.child("groups/\(self.user.defaultGroupId)").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-//                        self.group = Group.groupFromFirebase(self.user.defaultGroupId, results: snapshot.value! as! NSDictionary)
-                        self.group = Group.groupFromFirebase(self.user.defaultGroupId, results: snapshot.value! as! NSDictionary)
-                    })
-                    
-                    self.alphaExpensesRef.child("users").queryOrderedByChild("defaultGroupId").queryEqualToValue(self.user.defaultGroupId).observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-                        self.groupMembers = User.usersFromResults(snapshot.value! as! NSDictionary)
-                    })
-                    
+                        if let groupRef = self.alphaRef.child("groups/\(groupId)") as FIRDatabaseReference? {
+                            groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
+                                self.group = Group.groupFromFirebase(self.user.defaultGroupId, results: groupSnapshot.value! as! NSDictionary)
+                                for member in self.group.members {
+                                    if let memberRef = self.alphaRef.child("users/\(member)") as FIRDatabaseReference? {
+                                        memberRef.observeEventType(.Value, withBlock: { (memberSnapshot) in
+                                            self.groupMembers.append(User.userFromFirebase(memberSnapshot.value! as! NSDictionary))
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    }
                 })
-                
-                
-                
-                
-                
             }
-            
-            
-            
         } else {
             if let loginViewController = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as? LoginViewController {
                 self.navigationController?.pushViewController(loginViewController, animated: true)
@@ -214,37 +209,7 @@ class ViewController: UIViewController {
     
     func addExpenseTemp() {
         
-        let ezrakey = alphaExpensesRef.child("groups").childByAutoId().key
-        let ramkey = alphaExpensesRef.child("groups").childByAutoId().key
-        let alphakey = "-KN2R518jhzzednYYZ73"
-        
-        alphaExpensesRef.child("users").updateChildValues([ezrakey : ["name": "ezra", "title" : "Director of Awesomeness",
-            "amountOwing": 1600, "defaultGroup": "alpha708" ,"groups": [alphakey: true], "email": "ezrabathini@gmail.com"]])
-        
-        alphaExpensesRef.child("users").updateChildValues([ramkey : ["name": "ram", "title" : "Director of BS",
-            "amountOwing": -1600, "defaultGroup": "alpha708", "groups": [alphakey : true], "email": "ev.ramkumar@gmail.com"]])
-        
-//        alphaExpensesRef.child("users").updateChildValues([key1 : ["name": "ezra", "title" : "Director of Awesomeness",
-//            "amountOwing": 1600.09, "defaultGroup": "alpha708" ,"groups": ["alpha708": true], "email": "ezrabathini@gmail.com"], key2 : ["name": "ram", "title" : "Director of BS",
-//                "amountOwing": -1600.09, "defaultGroup": "alpha708", "groups": ["alpha708": true], "email": "ev.ramkumar@gmail.com"]])
-//
-        alphaExpensesRef.child("groups").updateChildValues([alphakey : ["name": "alpha708", "members" : [ezrakey: true, ramkey: true]]])
-//
-//        
-        
-        
-//        let key = alphaExpensesRef.child("expenses").childByAutoId().key
-//        
-//        alphaExpensesRef.child("expenses").updateChildValues([key : ["Total": 120.00, "addedBy": "ezra", "description": "some desription", "spent": ["ezra": 1, "ram": 0 ], "parity" : ["ezra" : 1, "ram": 1], "share": ["ezra": 60.00, "ram": 60.00 ], "settlemet": ["ezra": 60.00, "ram": -60.00 ]  ]])
-        
-//        if let currentUser = FIRAuth.auth()?.currentUser?.displayName {
-//            let post = ["Total": 909.99, "addedBy": currentUser, "Description": "some desription"]
-//            
-//            let childUpdates = ["/expenses/\(key)": post]
-//            alphaExpensesRef.updateChildValues(childUpdates)
-//        }
-//        
-        
+    
         
     }
 
@@ -277,7 +242,7 @@ class ViewController: UIViewController {
             newExpense.groupId = user.defaultGroupId
             newExpense.groupMembers = groupMembers
             newExpense.owing = owing
-            newExpense.firebaseDBRef = self.alphaExpensesRef
+            newExpense.firebaseDBRef = self.alphaRef
             
             addExpenseVC.newExpense = newExpense
             self.navigationController?.pushViewController(addExpenseVC, animated: true)
