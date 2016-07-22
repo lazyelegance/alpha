@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import Material
 
 
 
@@ -19,13 +20,20 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = MaterialColor.indigo.accent2
         
         GIDSignIn.sharedInstance().uiDelegate = self
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
         
         let signInButton = GIDSignInButton(frame: CGRectMake(30, 50, 100, 50))
-        signInButton.center = self.view.center
+        
+        signInButton.style = .Wide
+        
+        let signInButtonWidth = signInButton.frame.size.width
+        print(signInButtonWidth)
+        
+        signInButton.frame.origin = CGPointMake(view.bounds.width/2 - signInButtonWidth/2, view.bounds.height - 100)
         
         view.addSubview(signInButton)
 
