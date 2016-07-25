@@ -22,7 +22,7 @@ class ExpensesCell: UITableViewCell {
     
     
     let clearColor = UIColor.clearColor()
-    var expense: Expense? {
+    var expense: GroupExpense? {
         didSet {
             if let item = expense {
                 self.backgroundColor = MaterialColor.indigo.accent4

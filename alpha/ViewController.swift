@@ -27,6 +27,9 @@ class ViewController: UIViewController {
     let btn3: FlatButton = FlatButton()
     
     var expenses = [Expense]()
+    var totalSpent: Float = 0.0
+    
+    var groupExpenses = [GroupExpense]()
 
     @IBOutlet weak var youOweLabel: UILabel!
     
@@ -131,6 +134,9 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         
+
+
+        
         flatMenu.close()
         
         if let currentUser = FIRAuth.auth()?.currentUser {
@@ -144,6 +150,7 @@ class ViewController: UIViewController {
                     
                     self.user = User.userFromFirebase(snapshot.value! as! NSDictionary)
                     
+                    
                     self.mainBalance.text = "\(self.user.amountOwing) $"
                     self.helloLabel.text = "Hello, "
                     self.userButton.setTitle(self.user.name, forState: .Normal)
@@ -153,13 +160,31 @@ class ViewController: UIViewController {
                     self.mainBalance.alpha = 1
                     self.youOweLabel.alpha = 1
                     
-                    
-                    if let groupId = self.user.defaultGroupId as String? {
-                        if let expensesRef = self.alphaRef.child("expenses/\(groupId)") as FIRDatabaseReference? {
+                    if let userId = self.user.userId as String? {
+                        if let expensesRef = self.alphaRef.child("expenses/\(userId)") as FIRDatabaseReference? {
+                            expensesRef.child("totalSpent").observeEventType(.Value, withBlock: { (totalSpentSpanshot) in
+                                self.totalSpent = totalSpentSpanshot.value! as! Float
+                                print("TOTAL SPENT\(self.totalSpent)")
+                                self.mainBalance.text = "\(self.totalSpent)"
+                            })
+                            
                             expensesRef.observeEventType(.Value, withBlock: { (expSnapshot) in
-                                self.expenses = Expense.expensesFromFirebase(expSnapshot.value! as! NSDictionary, firebasereference: expSnapshot.ref)
+                                print(expSnapshot.value!)
+                                
+                                self.expenses = Expense.expensesFromResults(expSnapshot.value! as! NSDictionary, ref: expSnapshot.ref)
+                                
+                                
                             })
                         }
+                    }
+                    
+                    
+                    if let groupId = self.user.defaultGroupId as String? {
+//                        if let expensesRef = self.alphaRef.child("expenses/\(groupId)") as FIRDatabaseReference? {
+//                            expensesRef.observeEventType(.Value, withBlock: { (expSnapshot) in
+//                                self.expenses = GroupExpense.expensesFromFirebase(expSnapshot.value! as! NSDictionary, firebasereference: expSnapshot.ref)
+//                            })
+//                        }
                         
                         if let groupRef = self.alphaRef.child("groups/\(groupId)") as FIRDatabaseReference? {
                             groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
@@ -215,39 +240,54 @@ class ViewController: UIViewController {
 
     func toListExpenses() {
         if let expensesListController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListController") as? ExpensesListController {
-            expensesListController.expenses = self.expenses
+            expensesListController.expenses = self.groupExpenses
             expensesListController.groupName = self.group.name
             self.navigationController?.pushViewController(expensesListController, animated: true)
         }
     }
     
     func toAddExpenseCycle() {
-        print(self.user)
-        print(self.group)
         if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
             addExpenseVC.currentStep = AddExpenseStep.description
+            addExpenseVC.expenseType = ExpenseType.user
             
-            var owing = [String : Float]()
-            owing.removeAll()
-            
-            for member in groupMembers {
-                owing[member.name] = member.amountOwing
-            }
-            
-            print(owing)
             
             var newExpense = Expense()
-            newExpense.addedBy = user.name 
-            newExpense.group = user.defaultGroupName
-            newExpense.groupId = user.defaultGroupId
-            newExpense.groupMembers = groupMembers
-            newExpense.owing = owing
-            newExpense.firebaseDBRef = self.alphaRef
+            
+            if let userId = self.user.userId as String? {
+                newExpense.firebaseDBRef = alphaRef.child("expenses/\(userId)")
+            }
             
             addExpenseVC.newExpense = newExpense
             self.navigationController?.pushViewController(addExpenseVC, animated: true)
         }
     }
+    
+//    func toAddExpenseCycle() {
+//        if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
+//            addExpenseVC.currentStep = AddExpenseStep.description
+//            
+//            var owing = [String : Float]()
+//            owing.removeAll()
+//            
+//            for member in groupMembers {
+//                owing[member.name] = member.amountOwing
+//            }
+//            
+//            print(owing)
+//            
+//            var newExpense = GroupExpense()
+//            newExpense.addedBy = user.name 
+//            newExpense.group = user.defaultGroupName
+//            newExpense.groupId = user.defaultGroupId
+//            newExpense.groupMembers = groupMembers
+//            newExpense.owing = owing
+//            newExpense.firebaseDBRef = self.alphaRef
+//            
+//            addExpenseVC.newExpense = newExpense
+//            self.navigationController?.pushViewController(addExpenseVC, animated: true)
+//        }
+//    }
     
 
 }

@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		630FB1E71D3A5114003534A0 /* AddExpenseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630FB1E61D3A5114003534A0 /* AddExpenseController.swift */; };
 		630FB1E91D3A51AE003534A0 /* AddExpenseStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630FB1E81D3A51AE003534A0 /* AddExpenseStep.swift */; };
-		633BC3131D3B1BF40015BAAA /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633BC3121D3B1BF40015BAAA /* Expense.swift */; };
+		632CDE061D46221800B3AB79 /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632CDE051D46221800B3AB79 /* Expense.swift */; };
+		633BC3131D3B1BF40015BAAA /* GroupExpense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633BC3121D3B1BF40015BAAA /* GroupExpense.swift */; };
 		633BC3151D3B6C520015BAAA /* ParityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633BC3141D3B6C520015BAAA /* ParityViewController.swift */; };
 		633BC3171D3B7A8E0015BAAA /* FinishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633BC3161D3B7A8E0015BAAA /* FinishViewController.swift */; };
 		634B4B121D3F974D0022B3D2 /* ParitySelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634B4B111D3F974D0022B3D2 /* ParitySelectionCell.swift */; };
@@ -59,7 +60,8 @@
 		53D4A6299A9620992F2B1493 /* Pods-alphaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-alphaTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-alphaTests/Pods-alphaTests.debug.xcconfig"; sourceTree = "<group>"; };
 		630FB1E61D3A5114003534A0 /* AddExpenseController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddExpenseController.swift; sourceTree = "<group>"; };
 		630FB1E81D3A51AE003534A0 /* AddExpenseStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddExpenseStep.swift; sourceTree = "<group>"; };
-		633BC3121D3B1BF40015BAAA /* Expense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
+		632CDE051D46221800B3AB79 /* Expense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
+		633BC3121D3B1BF40015BAAA /* GroupExpense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupExpense.swift; sourceTree = "<group>"; };
 		633BC3141D3B6C520015BAAA /* ParityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParityViewController.swift; sourceTree = "<group>"; };
 		633BC3161D3B7A8E0015BAAA /* FinishViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinishViewController.swift; sourceTree = "<group>"; };
 		634B4B111D3F974D0022B3D2 /* ParitySelectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParitySelectionCell.swift; sourceTree = "<group>"; };
@@ -153,9 +155,10 @@
 			children = (
 				63CBEBC91D38BACD0002DB65 /* AppDelegate.swift */,
 				63CBEBCB1D38BACD0002DB65 /* ViewController.swift */,
+				632CDE051D46221800B3AB79 /* Expense.swift */,
 				63B71C451D3E1D7600087A8E /* ExpensesCell.swift */,
 				63B71C431D3E1C9700087A8E /* ExpensesListController.swift */,
-				633BC3121D3B1BF40015BAAA /* Expense.swift */,
+				633BC3121D3B1BF40015BAAA /* GroupExpense.swift */,
 				63B71C491D3E6FB200087A8E /* Group.swift */,
 				63B71C471D3E3BA500087A8E /* User.swift */,
 				630FB1E61D3A5114003534A0 /* AddExpenseController.swift */,
@@ -493,7 +496,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				633BC3131D3B1BF40015BAAA /* Expense.swift in Sources */,
+				633BC3131D3B1BF40015BAAA /* GroupExpense.swift in Sources */,
 				63547D8F1D39DAE800A00434 /* LoginViewController.swift in Sources */,
 				63B71C441D3E1C9700087A8E /* ExpensesListController.swift in Sources */,
 				633BC3171D3B7A8E0015BAAA /* FinishViewController.swift in Sources */,
@@ -502,6 +505,7 @@
 				63B71C4A1D3E6FB200087A8E /* Group.swift in Sources */,
 				63547D931D39F4F300A00434 /* AsyncImageView.m in Sources */,
 				63B71C461D3E1D7700087A8E /* ExpensesCell.swift in Sources */,
+				632CDE061D46221800B3AB79 /* Expense.swift in Sources */,
 				63B71C481D3E3BA500087A8E /* User.swift in Sources */,
 				633BC3151D3B6C520015BAAA /* ParityViewController.swift in Sources */,
 				634B4B121D3F974D0022B3D2 /* ParitySelectionCell.swift in Sources */,

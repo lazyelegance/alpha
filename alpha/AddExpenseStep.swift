@@ -9,10 +9,16 @@
 import Foundation
 import Material
 
+public enum ExpenseType {
+    case user
+    case group
+}
+
 public enum AddExpenseStep {
     case description
     case billAmount
     case parity
+    case category
     case finish
     
     
@@ -26,6 +32,8 @@ public enum AddExpenseStep {
             return "Parity"
         case .finish:
             return "Finish"
+        case .category:
+            return "Category"
         }
     }
     
@@ -36,26 +44,32 @@ public enum AddExpenseStep {
         case .description:
             return .billAmount
         case .billAmount:
-            return .parity
+            return .category
         case .parity:
+            return .finish
+        case .category:
             return .finish
         case .finish:
             return self
         }
     }
     
-    func mongoField() ->String {
+    func nextGroupExpenseStep() -> AddExpenseStep {
         switch self {
         case .description:
-            return "Description"
+            return .billAmount
         case .billAmount:
-            return "BillAmount"
-        case parity:
-            return "parity"
+            return .parity
+        case .parity:
+            return .finish
+        case .category:
+            return .parity
         case .finish:
-            return "Finish"
+            return self
         }
     }
+    
+
     
     func toColor() -> UIColor {
         switch self {
@@ -67,6 +81,8 @@ public enum AddExpenseStep {
             return MaterialColor.blue.darken1
         case .finish:
             return  MaterialColor.indigo.darken1
+        case .category:
+            return MaterialColor.blueGrey.darken1
         }
     }
     

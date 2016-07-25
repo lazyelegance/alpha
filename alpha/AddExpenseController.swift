@@ -11,9 +11,10 @@ import Material
 
 class AddExpenseController: UIViewController, TextFieldDelegate {
     
-
+    var newExpense = Expense()
+    var newGroupExpense = GroupExpense()
     var currentStep = AddExpenseStep.description
-    
+    var expenseType: ExpenseType = .user
     var currAmountOwing = "0.00"
 
 
@@ -23,13 +24,10 @@ class AddExpenseController: UIViewController, TextFieldDelegate {
     
     @IBOutlet weak var backButton: FabButton!
     
-//    var nextButton: FlatButton!
-//    
-//    var backButton: FlatButton!
     
     var startOverButton: FlatButton!
     
-    var newExpense = Expense()
+
     
     
     override func viewDidLoad() {
@@ -37,7 +35,7 @@ class AddExpenseController: UIViewController, TextFieldDelegate {
         
         view.backgroundColor = currentStep.toColor()
 
-        
+        print(currentStep.toString().uppercaseString)
         expenseTextField.placeholder = currentStep.toString()
 //        expenseTextField.placeholderColor = MaterialColor.white
 //        expenseTextField.backgroundColor = currentStep.toColor()
@@ -61,14 +59,22 @@ class AddExpenseController: UIViewController, TextFieldDelegate {
         
         nextButton.alpha = 0
         
-        if currentStep == .billAmount {
+        switch currentStep {
+        case .billAmount:
             nextButton.setTitle("next".uppercaseString, forState: .Normal)
             expenseTextField.keyboardType = UIKeyboardType.DecimalPad
             nextButton.backgroundColor = MaterialColor.amber.darken2
-        } else {
+        case .description:
             nextButton.setTitle("add expense amount".uppercaseString, forState: .Normal)
             nextButton.backgroundColor = MaterialColor.blue.darken2
+        case .category:
+            nextButton.setTitle("finish adding expense".uppercaseString, forState: .Normal)
+            nextButton.backgroundColor = MaterialColor.blue.darken2
+        default:
+            break
         }
+        
+
         
         nextButton.setTitleColor(MaterialColor.white, forState: .Normal)
         nextButton.backgroundColor = view.backgroundColor
@@ -108,24 +114,37 @@ class AddExpenseController: UIViewController, TextFieldDelegate {
                 newExpense.description = expenseTextField.text!
             case .billAmount:
                 newExpense.billAmount = (expenseTextField.text! as NSString).floatValue
+            case .category:
+                newExpense.category = expenseTextField.text!
             default:
                 return
             }
             
-            if currentStep.nextStep() == .parity {
+            
+            switch currentStep.nextStep() {
+            case .parity:
                 if let parityVC = self.storyboard?.instantiateViewControllerWithIdentifier("parityViewController") as? ParityViewController {
                     parityVC.currentStep = self.currentStep.nextStep()
-                    parityVC.newExpense = self.newExpense
+                    parityVC.newExpense = self.newGroupExpense
                     self.navigationController?.pushViewController(parityVC, animated: true)
                     
                 }
-            } else {
+            case .finish:
+                if let finishVC = self.storyboard?.instantiateViewControllerWithIdentifier("finishViewController") as? FinishViewController {
+                    
+                    
+                    finishVC.newExpense = self.newExpense
+                    self.navigationController?.pushViewController(finishVC, animated: true)
+                }
+                
+            default:
                 if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
                     addExpenseVC.currentStep = self.currentStep.nextStep()
                     addExpenseVC.newExpense = self.newExpense
                     self.navigationController?.pushViewController(addExpenseVC, animated: true)
                 }
             }
+            
         }
         
         
