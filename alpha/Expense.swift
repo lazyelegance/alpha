@@ -2,45 +2,47 @@
 //  Expense.swift
 //  alpha
 //
-//  Created by Ezra Bathini on 17/07/16.
+//  Created by Ezra Bathini on 25/07/16.
 //  Copyright © 2016 Ezra Bathini. All rights reserved.
 //
 
 import Foundation
-import Firebase
 import FirebaseDatabase
 
+
 struct Expense {
-    //
     var expenseId = String()
     var description: String
     var billAmount: Float
     var dateAdded = String()
-    var spent = [String: Int]()
-    var settlement = [String: Float]()
-    var share = [String: Float]()
-    var parity = [String: Int]()
-    var addedBy = String()
-    var group = String()
-    var groupId = String()
-    var groupMembers = [User]()
-    var owing = [String: Float]()
+    var category = String()
     var firebaseDBRef = FIRDatabaseReference()
     
-    
     init() {
-        self.description = "New Expense"
+        self.description = "New User Expense"
         self.billAmount = 0.00
     }
     
-    
-    static func expensesFromFirebase(results: NSDictionary, firebasereference: FIRDatabaseReference) -> [Expense] {
+    static func expensesFromResults(results: NSDictionary, ref: FIRDatabaseReference) -> [Expense] {
         var expenses = [Expense]()
-        
         expenses.removeAll()
         
-        
-        
+//        for result in results {
+//            var expense = Expense()
+//            switch result.key as! String {
+//            case "billAmount":
+//                expense.billAmount = result.value as! Float
+//            case "category":
+//                expense.category = result.value as! String
+//            case "dateAdded":
+//                expense.dateAdded = result.value as! String
+//            case "dateAdded":
+//                expense.dateAdded = result.value as! String
+//            default:
+//                break
+//            }
+//            expenses.append(expense)
+//        }
         
         if results.count > 0 {
             for result in results {
@@ -51,29 +53,17 @@ struct Expense {
                         
                         
                         expense.expenseId = result.key as! String
-                        expense.firebaseDBRef = firebasereference
+                        expense.firebaseDBRef = ref
                         
                         switch value.key as! String {
-                        case "description":
-                            expense.description = value.value as! String
-                        case "addedBy":
-                            expense.addedBy = value.value as! String
-                        case "dateAdded":
-                            expense.dateAdded = value.value as! String
-                        case "group":
-                            expense.group = value.value as! String
                         case "billAmount":
                             expense.billAmount = value.value as! Float
-                        case "parity":
-                            expense.parity = value.value as! [String: Int]
-                        case "share":
-                            expense.share = value.value as! [String: Float]
-                        case "settlement":
-                            expense.settlement = value.value as! [String: Float]
-                        case "spent":
-                            expense.spent = value.value as! [String: Int]
-                        case "owing":
-                            expense.owing = value.value as! [String: Float]
+                        case "category":
+                            expense.category = value.value as! String
+                        case "dateAdded":
+                            expense.dateAdded = value.value as! String
+                        case "dateAdded":
+                            expense.dateAdded = value.value as! String
                         default:
                             break
                         }
@@ -86,7 +76,7 @@ struct Expense {
             
         }
         
+        print(expenses)
         return expenses
     }
-    
 }

@@ -12,7 +12,7 @@ import Material
 class ParityViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var currentStep = AddExpenseStep.description
     
-    var newExpense = Expense()
+    var newExpense = GroupExpense()
     
     var parityText = "Shared Equally (1:1)"
     
@@ -333,7 +333,7 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
                 }
             }
             
-            finishVC.newExpense = self.newExpense
+            finishVC.newGroupExpense = self.newExpense
             self.navigationController?.pushViewController(finishVC, animated: true)
         }
     }

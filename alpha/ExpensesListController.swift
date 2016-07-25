@@ -11,7 +11,7 @@ import Material
 
 class ExpensesListController: UITableViewController {
     
-    var expenses = [Expense]()
+    var expenses = [GroupExpense]()
     var groupName = "Group"
 
     @IBOutlet weak var headerView: UIView!
@@ -57,7 +57,7 @@ class ExpensesListController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("expensesCell", forIndexPath: indexPath) as! ExpensesCell
 
-        if let expense = expenses[indexPath.row] as? Expense {
+        if let expense = expenses[indexPath.row] as? GroupExpense {
             cell.expense = expense
         }
 
