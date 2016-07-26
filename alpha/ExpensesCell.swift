@@ -22,7 +22,7 @@ class ExpensesCell: UITableViewCell {
     
     
     let clearColor = UIColor.clearColor()
-    var expense: GroupExpense? {
+    var expense: Expense? {
         didSet {
             if let item = expense {
                 self.backgroundColor = MaterialColor.indigo.accent4
@@ -34,7 +34,7 @@ class ExpensesCell: UITableViewCell {
                 
                 descriptionLabel.text = item.description
                 billAmountLabel.text = "$ \(item.billAmount)"
-                addedByLabel.text = "added By : " + item.addedBy
+                addedByLabel.text = "added By : " + item.category
                 addedDatelabel.text = "on " + item.dateAdded
             }
         }

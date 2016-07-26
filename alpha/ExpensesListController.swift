@@ -11,8 +11,8 @@ import Material
 
 class ExpensesListController: UITableViewController {
     
-    var expenses = [GroupExpense]()
-    var groupName = "Group"
+    var expenses = [Expense]()
+
 
     @IBOutlet weak var headerView: UIView!
     
@@ -27,7 +27,7 @@ class ExpensesListController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-        headerLabel.text = groupName.capitalizedString + " Expenses"
+        headerLabel.text = "All" + " Expenses"
         headerView.backgroundColor = MaterialColor.indigo.accent4
         headerView.frame.size.height = 90
         
@@ -57,7 +57,7 @@ class ExpensesListController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("expensesCell", forIndexPath: indexPath) as! ExpensesCell
 
-        if let expense = expenses[indexPath.row] as? GroupExpense {
+        if let expense = expenses[indexPath.row] as? Expense {
             cell.expense = expense
         }
 

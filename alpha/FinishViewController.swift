@@ -74,10 +74,21 @@ class FinishViewController: UIViewController {
     }
     
     func saveExpense() {
-        //
+        
+
         let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
         
         let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
+        
+        let formatter_mon = NSDateFormatter()
+        formatter_mon.dateFormat = "MM_yyyy"
+        let currmon = formatter_mon.stringFromDate(currDate)
+        
+        
+        
+        let formatter_week = NSDateFormatter()
+        formatter_week.dateFormat = "w_yyyy"
+        let currweek = formatter_week.stringFromDate(currDate)
         
         if self.expenseType == .user {
             let userExpensesRef = newExpense.firebaseDBRef
@@ -93,17 +104,40 @@ class FinishViewController: UIViewController {
                 print("SuCESSS")
             }
             
-            userExpensesRef.child("totalSpent").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-                let previousTotalSpent = snapshot.value! as! Float
-                let currentTotalSpent = previousTotalSpent + self.newExpense.billAmount
-                userExpensesRef.child("totalSpent").setValue(currentTotalSpent, withCompletionBlock: { (error, ref) in
-                    if error != nil {
-                        print(error?.localizedDescription)
-                        return
+            
+            
+            
+            userExpensesRef.child("totals").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                
+                if let totals = Expense.totalsFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
+                    
+                    if let currentTotalSpent = totals["total"] as Float? {
+                        let newTotalSpent = currentTotalSpent + self.newExpense.billAmount
+                        userExpensesRef.child("totals/total").setValue(newTotalSpent)
+
+                        userExpensesRef.child("totals/\(currweek)").setValue(newTotalSpent)
                     }
                     
-                    print("SuCESSS")
-                })
+                    if totals[currmon] != nil {
+                        if let currentMonSpent = totals[currmon] as Float? {
+                            let newMonSpent = currentMonSpent + self.newExpense.billAmount
+                            userExpensesRef.child("totals/\(currmon)").setValue(newMonSpent)
+                        }
+                    } else {
+                        userExpensesRef.child("totals/\(currmon)").setValue(self.newExpense.billAmount)
+                    }
+                    
+                    if totals[currweek] != nil {
+                        if let currentMonSpent = totals[currweek] as Float? {
+                            let newMonSpent = currentMonSpent + self.newExpense.billAmount
+                            userExpensesRef.child("totals/\(currweek)").setValue(newMonSpent)
+                        }
+                    } else {
+                        userExpensesRef.child("totals/\(currweek)").setValue(self.newExpense.billAmount)
+                    }
+
+                }
+                
             })
             
 
