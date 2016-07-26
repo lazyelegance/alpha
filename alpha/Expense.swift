@@ -23,26 +23,31 @@ struct Expense {
         self.billAmount = 0.00
     }
     
+    
+    static func totalsFromResults(results: NSDictionary) -> [String : Float] {
+        
+        var totals = [String: Float]()
+        totals.removeAll()
+        
+        if results.count > 0 {
+            print(results)
+            for result in results {
+                totals[result.key as! String] = (result.value as! Float)
+                
+            }
+
+            return totals
+        }
+        
+        
+        return ["total": 0.0]
+    }
+    
     static func expensesFromResults(results: NSDictionary, ref: FIRDatabaseReference) -> [Expense] {
         var expenses = [Expense]()
         expenses.removeAll()
         
-//        for result in results {
-//            var expense = Expense()
-//            switch result.key as! String {
-//            case "billAmount":
-//                expense.billAmount = result.value as! Float
-//            case "category":
-//                expense.category = result.value as! String
-//            case "dateAdded":
-//                expense.dateAdded = result.value as! String
-//            case "dateAdded":
-//                expense.dateAdded = result.value as! String
-//            default:
-//                break
-//            }
-//            expenses.append(expense)
-//        }
+
         
         if results.count > 0 {
             for result in results {
@@ -60,9 +65,10 @@ struct Expense {
                             expense.billAmount = value.value as! Float
                         case "category":
                             expense.category = value.value as! String
+                        case "description":
+                            expense.description = value.value as! String
                         case "dateAdded":
-                            expense.dateAdded = value.value as! String
-                        case "dateAdded":
+
                             expense.dateAdded = value.value as! String
                         default:
                             break
@@ -75,8 +81,7 @@ struct Expense {
             }
             
         }
-        
-        print(expenses)
+
         return expenses
     }
 }

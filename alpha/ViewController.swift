@@ -12,6 +12,36 @@ import FirebaseAuth
 import FirebaseDatabase
 import Material
 
+
+enum SegementButtonState {
+    case total
+    case thisMonth
+    case thisWeek
+    
+    func titleString() -> String {
+        switch self {
+        case .total:
+            return "in Total"
+        case .thisMonth:
+            return "This Month"
+        case .thisWeek:
+            return "This Week"
+        }
+    }
+    
+    func nextState() -> SegementButtonState {
+        switch self {
+        case .total:
+            return .thisMonth
+        case .thisMonth:
+            return .thisWeek
+        case .thisWeek:
+            return .total
+        }
+    }
+    
+}
+
 class ViewController: UIViewController {
     
     private var fabMenu: Menu!
@@ -28,6 +58,9 @@ class ViewController: UIViewController {
     
     var expenses = [Expense]()
     var totalSpent: Float = 0.0
+    var thisMonthSpent: Float = 0.0
+    var thisWeekSpent: Float = 0.0
+    var totals = [String : Float]()
     
     var groupExpenses = [GroupExpense]()
 
@@ -36,7 +69,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var groupButton: RaisedButton!
     
     @IBOutlet weak var userButton: RaisedButton!
-    
+    @IBOutlet weak var segmentButton: RaisedButton!
     
     @IBOutlet weak var mainBalance: UILabel!
     
@@ -50,6 +83,8 @@ class ViewController: UIViewController {
     
     var alphaRef = FIRDatabaseReference.init()
     
+    var segmentButtonState = SegementButtonState.total
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -59,8 +94,9 @@ class ViewController: UIViewController {
         self.navigationController?.navigationBar.hidden = true
         
         view.backgroundColor = MaterialColor.indigo.accent3
-        groupButton.backgroundColor = MaterialColor.indigo.accent4
-        groupButton.layer.shadowOpacity = 0.1
+        segmentButton.backgroundColor = MaterialColor.indigo.accent4
+        segmentButton.layer.shadowOpacity = 0.1
+        segmentButton.addTarget(self, action: #selector(self.updateSpentField(_:)), forControlEvents: .TouchUpInside)
         
         userButton.backgroundColor = MaterialColor.indigo.accent4
         userButton.layer.shadowOpacity = 0.1
@@ -142,7 +178,7 @@ class ViewController: UIViewController {
         if let currentUser = FIRAuth.auth()?.currentUser {
             helloLabel.text = "Welcome"
             helloLabel.alpha = 1
-            print(currentUser.uid)
+
             
             if let userRef = alphaRef.child("users/\(currentUser.uid)") as FIRDatabaseReference? {
                 
@@ -154,25 +190,71 @@ class ViewController: UIViewController {
                     self.mainBalance.text = "\(self.user.amountOwing) $"
                     self.helloLabel.text = "Hello, "
                     self.userButton.setTitle(self.user.name, forState: .Normal)
-                    self.groupButton.setTitle(self.user.defaultGroupName, forState: .Normal)
                     self.userButton.alpha = 1
-                    self.groupButton.alpha = 1
-                    self.mainBalance.alpha = 1
-                    self.youOweLabel.alpha = 1
+                    
+                    let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
+                    
+                    let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
+                    
+                    let formatter_mon = NSDateFormatter()
+                    formatter_mon.dateFormat = "MM_yyyy"
+                    let currmon = formatter_mon.stringFromDate(currDate)
+                    
+                    
+                    
+                    let formatter_week = NSDateFormatter()
+                    formatter_week.dateFormat = "w_yyyy"
+                    let currweek = formatter_week.stringFromDate(currDate)
+                    
                     
                     if let userId = self.user.userId as String? {
                         if let expensesRef = self.alphaRef.child("expenses/\(userId)") as FIRDatabaseReference? {
-                            expensesRef.child("totalSpent").observeEventType(.Value, withBlock: { (totalSpentSpanshot) in
-                                self.totalSpent = totalSpentSpanshot.value! as! Float
-                                print("TOTAL SPENT\(self.totalSpent)")
-                                self.mainBalance.text = "\(self.totalSpent)"
+                            
+                            self.totals.removeAll()
+                            expensesRef.child("totals").observeEventType(.Value, withBlock: { (totalssnapshot) in
+                                self.totals = Expense.totalsFromResults(totalssnapshot.value! as! NSDictionary)
+                                
+                                if self.totals["total"] != nil {
+                                    self.totalSpent = self.totals["total"] as Float!
+                                }
+                                
+                                if self.totals[currmon] != nil {
+                                    self.thisMonthSpent = self.totals[currmon] as Float!
+                                }
+                                
+                                if self.totals[currweek] != nil {
+                                    self.thisWeekSpent = self.totals[currweek] as Float!
+                                }
+                                
+                                
+                                self.segmentButton.setTitle(self.segmentButtonState.titleString(), forState: .Normal)
+                                switch self.segmentButtonState {
+                                case .total:
+                                    self.mainBalance.text = "\(self.totalSpent)"
+                                case .thisMonth:
+                                    self.mainBalance.text = "\(self.thisMonthSpent)"
+                                case .thisWeek:
+                                    self.mainBalance.text = "\(self.thisWeekSpent)"
+                                }
+                                
+                                self.segmentButton.alpha = 1
+                                self.mainBalance.alpha = 1
+                                self.youOweLabel.alpha = 1
+                                
                             })
                             
+                            
                             expensesRef.observeEventType(.Value, withBlock: { (expSnapshot) in
-                                print(expSnapshot.value!)
+
                                 
                                 self.expenses = Expense.expensesFromResults(expSnapshot.value! as! NSDictionary, ref: expSnapshot.ref)
                                 
+                                for expense in self.expenses {
+                                    
+                                    let formatter = NSDateFormatter()
+                                    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+                                    print(formatter.dateFromString(expense.dateAdded))
+                                }
                                 
                             })
                         }
@@ -180,11 +262,7 @@ class ViewController: UIViewController {
                     
                     
                     if let groupId = self.user.defaultGroupId as String? {
-//                        if let expensesRef = self.alphaRef.child("expenses/\(groupId)") as FIRDatabaseReference? {
-//                            expensesRef.observeEventType(.Value, withBlock: { (expSnapshot) in
-//                                self.expenses = GroupExpense.expensesFromFirebase(expSnapshot.value! as! NSDictionary, firebasereference: expSnapshot.ref)
-//                            })
-//                        }
+
                         
                         if let groupRef = self.alphaRef.child("groups/\(groupId)") as FIRDatabaseReference? {
                             groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
@@ -232,6 +310,21 @@ class ViewController: UIViewController {
     }
     
     
+    func updateSpentField(sender: RaisedButton) {
+        self.segmentButtonState = self.segmentButtonState.nextState()
+        self.segmentButton.setTitle(self.segmentButtonState.titleString(), forState: .Normal)
+        switch self.segmentButtonState {
+        case .total:
+            self.mainBalance.text = "\(self.totalSpent)"
+        case .thisMonth:
+            self.mainBalance.text = "\(self.thisMonthSpent)"
+        case .thisWeek:
+            self.mainBalance.text = "\(self.thisWeekSpent)"
+        }
+
+    }
+    
+    
     func addExpenseTemp() {
         
     
@@ -240,8 +333,8 @@ class ViewController: UIViewController {
 
     func toListExpenses() {
         if let expensesListController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListController") as? ExpensesListController {
-            expensesListController.expenses = self.groupExpenses
-            expensesListController.groupName = self.group.name
+            expensesListController.expenses = self.expenses
+            
             self.navigationController?.pushViewController(expensesListController, animated: true)
         }
     }

@@ -58,16 +58,16 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="YEb-8R-cGU">
-                                <rect key="frame" x="50" y="210" width="221" height="40"/>
+                                <rect key="frame" x="50" y="210" width="164" height="40"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You Owe The Group" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="efp-qg-Cvl">
-                                        <rect key="frame" x="0.0" y="0.0" width="168" height="40"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You've spent " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="efp-qg-Cvl">
+                                        <rect key="frame" x="0.0" y="0.0" width="111" height="40"/>
                                         <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="18"/>
                                         <color key="textColor" red="0.98767406089999998" green="0.98767406089999998" blue="0.98767406089999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RqZ-sb-ljX" customClass="RaisedButton" customModule="Material">
-                                        <rect key="frame" x="170" y="0.0" width="51" height="40"/>
+                                        <rect key="frame" x="113" y="0.0" width="51" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="46" id="Vuj-R6-HbP"/>
                                         </constraints>
@@ -135,9 +135,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="x27-PJ-44d"/>
                     <connections>
-                        <outlet property="groupButton" destination="RqZ-sb-ljX" id="Yrw-tl-Hde"/>
                         <outlet property="helloLabel" destination="BhD-Qv-hNf" id="1yp-4c-ns7"/>
                         <outlet property="mainBalance" destination="Ecv-xq-tFK" id="1ey-km-MZ7"/>
+                        <outlet property="segmentButton" destination="RqZ-sb-ljX" id="lXv-us-EF8"/>
                         <outlet property="userButton" destination="dSQ-Ug-lB1" id="0ov-VV-Cp7"/>
                         <outlet property="youOweLabel" destination="efp-qg-Cvl" id="6xZ-4O-pCW"/>
                     </connections>
