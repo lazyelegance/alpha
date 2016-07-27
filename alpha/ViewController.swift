@@ -88,33 +88,62 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-
+        self.navigationController?.navigationBar.hidden = true
+        prepareView()
+        prepareButtons()
+        prepareMenu()
       
         
-        self.navigationController?.navigationBar.hidden = true
+        alphaRef = FIRDatabase.database().reference()
+        mainBalance.text = "0.0 $"
+        mainBalance.font = RobotoFont.lightWithSize(50)
+
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        flatMenu.close()
+        if (FIRAuth.auth()?.currentUser) != nil {
+            updateMainBalance()
+        } else {
+            showLoginScreen()
+        }
+    }
+    
+    
+    
+    
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
+    // MARK: - Prepare View
+    
+    private func prepareView() {
+        
         
         view.backgroundColor = MaterialColor.indigo.accent3
+    }
+    
+    private func prepareButtons() {
         segmentButton.backgroundColor = MaterialColor.indigo.accent4
         segmentButton.layer.shadowOpacity = 0.1
         segmentButton.addTarget(self, action: #selector(self.updateSpentField(_:)), forControlEvents: .TouchUpInside)
         
         userButton.backgroundColor = MaterialColor.indigo.accent4
         userButton.layer.shadowOpacity = 0.1
-        
-        
-        
-        mainBalance.font = RobotoFont.lightWithSize(50)
-                
-        alphaRef = FIRDatabase.database().reference()
-        
+    }
     
-        
+    private func prepareMenu() {
         btn1.addTarget(self, action: #selector(ViewController.handleFlatMenu), forControlEvents: .TouchUpInside)
         btn1.setTitleColor(MaterialColor.blue.accent1, forState: .Normal)
         btn1.titleLabel?.font = RobotoFont.regularWithSize(12)
         btn1.backgroundColor = MaterialColor.white
         btn1.pulseColor = MaterialColor.white
-
+        
         btn1.setTitle("Menu".uppercaseString, forState: .Normal)
         
         
@@ -135,9 +164,9 @@ class ViewController: UIViewController {
         
         btn3.setTitleColor(MaterialColor.white, forState: .Normal)
         btn3.titleLabel?.font = RobotoFont.boldWithSize(12)
-//        btn3.borderColor = MaterialColor.blueGrey.lighten1
+        //        btn3.borderColor = MaterialColor.blueGrey.lighten1
         btn3.pulseColor = MaterialColor.blue.accent3
-//        btn3.borderWidth = 1
+        //        btn3.borderWidth = 1
         btn3.setTitle("See Expenses".uppercaseString, forState: .Normal)
         btn3.addTarget(self, action: #selector(ViewController.toListExpenses), forControlEvents: .TouchUpInside)
         view.addSubview(btn3)
@@ -157,28 +186,15 @@ class ViewController: UIViewController {
         flatMenu.spacing = 8
         flatMenu.itemSize = CGSizeMake(120, height)
         flatMenu.views = [btn1, btn2, btn3]
-        
-        
-        mainBalance.text = "0.0 $"
-        
-
-        
-
-        
     }
-
     
-    override func viewWillAppear(animated: Bool) {
-        
-
-
-        
-        flatMenu.close()
-        
+    // MARK: - Query Firebase
+    
+    private func updateMainBalance() {
         if let currentUser = FIRAuth.auth()?.currentUser {
             helloLabel.text = "Welcome"
             helloLabel.alpha = 1
-
+            
             
             if let userRef = alphaRef.child("users/\(currentUser.uid)") as FIRDatabaseReference? {
                 
@@ -245,7 +261,7 @@ class ViewController: UIViewController {
                             
                             
                             expensesRef.observeEventType(.Value, withBlock: { (expSnapshot) in
-
+                                
                                 
                                 self.expenses = Expense.expensesFromResults(expSnapshot.value! as! NSDictionary, ref: expSnapshot.ref)
                                 
@@ -262,7 +278,7 @@ class ViewController: UIViewController {
                     
                     
                     if let groupId = self.user.defaultGroupId as String? {
-
+                        
                         
                         if let groupRef = self.alphaRef.child("groups/\(groupId)") as FIRDatabaseReference? {
                             groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
@@ -279,20 +295,19 @@ class ViewController: UIViewController {
                     }
                 })
             }
-        } else {
-            if let loginViewController = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as? LoginViewController {
-                self.navigationController?.pushViewController(loginViewController, animated: true)
-            } else {
-                print("cannot instantiate login")
-            }
         }
     }
- 
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    private func showLoginScreen() {
+        if let loginViewController = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as? LoginViewController {
+            self.navigationController?.pushViewController(loginViewController, animated: true)
+        } else {
+            print("cannot instantiate login")
+        }
     }
+    
+    
     
     
     

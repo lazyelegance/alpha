@@ -22,38 +22,17 @@ class FinishViewController: UIViewController {
     var expenseType: ExpenseType = .user
 
     @IBOutlet weak var backButton: FabButton!
-
     @IBOutlet weak var saveButton: RaisedButton!
-    
     @IBOutlet weak var descriptionLabel: UILabel!
-    
-    
     @IBOutlet weak var titleLabel: UILabel!
-    
-    
     @IBOutlet weak var paritylabel: UILabel!
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = AddExpenseStep.finish.toColor()
-        
-        descriptionLabel.text = newExpense.description
-        titleLabel.text = "You are about to add expense of $\(newExpense.billAmount)"
-        paritylabel.text = parityText
-        
-        saveButton.backgroundColor = view.backgroundColor
-        saveButton.setTitle("SAVE EXPENSE", forState: .Normal)
-        backButton.setImage(MaterialIcon.arrowBack, forState: .Normal)
-        
-        backButton.addTarget(self, action: #selector(self.backOneStep), forControlEvents: .TouchUpInside)
-        saveButton.addTarget(self, action: #selector(self.saveExpense), forControlEvents: .TouchUpInside)
-        saveButton.setTitleColor(MaterialColor.white, forState: .Normal)
-
-        // Do any additional setup after loading the view.
-        
-        getTotalSpent(newExpense.firebaseDBRef)
+        prepareView()
+        prepareLabels()
+        prepareButtons()
     }
 
     override func didReceiveMemoryWarning() {
@@ -61,17 +40,40 @@ class FinishViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    private func prepareView() {
+        view.backgroundColor = AddExpenseStep.finish.toColor()
+    }
+    private func prepareLabels() {
+        switch expenseType {
+        case .user:
+            descriptionLabel.text = newExpense.description
+            titleLabel.text = "You are about to add expense of $\(newExpense.billAmount)"
+            paritylabel.text = newExpense.category
+        case .group:
+            descriptionLabel.text = newGroupExpense.description
+            titleLabel.text = "You are about to add expense of $\(newGroupExpense.billAmount)"
+            paritylabel.text = parityText
+        }
+        
+    }
+    private func prepareButtons() {
+        saveButton.backgroundColor = view.backgroundColor
+        saveButton.setTitle("SAVE EXPENSE", forState: .Normal)
+        backButton.setImage(MaterialIcon.arrowBack, forState: .Normal)
+        
+        backButton.addTarget(self, action: #selector(self.backOneStep), forControlEvents: .TouchUpInside)
+        saveButton.addTarget(self, action: #selector(self.saveExpense), forControlEvents: .TouchUpInside)
+        saveButton.setTitleColor(MaterialColor.white, forState: .Normal)
+    }
+    
+    
+    
     func backOneStep() {
         print("back button")
         navigationController?.popViewControllerAnimated(true)
     }
     
-    func getTotalSpent(ref: FIRDatabaseReference) -> Float {
-        ref.child("totalSpent").observeSingleEventOfType(.Value) { (snapshot) in
-            return snapshot.value! as! Float
-        }
-        return -1
-    }
+
     
     func saveExpense() {
         
@@ -83,9 +85,7 @@ class FinishViewController: UIViewController {
         let formatter_mon = NSDateFormatter()
         formatter_mon.dateFormat = "MM_yyyy"
         let currmon = formatter_mon.stringFromDate(currDate)
-        
-        
-        
+
         let formatter_week = NSDateFormatter()
         formatter_week.dateFormat = "w_yyyy"
         let currweek = formatter_week.stringFromDate(currDate)
@@ -186,15 +186,8 @@ class FinishViewController: UIViewController {
     
     func saveGroupExpense()  {
         print("SAVING")
-        
-        
-        
-        print(newExpense)
-        
-        
-        
-        
-        
+
+        //TO DO
         
     }
     

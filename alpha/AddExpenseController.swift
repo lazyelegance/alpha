@@ -33,36 +33,53 @@ class AddExpenseController: UIViewController, TextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = currentStep.toColor()
+        prepareView()
+        prepareTextField()
+        prepareButtons()
 
-        print(currentStep.toString().uppercaseString)
+        
+
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    private func prepareView() {
+        view.backgroundColor = currentStep.toColor()
+    }
+    
+    private func prepareTextField() {
+        
+        
         expenseTextField.placeholder = currentStep.toString()
-//        expenseTextField.placeholderColor = MaterialColor.white
-//        expenseTextField.backgroundColor = currentStep.toColor()
+        expenseTextField.placeholderColor = MaterialColor.white
         expenseTextField.textColor = MaterialColor.white
         expenseTextField.font = RobotoFont.lightWithSize(20)
         expenseTextField.dividerColor = MaterialColor.white
+        expenseTextField.placeholderActiveColor = MaterialColor.yellow.accent1
         
-        
-//        expenseTextField.delegate = self
         
         expenseTextField.addTarget(self, action: #selector(AddExpenseController.toNextInAddExpenseCycle), forControlEvents: .EditingDidEndOnExit)
         expenseTextField.addTarget(self, action: #selector(AddExpenseController.showNextButton), forControlEvents: .EditingChanged)
-        
-        
         expenseTextField.keyboardType = UIKeyboardType.Alphabet
+        if currentStep == .billAmount {
+             expenseTextField.keyboardType = UIKeyboardType.DecimalPad
+        }
+        expenseTextField.delegate = self
         expenseTextField.keyboardAppearance = .Light
+        expenseTextField.becomeFirstResponder()
+    }
+    
+    private func prepareButtons() {
         
-        
-        
-        backButton.setImage(MaterialIcon.arrowBack, forState: .Normal)
         
         nextButton.alpha = 0
-        
         switch currentStep {
         case .billAmount:
             nextButton.setTitle("next".uppercaseString, forState: .Normal)
-            expenseTextField.keyboardType = UIKeyboardType.DecimalPad
+           
             nextButton.backgroundColor = MaterialColor.amber.darken2
         case .description:
             nextButton.setTitle("add expense amount".uppercaseString, forState: .Normal)
@@ -73,31 +90,16 @@ class AddExpenseController: UIViewController, TextFieldDelegate {
         default:
             break
         }
-        
-
-        
         nextButton.setTitleColor(MaterialColor.white, forState: .Normal)
         nextButton.backgroundColor = view.backgroundColor
-        
-        expenseTextField.becomeFirstResponder()
-        
         nextButton.addTarget(self, action: #selector(AddExpenseController.toNextInAddExpenseCycle), forControlEvents: .TouchUpInside)
-        backButton.addTarget(self, action: #selector(AddExpenseController.backOneStep), forControlEvents: .TouchUpInside)
         
-
-        let image = UIImage(named: "ic_close_white")?.imageWithRenderingMode(.Automatic)
-        let clearButton: FlatButton = FlatButton()
-        clearButton.pulseColor = MaterialColor.grey.base
-        clearButton.tintColor = MaterialColor.grey.base
-        clearButton.setImage(image, forState: .Normal)
-        clearButton.setImage(image, forState: .Highlighted)
-
+        
+        
+        backButton.setImage(MaterialIcon.arrowBack, forState: .Normal)
+        backButton.addTarget(self, action: #selector(AddExpenseController.backOneStep), forControlEvents: .TouchUpInside)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    
     
     
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
@@ -135,6 +137,12 @@ class AddExpenseController: UIViewController, TextFieldDelegate {
                     
                     finishVC.newExpense = self.newExpense
                     self.navigationController?.pushViewController(finishVC, animated: true)
+                }
+            case .category:
+                if let categoryVC = self.storyboard?.instantiateViewControllerWithIdentifier("categoryViewController") as? CategoryViewController {
+                    categoryVC.newExpense = self.newExpense
+                    self.navigationController?.pushViewController(categoryVC, animated: true)
+                    
                 }
                 
             default:

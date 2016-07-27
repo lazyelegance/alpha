@@ -11,6 +11,7 @@
         <mutableArray key="Roboto-Medium.ttf">
             <string>Roboto-Medium</string>
             <string>Roboto-Medium</string>
+            <string>Roboto-Medium</string>
         </mutableArray>
         <mutableArray key="Roboto-Regular.ttf">
             <string>Roboto-Regular</string>
@@ -331,21 +332,6 @@
                                     <constraint firstAttribute="height" constant="2" id="B2t-Uq-UnD"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How is the amount shared?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e25-Zx-Dzg">
-                                <rect key="frame" x="20" y="80" width="220" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="Ysq-iz-VEk"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="jBY-AU-Lw9"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="18"/>
-                                <color key="textColor" red="0.98767406088082899" green="0.98767406088082899" blue="0.98767406088082899" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="jBY-AU-Lw9"/>
-                                    </mask>
-                                </variation>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YLv-Ry-4Hr" customClass="FlatButton" customModule="Material">
                                 <rect key="frame" x="20" y="134" width="49" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
@@ -488,6 +474,21 @@
                                     </mask>
                                 </variation>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="How is the amount shared?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e25-Zx-Dzg">
+                                <rect key="frame" x="20" y="82" width="220" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Ysq-iz-VEk"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="jBY-AU-Lw9"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="18"/>
+                                <color key="textColor" red="0.98767406088082899" green="0.98767406088082899" blue="0.98767406088082899" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="jBY-AU-Lw9"/>
+                                    </mask>
+                                </variation>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.91084804210569092" blue="0.3351302671348475" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -532,6 +533,60 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M4K-r1-Xfg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2407" y="-161"/>
+        </scene>
+        <!--Category View Controller-->
+        <scene sceneID="eh7-rl-E47">
+            <objects>
+                <viewController storyboardIdentifier="categoryViewController" id="Qcp-pq-uOS" customClass="CategoryViewController" customModule="alpha" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="cIw-KA-LFM"/>
+                        <viewControllerLayoutGuide type="bottom" id="t8D-ux-hZ2"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="27D-Qa-yLW">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Choose a category" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ING-im-fZu">
+                                <rect key="frame" x="20" y="80" width="220" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="fCm-eT-kTQ"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="t2O-Qu-zj3"/>
+                                    <constraint firstAttribute="height" constant="40" id="uNm-6z-oOn"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="18"/>
+                                <color key="textColor" red="0.98767406089999998" green="0.98767406089999998" blue="0.98767406089999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="fCm-eT-kTQ"/>
+                                        <exclude reference="t2O-Qu-zj3"/>
+                                    </mask>
+                                </variation>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dUh-tE-5sL">
+                                <rect key="frame" x="0.0" y="120" width="600" height="2"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="2" id="KPc-kJ-wHr"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="0.62932257166034145" blue="0.46603804651672587" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="dUh-tE-5sL" firstAttribute="top" secondItem="ING-im-fZu" secondAttribute="bottom" id="3mH-Xr-5w0"/>
+                            <constraint firstItem="ING-im-fZu" firstAttribute="top" secondItem="cIw-KA-LFM" secondAttribute="bottom" constant="60" id="HhY-UH-SOc"/>
+                            <constraint firstItem="dUh-tE-5sL" firstAttribute="leading" secondItem="27D-Qa-yLW" secondAttribute="leadingMargin" constant="-20" id="HzW-pD-Jt2"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="dUh-tE-5sL" secondAttribute="trailing" constant="-20" id="OQc-5r-PQj"/>
+                            <constraint firstItem="ING-im-fZu" firstAttribute="leading" secondItem="27D-Qa-yLW" secondAttribute="leadingMargin" id="sCr-4c-bh4"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="titleLabel" destination="ING-im-fZu" id="2Ga-NK-Elu"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qsX-Sh-ENU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3077" y="-152"/>
         </scene>
         <!--Expenses List Controller-->
         <scene sceneID="pJv-Zq-9pl">
