@@ -30,13 +30,33 @@ class FinishViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        prepareView()
+        prepareLabels()
+        prepareButtons()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    private func prepareView() {
         view.backgroundColor = AddExpenseStep.finish.toColor()
+    }
+    private func prepareLabels() {
+        switch expenseType {
+        case .user:
+            descriptionLabel.text = newExpense.description
+            titleLabel.text = "You are about to add expense of $\(newExpense.billAmount)"
+            paritylabel.text = newExpense.category
+        case .group:
+            descriptionLabel.text = newGroupExpense.description
+            titleLabel.text = "You are about to add expense of $\(newGroupExpense.billAmount)"
+            paritylabel.text = parityText
+        }
         
-        descriptionLabel.text = newExpense.description
-        titleLabel.text = "You are about to add expense of $\(newExpense.billAmount)"
-        paritylabel.text = parityText
-        
+    }
+    private func prepareButtons() {
         saveButton.backgroundColor = view.backgroundColor
         saveButton.setTitle("SAVE EXPENSE", forState: .Normal)
         backButton.setImage(MaterialIcon.arrowBack, forState: .Normal)
@@ -44,16 +64,9 @@ class FinishViewController: UIViewController {
         backButton.addTarget(self, action: #selector(self.backOneStep), forControlEvents: .TouchUpInside)
         saveButton.addTarget(self, action: #selector(self.saveExpense), forControlEvents: .TouchUpInside)
         saveButton.setTitleColor(MaterialColor.white, forState: .Normal)
-
-        // Do any additional setup after loading the view.
-        
-        
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    
+    
     
     func backOneStep() {
         print("back button")
@@ -72,9 +85,7 @@ class FinishViewController: UIViewController {
         let formatter_mon = NSDateFormatter()
         formatter_mon.dateFormat = "MM_yyyy"
         let currmon = formatter_mon.stringFromDate(currDate)
-        
-        
-        
+
         let formatter_week = NSDateFormatter()
         formatter_week.dateFormat = "w_yyyy"
         let currweek = formatter_week.stringFromDate(currDate)
@@ -175,15 +186,8 @@ class FinishViewController: UIViewController {
     
     func saveGroupExpense()  {
         print("SAVING")
-        
-        
-        
-        print(newExpense)
-        
-        
-        
-        
-        
+
+        //TO DO
         
     }
     
