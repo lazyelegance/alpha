@@ -22,15 +22,9 @@ class FinishViewController: UIViewController {
     var expenseType: ExpenseType = .user
 
     @IBOutlet weak var backButton: FabButton!
-
     @IBOutlet weak var saveButton: RaisedButton!
-    
     @IBOutlet weak var descriptionLabel: UILabel!
-    
-    
     @IBOutlet weak var titleLabel: UILabel!
-    
-    
     @IBOutlet weak var paritylabel: UILabel!
     
 
@@ -53,7 +47,7 @@ class FinishViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         
-        getTotalSpent(newExpense.firebaseDBRef)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -66,12 +60,7 @@ class FinishViewController: UIViewController {
         navigationController?.popViewControllerAnimated(true)
     }
     
-    func getTotalSpent(ref: FIRDatabaseReference) -> Float {
-        ref.child("totalSpent").observeSingleEventOfType(.Value) { (snapshot) in
-            return snapshot.value! as! Float
-        }
-        return -1
-    }
+
     
     func saveExpense() {
         

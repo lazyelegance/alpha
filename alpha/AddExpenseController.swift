@@ -136,6 +136,12 @@ class AddExpenseController: UIViewController, TextFieldDelegate {
                     finishVC.newExpense = self.newExpense
                     self.navigationController?.pushViewController(finishVC, animated: true)
                 }
+            case .category:
+                if let categoryVC = self.storyboard?.instantiateViewControllerWithIdentifier("categoryViewController") as? CategoryViewController {
+                    categoryVC.newExpense = self.newExpense
+                    self.navigationController?.pushViewController(categoryVC, animated: true)
+                    
+                }
                 
             default:
                 if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {

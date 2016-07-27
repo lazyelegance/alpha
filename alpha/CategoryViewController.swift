@@ -9,47 +9,33 @@
 import UIKit
 import Material
 
-class CategoryViewController: UIViewController {
-    
-    let categories = ["food", "rent", "entertainment", "groceries"]
-    
+private struct Category {
+    var text: String
+    var detail: String
+    var image: UIImage?
+}
 
-
+class CategoryViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
     @IBOutlet weak var titleLabel: UILabel!
+    
+    private let tableView: UITableView = UITableView()
+    
+    private var categories: Array<Category> = Array<Category>()
+    
+    var tableViewY: CGFloat = 0
+    
+    var newExpense = Expense()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = MaterialColor.indigo.accent1
+        tableViewY = titleLabel.frame.origin.y + titleLabel.frame.size.height + 5
         
-        let w: CGFloat = 200
-        let titlelabelorigin = titleLabel.frame.origin
-        let titlelabelheight = titleLabel.frame.size.height
-        
-        
-        for i in 0 ..< categories.count {
-            let buttonx = (view.bounds.width - w) / 2
-            let buttony = titlelabelorigin.y + titlelabelheight + 10 + (50 * CGFloat(i))
-            let buttonwidth = view.bounds.width - w
-            
-                
+        prepareView()
+        prepareItems()
+        prepareTableView()
 
-            let button: RaisedButton = RaisedButton(frame: CGRectMake(buttonx , buttony, buttonwidth, 30))
-            button.setTitle(categories[i], forState: .Normal)
-            button.setTitleColor(MaterialColor.white, forState: .Normal)
-            button.backgroundColor = view.backgroundColor!
-            button.pulseColor = MaterialColor.indigo.lighten1
-            button.titleLabel!.font = RobotoFont.mediumWithSize(12)
-            button.titleLabel?.textAlignment = .Left
-            button.layer.shadowOpacity = 0.1
 
-            view.addSubview(button)
-        }
-        
-        
-        
-        print(view.subviews)
-
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
@@ -57,24 +43,80 @@ class CategoryViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(true)
-        
-
-        
-        
-
+    private func prepareView() {
+        view.backgroundColor = MaterialColor.indigo.accent1
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    private func prepareItems() {
+        categories.append(Category(text: "Food", detail: ".", image: UIImage(named: "ic_restaurant_white")))
+        categories.append(Category(text: "Rent", detail: "?", image: UIImage(named: "ic_home_white")))
+        categories.append(Category(text: "Entertainment", detail: ".", image: UIImage(named: "ic_local_activity_white")))
+        categories.append(Category(text: "Groceries", detail: "?", image: UIImage(named: "ic_local_grocery_store_white")))
+        categories.append(Category(text: "Fuel", detail: "?", image: UIImage(named: "ic_local_gas_station_white")))
+        categories.append(Category(text: "Subscription", detail: "?", image: UIImage(named: "ic_subscriptions_white")))
+        
     }
-    */
+    
+    private func prepareTableView() {
+        tableView.backgroundColor = MaterialColor.clear
+        tableView.separatorStyle = .None
+        tableView.registerClass(MaterialTableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.frame = CGRectMake(10, tableViewY, self.view.frame.size.width - 20, 350)
+        
+        self.view.addSubview(tableView)
+    }
+    
 
+    
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return categories.count;
+    }
+    
+    /// Returns the number of sections.
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    /// Prepares the cells within the tableView.
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell: MaterialTableViewCell = MaterialTableViewCell(style: .Subtitle, reuseIdentifier: "Cell")
+        
+        let item: Category = categories[indexPath.row]
+        cell.selectionStyle = .None
+        cell.textLabel!.text = item.text
+        cell.textLabel!.font = RobotoFont.regular
+        cell.textLabel?.textColor = MaterialColor.white
+        cell.imageView!.image = item.image?.resize(toWidth: 40)
+        cell.imageView!.layer.cornerRadius = 20
+        cell.backgroundColor = MaterialColor.indigo.accent1
+        cell.contentView.backgroundColor = MaterialColor.clear
+        
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 60
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        //
+        if let category = (categories[indexPath.row]).text as String? {
+            newExpense.category = category
+            if let finishVC = self.storyboard?.instantiateViewControllerWithIdentifier("finishViewController") as? FinishViewController {
+                finishVC.newExpense = newExpense
+                self.navigationController?.pushViewController(finishVC, animated: true)
+            }
+        }
+        
+        
+    }
 }
+
+
+
+
