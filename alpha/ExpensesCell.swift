@@ -35,7 +35,7 @@ class ExpensesCell: UITableViewCell {
             if let item = expense {
                 self.backgroundColor = MaterialColor.teal.lighten1
                 self.contentView.backgroundColor = clearColor
-                materialView.depth = .Depth1
+               
                 materialView.backgroundColor = self.backgroundColor
                 
                 
@@ -62,11 +62,9 @@ class ExpensesCell: UITableViewCell {
                     addedMonth.text = formatter.stringFromDate(itemdate)
                     formatter.dateFormat = "yyyy"
                     addedYear.text = formatter.stringFromDate(itemdate)
+                } else {
+                    dateView.alpha = 0
                 }
-                
-                
-                
-                
             }
         }
     }

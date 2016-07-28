@@ -92,6 +92,7 @@ class ViewController: UIViewController {
         prepareView()
         prepareButtons()
         prepareMenu()
+        
       
         
         alphaRef = FIRDatabase.database().reference()
@@ -123,10 +124,10 @@ class ViewController: UIViewController {
     // MARK: - Prepare View
     
     private func prepareView() {
-        
-        
         view.backgroundColor = MaterialColor.indigo.accent3
     }
+    
+    
     
     private func prepareButtons() {
         segmentButton.backgroundColor = MaterialColor.indigo.accent4
@@ -260,19 +261,7 @@ class ViewController: UIViewController {
                             })
                             
                             
-                            expensesRef.observeEventType(.Value, withBlock: { (expSnapshot) in
-                                
-                                
-                                self.expenses = Expense.expensesFromResults(expSnapshot.value! as! NSDictionary, ref: expSnapshot.ref)
-                                
-                                for expense in self.expenses {
-                                    
-                                    let formatter = NSDateFormatter()
-                                    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
-                                    print(formatter.dateFromString(expense.dateAdded))
-                                }
-                                
-                            })
+                            
                         }
                     }
                     
@@ -347,11 +336,13 @@ class ViewController: UIViewController {
     }
 
     func toListExpenses() {
-        if let expensesListController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListController") as? ExpensesListController {
-            expensesListController.expenses = self.expenses
-            
-            self.navigationController?.pushViewController(expensesListController, animated: true)
+        if let userId = self.user.userId as String? {
+            if let expensesListController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListController") as? ExpensesListController {
+                expensesListController.expensesRef = self.alphaRef.child("expenses/\(userId)")
+                self.navigationController?.pushViewController(expensesListController, animated: true)
+            }
         }
+        
     }
     
     func toAddExpenseCycle() {
