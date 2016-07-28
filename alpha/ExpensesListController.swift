@@ -28,10 +28,10 @@ class ExpensesListController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         headerLabel.text = "All" + " Expenses"
-        headerView.backgroundColor = MaterialColor.indigo.accent4
+        headerView.backgroundColor = MaterialColor.teal.lighten1
         headerView.frame.size.height = 90
         
-        tableView.backgroundColor = MaterialColor.indigo.accent4
+        tableView.backgroundColor = MaterialColor.teal.lighten1
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
     }

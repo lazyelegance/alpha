@@ -17,25 +17,56 @@ class ExpensesCell: UITableViewCell {
     
     @IBOutlet weak var addedByLabel: UILabel!
     
+    @IBOutlet weak var categoryLabel: UILabel!
     
-    @IBOutlet weak var addedDatelabel: UILabel!
     
+    @IBOutlet weak var addedMonth: UILabel!
+
+    @IBOutlet weak var addedDay: UILabel!
     
+    @IBOutlet weak var addedYear: UILabel!
+    
+    @IBOutlet weak var materialView: MaterialView!
+    
+    @IBOutlet weak var dateView: MaterialView!
     let clearColor = UIColor.clearColor()
     var expense: Expense? {
         didSet {
             if let item = expense {
-                self.backgroundColor = MaterialColor.indigo.accent4
+                self.backgroundColor = MaterialColor.teal.lighten1
                 self.contentView.backgroundColor = clearColor
+                materialView.depth = .Depth1
+                materialView.backgroundColor = self.backgroundColor
+                
+                
                 descriptionLabel.backgroundColor = clearColor
                 billAmountLabel.backgroundColor = clearColor
-                addedDatelabel.backgroundColor = clearColor
-                addedByLabel.backgroundColor = clearColor
+                categoryLabel.backgroundColor = clearColor
                 
                 descriptionLabel.text = item.description
                 billAmountLabel.text = "$ \(item.billAmount)"
-                addedByLabel.text = "added By : " + item.category
-                addedDatelabel.text = "on " + item.dateAdded
+                categoryLabel.text =  item.category
+                
+                
+                let formatter = NSDateFormatter()
+                formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+            
+                if let itemdate = formatter.dateFromString(item.dateAdded) {
+                    
+                    dateView.backgroundColor = self.backgroundColor
+                    dateView.shape = .Circle
+                    
+                    formatter.dateFormat = "dd"
+                    addedDay.text = formatter.stringFromDate(itemdate)
+                    formatter.dateFormat = "MMMM"
+                    addedMonth.text = formatter.stringFromDate(itemdate)
+                    formatter.dateFormat = "yyyy"
+                    addedYear.text = formatter.stringFromDate(itemdate)
+                }
+                
+                
+                
+                
             }
         }
     }
