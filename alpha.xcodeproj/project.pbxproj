@@ -29,6 +29,7 @@
 		63CBEBD41D38BACD0002DB65 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63CBEBD21D38BACD0002DB65 /* LaunchScreen.storyboard */; };
 		63CBEBDF1D38BACD0002DB65 /* alphaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CBEBDE1D38BACD0002DB65 /* alphaTests.swift */; };
 		63CBEBEA1D38BACD0002DB65 /* alphaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CBEBE91D38BACD0002DB65 /* alphaUITests.swift */; };
+		63EC26C01D4B46AC00CB7222 /* GroupMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EC26BF1D4B46AC00CB7222 /* GroupMainViewController.swift */; };
 		6B998F7B7EF0BB4A9B5F55AE /* Pods_alphaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3DE9B19B18A878CD6E1FFA /* Pods_alphaTests.framework */; };
 		8D32934CCC36D5015B2DE628 /* Pods_alpha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8612B91C744E842E93D6644 /* Pods_alpha.framework */; };
 		B98BC09FC624BE711008BAC2 /* Pods_alphaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8568E0BA8BF3F348896ED86 /* Pods_alphaUITests.framework */; };
@@ -89,6 +90,7 @@
 		63CBEBE51D38BACD0002DB65 /* alphaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = alphaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		63CBEBE91D38BACD0002DB65 /* alphaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = alphaUITests.swift; sourceTree = "<group>"; };
 		63CBEBEB1D38BACD0002DB65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		63EC26BF1D4B46AC00CB7222 /* GroupMainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupMainViewController.swift; sourceTree = "<group>"; };
 		C8568E0BA8BF3F348896ED86 /* Pods_alphaUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_alphaUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8612B91C744E842E93D6644 /* Pods_alpha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_alpha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -160,6 +162,7 @@
 				632CDE051D46221800B3AB79 /* Expense.swift */,
 				63B71C451D3E1D7600087A8E /* ExpensesCell.swift */,
 				63B71C431D3E1C9700087A8E /* ExpensesListController.swift */,
+				63EC26BF1D4B46AC00CB7222 /* GroupMainViewController.swift */,
 				633BC3121D3B1BF40015BAAA /* GroupExpense.swift */,
 				63B71C491D3E6FB200087A8E /* Group.swift */,
 				63B71C471D3E3BA500087A8E /* User.swift */,
@@ -509,6 +512,7 @@
 				63B71C4A1D3E6FB200087A8E /* Group.swift in Sources */,
 				63547D931D39F4F300A00434 /* AsyncImageView.m in Sources */,
 				63B71C461D3E1D7700087A8E /* ExpensesCell.swift in Sources */,
+				63EC26C01D4B46AC00CB7222 /* GroupMainViewController.swift in Sources */,
 				632CDE061D46221800B3AB79 /* Expense.swift in Sources */,
 				63B71C481D3E3BA500087A8E /* User.swift in Sources */,
 				633BC3151D3B6C520015BAAA /* ParityViewController.swift in Sources */,
