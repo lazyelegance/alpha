@@ -20,6 +20,7 @@ struct User {
     var defaultGroupName = String()
     var title = String()
     var groups = [String : Bool]()
+    var photoURL = String()
     var current = false
     
     init() {
@@ -94,6 +95,8 @@ struct User {
                     user.title = value.value as! String
                 case "groups":
                     user.groups = value.value as! [String:Bool]
+                case "photoURL":
+                    user.photoURL = value.value as! String
                 default:
                     break
                 }
