@@ -159,7 +159,7 @@ class ViewController: UIViewController {
         btn2.pulseColor = MaterialColor.blue.accent3
         //btn2.borderWidth = 1
         btn2.setTitle("Add Expense".uppercaseString, forState: .Normal)
-        btn2.addTarget(self, action: #selector(ViewController.toAddExpenseCycle), forControlEvents: .TouchUpInside)
+        btn2.addTarget(self, action: #selector(self.toAddExpenseCycle), forControlEvents: .TouchUpInside)
         view.addSubview(btn2)
         
         
@@ -169,7 +169,7 @@ class ViewController: UIViewController {
         btn3.pulseColor = MaterialColor.blue.accent3
         //        btn3.borderWidth = 1
         btn3.setTitle("See Expenses".uppercaseString, forState: .Normal)
-        btn3.addTarget(self, action: #selector(ViewController.toListExpenses), forControlEvents: .TouchUpInside)
+        btn3.addTarget(self, action: #selector(self.toListExpenses), forControlEvents: .TouchUpInside)
         view.addSubview(btn3)
         
         let btn4: FlatButton = FlatButton()
@@ -178,6 +178,7 @@ class ViewController: UIViewController {
         btn4.pulseColor = MaterialColor.blue.accent3
         btn4.borderWidth = 1
         btn4.setTitle("Item", forState: .Normal)
+        btn4.addTarget(self, action: #selector(self.toUserGroups), forControlEvents: .TouchUpInside)
         view.addSubview(btn4)
         
         // Initialize the menu and setup the configuration options.
@@ -186,7 +187,7 @@ class ViewController: UIViewController {
         flatMenu.direction = .Up
         flatMenu.spacing = 8
         flatMenu.itemSize = CGSizeMake(120, height)
-        flatMenu.views = [btn1, btn2, btn3]
+        flatMenu.views = [btn1, btn2, btn3, btn4]
     }
     
     // MARK: - Query Firebase
@@ -196,8 +197,23 @@ class ViewController: UIViewController {
             helloLabel.text = "Welcome"
             helloLabel.alpha = 1
             
+            print(currentUser.photoURL)
+
             
             if let userRef = alphaRef.child("users/\(currentUser.uid)") as FIRDatabaseReference? {
+                
+                userRef.child("photoURL").observeSingleEventOfType(.Value, withBlock:{ (photoSnapshot) in
+                    if !(photoSnapshot.exists()) {
+                        
+                        //TEMP: get String from URL
+
+                            userRef.child("photoURL").setValue("\(currentUser.photoURL!)")
+
+                        
+                        
+                    }
+                })
+                
                 
                 userRef.observeEventType(.Value, withBlock: { (snapshot) in
                     
@@ -329,8 +345,13 @@ class ViewController: UIViewController {
     }
     
     
-    func addExpenseTemp() {
-        
+    func toUserGroups() {
+        if let groupMainViewController = self.storyboard?.instantiateViewControllerWithIdentifier("groupMainViewController") as? GroupMainViewController {
+            groupMainViewController.firebaseRef = alphaRef
+            groupMainViewController.currentUser = user
+            groupMainViewController.groupId = user.defaultGroupId
+            self.navigationController?.pushViewController(groupMainViewController, animated: true)
+        }
     
         
     }

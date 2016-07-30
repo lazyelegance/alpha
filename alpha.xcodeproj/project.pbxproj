@@ -22,6 +22,8 @@
 		63B71C461D3E1D7700087A8E /* ExpensesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B71C451D3E1D7600087A8E /* ExpensesCell.swift */; };
 		63B71C481D3E3BA500087A8E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B71C471D3E3BA500087A8E /* User.swift */; };
 		63B71C4A1D3E6FB200087A8E /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B71C491D3E6FB200087A8E /* Group.swift */; };
+		63C7A61E1D4BF0C50030A788 /* GroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7A61D1D4BF0C50030A788 /* GroupCell.swift */; };
+		63C7A6201D4C01060030A788 /* GroupExpenseTotals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7A61F1D4C01060030A788 /* GroupExpenseTotals.swift */; };
 		63CBEBCA1D38BACD0002DB65 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CBEBC91D38BACD0002DB65 /* AppDelegate.swift */; };
 		63CBEBCC1D38BACD0002DB65 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CBEBCB1D38BACD0002DB65 /* ViewController.swift */; };
 		63CBEBCF1D38BACD0002DB65 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63CBEBCD1D38BACD0002DB65 /* Main.storyboard */; };
@@ -77,6 +79,8 @@
 		63B71C451D3E1D7600087A8E /* ExpensesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpensesCell.swift; sourceTree = "<group>"; };
 		63B71C471D3E3BA500087A8E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		63B71C491D3E6FB200087A8E /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
+		63C7A61D1D4BF0C50030A788 /* GroupCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupCell.swift; sourceTree = "<group>"; };
+		63C7A61F1D4C01060030A788 /* GroupExpenseTotals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupExpenseTotals.swift; sourceTree = "<group>"; };
 		63CBEBC61D38BACD0002DB65 /* alpha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = alpha.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63CBEBC91D38BACD0002DB65 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63CBEBCB1D38BACD0002DB65 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -164,7 +168,9 @@
 				63B71C431D3E1C9700087A8E /* ExpensesListController.swift */,
 				63EC26BF1D4B46AC00CB7222 /* GroupMainViewController.swift */,
 				633BC3121D3B1BF40015BAAA /* GroupExpense.swift */,
+				63C7A61F1D4C01060030A788 /* GroupExpenseTotals.swift */,
 				63B71C491D3E6FB200087A8E /* Group.swift */,
+				63C7A61D1D4BF0C50030A788 /* GroupCell.swift */,
 				63B71C471D3E3BA500087A8E /* User.swift */,
 				630FB1E61D3A5114003534A0 /* AddExpenseController.swift */,
 				636610791D47B7B500D13CC3 /* CategoryViewController.swift */,
@@ -503,6 +509,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				633BC3131D3B1BF40015BAAA /* GroupExpense.swift in Sources */,
+				63C7A6201D4C01060030A788 /* GroupExpenseTotals.swift in Sources */,
 				63547D8F1D39DAE800A00434 /* LoginViewController.swift in Sources */,
 				63B71C441D3E1C9700087A8E /* ExpensesListController.swift in Sources */,
 				633BC3171D3B7A8E0015BAAA /* FinishViewController.swift in Sources */,
@@ -511,6 +518,7 @@
 				63CBEBCA1D38BACD0002DB65 /* AppDelegate.swift in Sources */,
 				63B71C4A1D3E6FB200087A8E /* Group.swift in Sources */,
 				63547D931D39F4F300A00434 /* AsyncImageView.m in Sources */,
+				63C7A61E1D4BF0C50030A788 /* GroupCell.swift in Sources */,
 				63B71C461D3E1D7700087A8E /* ExpensesCell.swift in Sources */,
 				63EC26C01D4B46AC00CB7222 /* GroupMainViewController.swift in Sources */,
 				632CDE061D46221800B3AB79 /* Expense.swift in Sources */,
