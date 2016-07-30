@@ -57,6 +57,7 @@ class GroupMainViewController: UIViewController, UITableViewDelegate, UITableVie
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: - Prepare
     
     private func prepareView() {
         view.backgroundColor = MaterialColor.orange.darken1
@@ -120,6 +121,7 @@ class GroupMainViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     
+    // MARK: - Fetch
     
     private func getGroupData() {
         
@@ -163,7 +165,7 @@ class GroupMainViewController: UIViewController, UITableViewDelegate, UITableVie
 
     
 
-    
+    // MARK: - TableView
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return groupMembers.count;
@@ -202,8 +204,24 @@ class GroupMainViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        //to do 
+        //to profile view
 
+    }
+    
+    // MARK: - Buttons
+    
+    @IBAction func seeAllGroupExpenses(sender: AnyObject) {
+        if let expensesListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListViewController") as? ExpensesListViewController {
+            expensesListViewController.expenseType = .user
+            expensesListViewController.expensesRef = self.firebaseRef.child("groupExpenses/\(groupId)")
+            self.navigationController?.pushViewController(expensesListViewController, animated: true)
+        }
+    }
+    
+    
+    @IBAction func addGroupExpense(sender: AnyObject) {
+        //to do
     }
  
 

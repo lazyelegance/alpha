@@ -358,9 +358,10 @@ class ViewController: UIViewController {
 
     func toListExpenses() {
         if let userId = self.user.userId as String? {
-            if let expensesListController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListController") as? ExpensesListController {
-                expensesListController.expensesRef = self.alphaRef.child("expenses/\(userId)")
-                self.navigationController?.pushViewController(expensesListController, animated: true)
+            if let expensesListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListViewController") as? ExpensesListViewController {
+                expensesListViewController.expenseType = .user
+                expensesListViewController.expensesRef = self.alphaRef.child("expenses/\(userId)")
+                self.navigationController?.pushViewController(expensesListViewController, animated: true)
             }
         }
         
