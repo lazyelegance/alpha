@@ -21,11 +21,11 @@ enum SegementButtonState {
     func titleString() -> String {
         switch self {
         case .total:
-            return "in Total"
+            return "Total".uppercaseString
         case .thisMonth:
-            return "This Month"
+            return "This Month".uppercaseString
         case .thisWeek:
-            return "This Week"
+            return "This Week".uppercaseString
         }
     }
     
@@ -42,7 +42,7 @@ enum SegementButtonState {
     
 }
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     private var fabMenu: Menu!
     private var flatMenu: Menu!
@@ -62,20 +62,30 @@ class ViewController: UIViewController {
     var thisWeekSpent: Float = 0.0
     var totals = [String : Float]()
     
+    var userGroups = [Group]()
     var groupExpenses = [GroupExpense]()
 
-    @IBOutlet weak var youOweLabel: UILabel!
+    @IBOutlet weak var groupsTableView: UITableView!
     
-    @IBOutlet weak var groupButton: RaisedButton!
+    @IBOutlet weak var headerView: MaterialView!
+
+    @IBOutlet weak var userExpensesView: MaterialView!
     
-    @IBOutlet weak var userButton: RaisedButton!
-    @IBOutlet weak var segmentButton: RaisedButton!
+    @IBOutlet weak var userGroupsView: MaterialView!
     
+    
+    
+    @IBOutlet weak var profileImageView: AsyncImageView!
+    @IBOutlet weak var messageLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var segmentButton: FlatButton!
+    
+    @IBOutlet weak var spentHeaderLabel: UILabel!
     @IBOutlet weak var mainBalance: UILabel!
     
-    @IBOutlet weak var userImageView: AsyncImageView!
+    @IBOutlet weak var showAllExpensesUserBtn: FlatButton!
     
-    @IBOutlet weak var helloLabel: UILabel!
+    @IBOutlet weak var addNewExpenseUserBtn: FlatButton!
     
     var user = User()
     var group = Group()
@@ -87,23 +97,23 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
         self.navigationController?.navigationBar.hidden = true
         prepareView()
-        prepareButtons()
-        prepareMenu()
-        
-      
-        
+        prepareUIElements()
+        //prepareMenu()
         alphaRef = FIRDatabase.database().reference()
-        mainBalance.text = "0.0 $"
-        mainBalance.font = RobotoFont.lightWithSize(50)
+        
+        //chnage later
+        
+        
+
 
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
-        flatMenu.close()
+//        flatMenu.close()
         if (FIRAuth.auth()?.currentUser) != nil {
             updateMainBalance()
         } else {
@@ -129,13 +139,45 @@ class ViewController: UIViewController {
     
     
     
-    private func prepareButtons() {
-        segmentButton.backgroundColor = MaterialColor.indigo.accent4
-        segmentButton.layer.shadowOpacity = 0.1
+    
+    
+    private func prepareUIElements() {
+        profileImageView.layer.masksToBounds = true
+        profileImageView.layer.cornerRadius = 5
+        spentHeaderLabel.text = "Loading"
+        spentHeaderLabel.font = UIFont.italicSystemFontOfSize(15)
+        spentHeaderLabel.textColor = MaterialColor.grey.lighten1
+        
+        
+        segmentButton.alpha = 0
+        mainBalance.alpha = 0
+        showAllExpensesUserBtn.alpha = 0
+        addNewExpenseUserBtn.alpha = 0
+        
+        
+        headerView.alpha = 0
+        userGroupsView.alpha = 0
+        
+        userExpensesView.backgroundColor = self.view.backgroundColor
+        
+        
+        if user.userId != "1" {
+            
+            spentHeaderLabel.text = "You have spent"
+            spentHeaderLabel.font = RobotoFont.regularWithSize(14)
+            spentHeaderLabel.textColor = MaterialColor.black
+
+            self.messageLabel.text = "Welcome."
+            self.nameLabel.text = self.user.name
+//            if let photoURLString = self.user.photoURL as String? {
+//                self.profileImageView.imageURL = NSURL(string: photoURLString)
+//            }
+            headerView.alpha = 1
+        }
+        
         segmentButton.addTarget(self, action: #selector(self.updateSpentField(_:)), forControlEvents: .TouchUpInside)
         
-        userButton.backgroundColor = MaterialColor.indigo.accent4
-        userButton.layer.shadowOpacity = 0.1
+
     }
     
     private func prepareMenu() {
@@ -194,36 +236,48 @@ class ViewController: UIViewController {
     
     private func updateMainBalance() {
         if let currentUser = FIRAuth.auth()?.currentUser {
-            helloLabel.text = "Welcome"
-            helloLabel.alpha = 1
-            
-            print(currentUser.photoURL)
 
             
             if let userRef = alphaRef.child("users/\(currentUser.uid)") as FIRDatabaseReference? {
                 
-                userRef.child("photoURL").observeSingleEventOfType(.Value, withBlock:{ (photoSnapshot) in
-                    if !(photoSnapshot.exists()) {
-                        
-                        //TEMP: get String from URL
-
-                            userRef.child("photoURL").setValue("\(currentUser.photoURL!)")
-
-                        
-                        
-                    }
-                })
+                //TO DO
+                
+//                userRef.child("photoURL").observeSingleEventOfType(.Value, withBlock:{ (photoSnapshot) in
+//                    if !(photoSnapshot.exists()) {
+//                        
+//                        if let photoURL = currentUser.photoURL as? NSURL? {
+//                            do {
+//                                let photoURLString = try  String(contentsOfURL: photoURL!, encoding: NSUTF8StringEncoding)
+//                                userRef.child("photoURL").setValue(photoURLString)
+//                            }
+//                            catch {
+//                                print(error)
+//                            }
+//                        } else {
+//                            print("failed to cast")
+//                        }
+//                        
+//
+//                    }
+//                })
                 
                 
                 userRef.observeEventType(.Value, withBlock: { (snapshot) in
                     
                     self.user = User.userFromFirebase(snapshot.value! as! NSDictionary)
+                    self.prepareUIElements()
                     
+                    self.userGroups.removeAll()
+                    for groupId in self.user.groups {
+                        if let groupRef = self.alphaRef.child("groups/\(groupId)") as FIRDatabaseReference? {
+                            groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
+                                self.userGroups.append(Group.groupFromFirebase(groupId, results: groupSnapshot.value! as! NSDictionary))
+                                self.groupsTableView.reloadData()
+                                self.userGroupsView.alpha = 1
+                            })
+                        }
+                    }
                     
-                    self.mainBalance.text = "\(self.user.amountOwing) $"
-                    self.helloLabel.text = "Hello, "
-                    self.userButton.setTitle(self.user.name, forState: .Normal)
-                    self.userButton.alpha = 1
                     
                     let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
                     
@@ -245,34 +299,46 @@ class ViewController: UIViewController {
                             
                             self.totals.removeAll()
                             expensesRef.child("totals").observeEventType(.Value, withBlock: { (totalssnapshot) in
-                                self.totals = Expense.totalsFromResults(totalssnapshot.value! as! NSDictionary)
-                                
-                                if self.totals["total"] != nil {
-                                    self.totalSpent = self.totals["total"] as Float!
+                                if totalssnapshot.exists() {
+                                    self.totals = Expense.totalsFromResults(totalssnapshot.value! as! NSDictionary)
+                                    
+                                    if self.totals["total"] != nil {
+                                        self.totalSpent = self.totals["total"] as Float!
+                                    }
+                                    
+                                    if self.totals[currmon] != nil {
+                                        self.thisMonthSpent = self.totals[currmon] as Float!
+                                    }
+                                    
+                                    if self.totals[currweek] != nil {
+                                        self.thisWeekSpent = self.totals[currweek] as Float!
+                                    }
+                                    
+                                    
+                                    self.segmentButton.setTitle(self.segmentButtonState.titleString(), forState: .Normal)
+                                    switch self.segmentButtonState {
+                                    case .total:
+                                        self.mainBalance.text = "\(self.totalSpent) $"
+                                    case .thisMonth:
+                                        self.mainBalance.text = "\(self.thisMonthSpent) $"
+                                    case .thisWeek:
+                                        self.mainBalance.text = "\(self.thisWeekSpent) $"
+                                    }
+                                    
+                                    
+                                    self.userExpensesView.backgroundColor = MaterialColor.white
+                                    self.showAllExpensesUserBtn.alpha = 1
+                                    self.addNewExpenseUserBtn.alpha = 1
+                                    self.segmentButton.alpha = 1
+                                    self.mainBalance.alpha = 1
+                                } else {
+                                    self.spentHeaderLabel.text = "You have not added any expenses yet. Click below to start"
+                                    self.addNewExpenseUserBtn.setTitle("ADD YOUR FIRST EXPENSE", forState: .Normal)
+                                    self.addNewExpenseUserBtn.alpha = 1
+                                    self.userExpensesView.backgroundColor = MaterialColor.white
                                 }
                                 
-                                if self.totals[currmon] != nil {
-                                    self.thisMonthSpent = self.totals[currmon] as Float!
-                                }
-                                
-                                if self.totals[currweek] != nil {
-                                    self.thisWeekSpent = self.totals[currweek] as Float!
-                                }
-                                
-                                
-                                self.segmentButton.setTitle(self.segmentButtonState.titleString(), forState: .Normal)
-                                switch self.segmentButtonState {
-                                case .total:
-                                    self.mainBalance.text = "\(self.totalSpent)"
-                                case .thisMonth:
-                                    self.mainBalance.text = "\(self.thisMonthSpent)"
-                                case .thisWeek:
-                                    self.mainBalance.text = "\(self.thisWeekSpent)"
-                                }
-                                
-                                self.segmentButton.alpha = 1
-                                self.mainBalance.alpha = 1
-                                self.youOweLabel.alpha = 1
+
                                 
                             })
                             
@@ -335,11 +401,11 @@ class ViewController: UIViewController {
         self.segmentButton.setTitle(self.segmentButtonState.titleString(), forState: .Normal)
         switch self.segmentButtonState {
         case .total:
-            self.mainBalance.text = "\(self.totalSpent)"
+            self.mainBalance.text = "\(self.totalSpent) $"
         case .thisMonth:
-            self.mainBalance.text = "\(self.thisMonthSpent)"
+            self.mainBalance.text = "\(self.thisMonthSpent) $"
         case .thisWeek:
-            self.mainBalance.text = "\(self.thisWeekSpent)"
+            self.mainBalance.text = "\(self.thisWeekSpent) $"
         }
 
     }
@@ -355,6 +421,38 @@ class ViewController: UIViewController {
     
         
     }
+    
+    
+    @IBAction func addNewExpense_User(sender: AnyObject) {
+        if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
+            addExpenseVC.currentStep = AddExpenseStep.description
+            addExpenseVC.expenseType = ExpenseType.user
+            
+            
+            var newExpense = Expense()
+            
+            if let userId = self.user.userId as String? {
+                newExpense.firebaseDBRef = alphaRef.child("expenses/\(userId)")
+            }
+            
+            addExpenseVC.newExpense = newExpense
+            self.navigationController?.pushViewController(addExpenseVC, animated: true)
+        }
+    }
+    
+   
+    @IBAction func showAllExpenses_User(sender: AnyObject) {
+        if let userId = self.user.userId as String? {
+            if let expensesListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListViewController") as? ExpensesListViewController {
+                expensesListViewController.expenseType = .user
+                expensesListViewController.expensesRef = self.alphaRef.child("expenses/\(userId)")
+                expensesListViewController.userName = self.user.name
+                self.navigationController?.pushViewController(expensesListViewController, animated: true)
+            }
+        }
+        
+    }
+    
 
     func toListExpenses() {
         if let userId = self.user.userId as String? {
@@ -384,6 +482,8 @@ class ViewController: UIViewController {
         }
     }
     
+    
+    
 //    func toAddExpenseCycle() {
 //        if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
 //            addExpenseVC.currentStep = AddExpenseStep.description
@@ -410,6 +510,57 @@ class ViewController: UIViewController {
 //        }
 //    }
     
+    
+    // MARK: - TableView
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return userGroups.count;
+    }
+    
+    /// Returns the number of sections.
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    /// Prepares the cells within the tableView.
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell: MaterialTableViewCell = MaterialTableViewCell(style: .Subtitle, reuseIdentifier: "groupCell")
+        
+        let userGroup = userGroups[indexPath.row]
+        cell.selectionStyle = .None
+        cell.textLabel!.text = userGroup.name
+        cell.textLabel!.font = RobotoFont.regular
+        
+        cell.detailTextLabel?.text = "Select to see more details"
+        cell.detailTextLabel?.numberOfLines = 0
+        cell.detailTextLabel?.lineBreakMode = .ByWordWrapping
+        
+        cell.detailTextLabel!.font = RobotoFont.regular
+        cell.detailTextLabel!.textColor = MaterialColor.grey.darken1
+        cell.imageView?.image = UIImage(named: "default_group")
+
+        
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if userGroups.count > 1 {
+            return 50
+        }
+        return 60
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if let groupMainViewController = self.storyboard?.instantiateViewControllerWithIdentifier("groupMainViewController") as? GroupMainViewController {
+            groupMainViewController.firebaseRef = alphaRef
+            groupMainViewController.currentUser = user
+            groupMainViewController.groupId = userGroups[indexPath.row].groupId
+            self.navigationController?.pushViewController(groupMainViewController, animated: true)
+        }
+        
+    }
+
 
 }
 

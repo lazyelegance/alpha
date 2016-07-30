@@ -215,6 +215,7 @@ class GroupMainViewController: UIViewController, UITableViewDelegate, UITableVie
         if let expensesListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListViewController") as? ExpensesListViewController {
             expensesListViewController.expenseType = .user
             expensesListViewController.expensesRef = self.firebaseRef.child("groupExpenses/\(groupId)")
+            expensesListViewController.groupName = self.group.name
             self.navigationController?.pushViewController(expensesListViewController, animated: true)
         }
     }

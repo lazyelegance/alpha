@@ -20,6 +20,9 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     var groupExpenses = [GroupExpense]()
     var groupExpensesRef = FIRDatabaseReference()
     
+    var groupName = String()
+    var userName = String()
+    
 
     @IBOutlet weak var headerDetail: UILabel!
     
@@ -30,6 +33,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         prepareview()
         preparetableview()
         getExpenses()
+        prepareHeaderView()
 
         // Do any additional setup after loading the view.
     }
@@ -49,6 +53,17 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
+    }
+    
+    private func prepareHeaderView() {
+        
+        
+        switch self.expenseType {
+        case .user:
+            headerDetail.text = "for " + userName
+        case .group:
+            headerDetail.text = "for " + groupName
+        }
     }
     
     private func getExpenses() {

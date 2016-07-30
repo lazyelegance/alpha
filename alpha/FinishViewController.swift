@@ -108,35 +108,42 @@ class FinishViewController: UIViewController {
             
             
             userExpensesRef.child("totals").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-                
-                if let totals = Expense.totalsFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
-                    
-                    if let currentTotalSpent = totals["total"] as Float? {
-                        let newTotalSpent = currentTotalSpent + self.newExpense.billAmount
+                if snapshot.exists() {
+                    if let totals = Expense.totalsFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
+                        
+                        if let currentTotalSpent = totals["total"] as Float? {
+                            let newTotalSpent = currentTotalSpent + self.newExpense.billAmount
+                            userExpensesRef.child("totals/total").setValue(newTotalSpent)
+                            
+                            userExpensesRef.child("totals/\(currweek)").setValue(newTotalSpent)
+                        }
+                        
+                        if totals[currmon] != nil {
+                            if let currentMonSpent = totals[currmon] as Float? {
+                                let newMonSpent = currentMonSpent + self.newExpense.billAmount
+                                userExpensesRef.child("totals/\(currmon)").setValue(newMonSpent)
+                            }
+                        } else {
+                            userExpensesRef.child("totals/\(currmon)").setValue(self.newExpense.billAmount)
+                        }
+                        
+                        if totals[currweek] != nil {
+                            if let currentMonSpent = totals[currweek] as Float? {
+                                let newMonSpent = currentMonSpent + self.newExpense.billAmount
+                                userExpensesRef.child("totals/\(currweek)").setValue(newMonSpent)
+                            }
+                        } else {
+                            userExpensesRef.child("totals/\(currweek)").setValue(self.newExpense.billAmount)
+                        }
+                        
+                    } else {
+                        let newTotalSpent = self.newExpense.billAmount
                         userExpensesRef.child("totals/total").setValue(newTotalSpent)
-
                         userExpensesRef.child("totals/\(currweek)").setValue(newTotalSpent)
+                        userExpensesRef.child("totals/\(currmon)").setValue(newTotalSpent)
                     }
-                    
-                    if totals[currmon] != nil {
-                        if let currentMonSpent = totals[currmon] as Float? {
-                            let newMonSpent = currentMonSpent + self.newExpense.billAmount
-                            userExpensesRef.child("totals/\(currmon)").setValue(newMonSpent)
-                        }
-                    } else {
-                        userExpensesRef.child("totals/\(currmon)").setValue(self.newExpense.billAmount)
-                    }
-                    
-                    if totals[currweek] != nil {
-                        if let currentMonSpent = totals[currweek] as Float? {
-                            let newMonSpent = currentMonSpent + self.newExpense.billAmount
-                            userExpensesRef.child("totals/\(currweek)").setValue(newMonSpent)
-                        }
-                    } else {
-                        userExpensesRef.child("totals/\(currweek)").setValue(self.newExpense.billAmount)
-                    }
-
                 }
+                
                 
             })
             

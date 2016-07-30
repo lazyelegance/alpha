@@ -30,7 +30,7 @@ struct Expense {
         totals.removeAll()
         
         if results.count > 0 {
-            print(results)
+
             for result in results {
                 totals[result.key as! String] = (result.value as! Float)
                 
