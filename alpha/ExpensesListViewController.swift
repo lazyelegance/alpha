@@ -67,6 +67,8 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     private func getExpenses() {
+        
+        print(self.expenseType)
         switch self.expenseType {
         case .user:
             expensesRef.observeEventType(.Value, withBlock: { (expSnapshot) in
@@ -74,6 +76,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                 self.tableView.reloadData()
             })
         case .group:
+            print(groupExpensesRef)
              groupExpensesRef.observeEventType(.Value, withBlock: { (grpExpSnapshot) in
                 self.groupExpenses = GroupExpense.expensesFromFirebase(grpExpSnapshot.value! as! NSDictionary, firebasereference: grpExpSnapshot.ref)
                 self.tableView.reloadData()
@@ -99,7 +102,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         case .user:
             return expenses.count
         case .group:
-            return expenses.count
+            return groupExpenses.count
         }
     }
     

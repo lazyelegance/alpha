@@ -62,15 +62,128 @@ class FinishViewController: UIViewController {
         backButton.setImage(MaterialIcon.arrowBack, forState: .Normal)
         
         backButton.addTarget(self, action: #selector(self.backOneStep), forControlEvents: .TouchUpInside)
-        saveButton.addTarget(self, action: #selector(self.saveExpense), forControlEvents: .TouchUpInside)
+        
+        switch expenseType {
+        case .user:
+            saveButton.addTarget(self, action: #selector(self.saveExpense), forControlEvents: .TouchUpInside)
+        case .group:
+            saveButton.addTarget(self, action: #selector(self.saveGroupExpense), forControlEvents: .TouchUpInside)
+        }
+        
         saveButton.setTitleColor(MaterialColor.white, forState: .Normal)
     }
     
     
     
     func backOneStep() {
-        print("back button")
         navigationController?.popViewControllerAnimated(true)
+    }
+    
+    
+    func goBacktoMainViewController() {
+        
+        switch expenseType {
+        case .user:
+            self.navigationController?.popToRootViewControllerAnimated(true)
+        case .group:
+            if ((self.navigationController?.viewControllers[1].isKindOfClass(GroupMainViewController)) == true) {
+                self.navigationController?.popToViewController((self.navigationController?.viewControllers[1])!, animated: true)
+            } else {
+                self.navigationController?.popToRootViewControllerAnimated(true)
+            }
+        }
+        
+    }
+    
+    
+    func restartAddExpense() {
+        //
+        if ((self.navigationController?.viewControllers[expenseType.firstStep()].isKindOfClass(AddExpenseController)) == true) {
+            self.navigationController?.popToViewController((self.navigationController?.viewControllers[expenseType.firstStep()])!, animated: true)
+        } else {
+            self.navigationController?.popToRootViewControllerAnimated(true)
+        }
+
+    }
+    
+    func saveGroupExpense() {
+        
+        if self.expenseType == .group {
+            let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
+            
+            let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
+            
+            let firebaseUserRef = newGroupExpense.firebaseDBRef.child("users")
+            let firebaseGroupRef = newGroupExpense.firebaseDBRef.child("groups").child(newGroupExpense.groupId)
+            let groupExpensesRef = newGroupExpense.firebaseDBRef.child("groupExpenses").child(newGroupExpense.groupId)
+            let grpExpTotalsRef = groupExpensesRef.child("totals")
+            let key = groupExpensesRef.childByAutoId().key
+            
+            groupExpensesRef.updateChildValues([key : ["dateAdded": "\(currDate)","billAmount": newGroupExpense.billAmount, "addedBy": newGroupExpense.addedBy, "description": newGroupExpense.description, "group": newGroupExpense.group, "spent": newGroupExpense.spent, "parity" : newGroupExpense.parity, "share": newGroupExpense.share, "settlement": newGroupExpense.settlement, "owing": newGroupExpense.owing, "category" : newGroupExpense.category  ]]) { (error, ref) in
+                if error != nil {
+                    print(error?.localizedDescription)
+                } else {
+                    print("Success Saving Expense")
+                }
+            }
+            
+            
+            
+            grpExpTotalsRef.observeSingleEventOfType(.Value, withBlock: { (grptotals) in
+                if grptotals.exists() {
+                    if let totals = GroupExpense.totalsFromResults(grptotals.value! as! NSDictionary) as [String: AnyObject]? {
+                        
+                        if let currentTotalSpent = totals["totalSpent"] as? Float {
+                            let newTotalSpent = currentTotalSpent + self.newExpense.billAmount
+                            grpExpTotalsRef.child("totalSpent").setValue(newTotalSpent)
+                        } else {
+                            grpExpTotalsRef.child("total").setValue(self.newExpense.billAmount)
+                        }
+                        if let spentDictionery = totals["spent"] as? [String: Float] {
+                            if let currentUserSpent = spentDictionery[self.newGroupExpense.addedBy] as Float? {
+                                let newTotalSpent = currentUserSpent + self.newExpense.billAmount
+                                grpExpTotalsRef.child("spent/\(self.newGroupExpense.addedBy)").setValue(newTotalSpent)
+                            } else {
+                                grpExpTotalsRef.child("spent/\(self.newGroupExpense.addedBy)").setValue(self.newGroupExpense.billAmount)
+                            }
+                        } else {
+                            grpExpTotalsRef.child("spent/\(self.newGroupExpense.addedBy)").setValue(self.newGroupExpense.billAmount)
+                        }
+                        
+                        grpExpTotalsRef.child("owing").setValue(self.newGroupExpense.owing)
+                        
+                    }
+                } else {
+                    grpExpTotalsRef.child("owing").setValue(self.newGroupExpense.owing)
+                    grpExpTotalsRef.child("spent/\(self.newGroupExpense.addedBy)").setValue(self.newGroupExpense.billAmount)
+                    grpExpTotalsRef.child("total").setValue(self.newExpense.billAmount)
+                }
+            })
+            
+            firebaseGroupRef.child("lastExpense").setValue(key) { (error, ref) in
+                if error != nil {
+                    print(error?.localizedDescription)
+                } else {
+                    print("Success Saving Last Expense To Group")
+                }
+            }
+            
+            for member in newGroupExpense.groupMembers {
+                let currentUserRef = firebaseUserRef.child(member.userId)
+                let currentUserOwing = newGroupExpense.owing[member.name]
+                
+                currentUserRef.child("amountOwing").setValue(currentUserOwing, withCompletionBlock: { (error, ref) in
+                    if error != nil {
+                        print(error?.localizedDescription)
+                    } else {
+                        print("Success saving \(member.name) owing amount")
+                    }
+                })
+            }
+            
+        }
+        
+        goBacktoMainViewController()
     }
     
 
@@ -84,11 +197,11 @@ class FinishViewController: UIViewController {
         
         let formatter_mon = NSDateFormatter()
         formatter_mon.dateFormat = "MM_yyyy"
-        let currmon = formatter_mon.stringFromDate(currDate)
+        let currmon = "m_" + formatter_mon.stringFromDate(currDate)
 
         let formatter_week = NSDateFormatter()
         formatter_week.dateFormat = "w_yyyy"
-        let currweek = formatter_week.stringFromDate(currDate)
+        let currweek = "w_" + formatter_week.stringFromDate(currDate)
         
         if self.expenseType == .user {
             let userExpensesRef = newExpense.firebaseDBRef
@@ -114,8 +227,6 @@ class FinishViewController: UIViewController {
                         if let currentTotalSpent = totals["total"] as Float? {
                             let newTotalSpent = currentTotalSpent + self.newExpense.billAmount
                             userExpensesRef.child("totals/total").setValue(newTotalSpent)
-                            
-                            userExpensesRef.child("totals/\(currweek)").setValue(newTotalSpent)
                         }
                         
                         if totals[currmon] != nil {
@@ -136,74 +247,27 @@ class FinishViewController: UIViewController {
                             userExpensesRef.child("totals/\(currweek)").setValue(self.newExpense.billAmount)
                         }
                         
-                    } else {
-                        let newTotalSpent = self.newExpense.billAmount
-                        userExpensesRef.child("totals/total").setValue(newTotalSpent)
-                        userExpensesRef.child("totals/\(currweek)").setValue(newTotalSpent)
-                        userExpensesRef.child("totals/\(currmon)").setValue(newTotalSpent)
                     }
+                } else {
+                    let newTotalSpent = self.newExpense.billAmount
+                    userExpensesRef.child("totals/total").setValue(newTotalSpent)
+                    userExpensesRef.child("totals/\(currweek)").setValue(newTotalSpent)
+                    userExpensesRef.child("totals/\(currmon)").setValue(newTotalSpent)
                 }
                 
                 
             })
             
 
-        } else if self.expenseType == .group {
-            let firebaseUserRef = newGroupExpense.firebaseDBRef.child("users")
-            let firebaseGroupRef = newGroupExpense.firebaseDBRef.child("groups").child(newGroupExpense.groupId)
-            let groupExpensesRef = newGroupExpense.firebaseDBRef.child("groupExpenses").child(newGroupExpense.groupId)
-            
-            let key = groupExpensesRef.childByAutoId().key
-
-            groupExpensesRef.updateChildValues([key : ["dateAdded": "\(currDate)","billAmount": newGroupExpense.billAmount, "addedBy": newGroupExpense.addedBy, "description": newGroupExpense.description, "group": newGroupExpense.group, "spent": newGroupExpense.spent, "parity" : newGroupExpense.parity, "share": newGroupExpense.share, "settlement": newGroupExpense.settlement, "owing": newGroupExpense.owing  ]]) { (error, ref) in
-                if error != nil {
-                    print(error?.localizedDescription)
-                } else {
-                    print("Success Saving Expense")
-                }
-            }
-            
-            firebaseGroupRef.child("lastExpense").setValue(key) { (error, ref) in
-                if error != nil {
-                    print(error?.localizedDescription)
-                } else {
-                    print("Success Saving Last Expense To Group")
-                }
-            }
-            
-            for member in newGroupExpense.groupMembers {
-                let currentUserRef = firebaseUserRef.child(member.userId)
-                let currentUserOwing = newGroupExpense.owing[member.name]
-                
-                currentUserRef.child("amountOwing").setValue(currentUserOwing, withCompletionBlock: { (error, ref) in
-                    if error != nil {
-                        print(error?.localizedDescription)
-                    } else {
-                        print("Success saving \(member.name) owing amount")
-                    }
-                })
-            }
-
         }
         
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        goBacktoMainViewController()
 
     }
     
-    
-    func saveGroupExpense()  {
-        print("SAVING")
 
-        //TO DO
-        
-    }
     
-    func restartAddExpense() {
-        //
-        if ((self.navigationController?.viewControllers[1].isKindOfClass(AddExpenseController)) == true) {
-            self.navigationController?.popToViewController((self.navigationController?.viewControllers[1])!, animated: true)
-        }
-    }
+    
     
 
     /*

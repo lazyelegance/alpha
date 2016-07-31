@@ -104,23 +104,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //prepareMenu()
         alphaRef = FIRDatabase.database().reference()
         
-        //chnage later
+        prepareExpenseData()
         
         
 
 
     }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(true)
-//        flatMenu.close()
-        if (FIRAuth.auth()?.currentUser) != nil {
-            updateMainBalance()
-        } else {
-            showLoginScreen()
-        }
-    }
-    
+
     
     
     
@@ -175,6 +165,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             headerView.alpha = 1
         }
         
+        segmentButton.tag = 110
         segmentButton.addTarget(self, action: #selector(self.updateSpentField(_:)), forControlEvents: .TouchUpInside)
         
 
@@ -234,33 +225,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     // MARK: - Query Firebase
     
-    private func updateMainBalance() {
+    private func prepareExpenseData() {
         if let currentUser = FIRAuth.auth()?.currentUser {
 
             
             if let userRef = alphaRef.child("users/\(currentUser.uid)") as FIRDatabaseReference? {
-                
-                //TO DO
-                
-//                userRef.child("photoURL").observeSingleEventOfType(.Value, withBlock:{ (photoSnapshot) in
-//                    if !(photoSnapshot.exists()) {
-//                        
-//                        if let photoURL = currentUser.photoURL as? NSURL? {
-//                            do {
-//                                let photoURLString = try  String(contentsOfURL: photoURL!, encoding: NSUTF8StringEncoding)
-//                                userRef.child("photoURL").setValue(photoURLString)
-//                            }
-//                            catch {
-//                                print(error)
-//                            }
-//                        } else {
-//                            print("failed to cast")
-//                        }
-//                        
-//
-//                    }
-//                })
-                
                 
                 userRef.observeEventType(.Value, withBlock: { (snapshot) in
                     
@@ -279,20 +248,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     }
                     
                     
-                    let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
-                    
-                    let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
-                    
-                    let formatter_mon = NSDateFormatter()
-                    formatter_mon.dateFormat = "MM_yyyy"
-                    let currmon = formatter_mon.stringFromDate(currDate)
-                    
-                    
-                    
-                    let formatter_week = NSDateFormatter()
-                    formatter_week.dateFormat = "w_yyyy"
-                    let currweek = formatter_week.stringFromDate(currDate)
-                    
                     
                     if let userId = self.user.userId as String? {
                         if let expensesRef = self.alphaRef.child("expenses/\(userId)") as FIRDatabaseReference? {
@@ -301,36 +256,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             expensesRef.child("totals").observeEventType(.Value, withBlock: { (totalssnapshot) in
                                 if totalssnapshot.exists() {
                                     self.totals = Expense.totalsFromResults(totalssnapshot.value! as! NSDictionary)
-                                    
-                                    if self.totals["total"] != nil {
-                                        self.totalSpent = self.totals["total"] as Float!
-                                    }
-                                    
-                                    if self.totals[currmon] != nil {
-                                        self.thisMonthSpent = self.totals[currmon] as Float!
-                                    }
-                                    
-                                    if self.totals[currweek] != nil {
-                                        self.thisWeekSpent = self.totals[currweek] as Float!
-                                    }
-                                    
-                                    
-                                    self.segmentButton.setTitle(self.segmentButtonState.titleString(), forState: .Normal)
-                                    switch self.segmentButtonState {
-                                    case .total:
-                                        self.mainBalance.text = "\(self.totalSpent) $"
-                                    case .thisMonth:
-                                        self.mainBalance.text = "\(self.thisMonthSpent) $"
-                                    case .thisWeek:
-                                        self.mainBalance.text = "\(self.thisWeekSpent) $"
-                                    }
-                                    
-                                    
-                                    self.userExpensesView.backgroundColor = MaterialColor.white
-                                    self.showAllExpensesUserBtn.alpha = 1
-                                    self.addNewExpenseUserBtn.alpha = 1
-                                    self.segmentButton.alpha = 1
-                                    self.mainBalance.alpha = 1
+                                    self.updateSpentField(self)
                                 } else {
                                     self.spentHeaderLabel.text = "You have not added any expenses yet. Click below to start"
                                     self.addNewExpenseUserBtn.setTitle("ADD YOUR FIRST EXPENSE", forState: .Normal)
@@ -396,8 +322,42 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     
-    func updateSpentField(sender: RaisedButton) {
-        self.segmentButtonState = self.segmentButtonState.nextState()
+    func updateSpentField(sender: AnyObject) {
+        
+        let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
+        
+        let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
+        
+        let formatter_mon = NSDateFormatter()
+        formatter_mon.dateFormat = "MM_yyyy"
+        let currmon = "m_" + formatter_mon.stringFromDate(currDate)
+        
+        
+        
+        let formatter_week = NSDateFormatter()
+        formatter_week.dateFormat = "w_yyyy"
+        let currweek = "w_" + formatter_week.stringFromDate(currDate)
+        print(currDate)
+        print(currmon)
+        print(currweek)
+
+        
+        if self.totals["total"] != nil {
+            self.totalSpent = self.totals["total"] as Float!
+        }
+        
+        if self.totals[currmon] != nil {
+            self.thisMonthSpent = self.totals[currmon] as Float!
+        }
+        
+        if self.totals[currweek] != nil {
+            self.thisWeekSpent = self.totals[currweek] as Float!
+        }
+        
+        if sender.tag != nil && sender.tag == 110 {
+            self.segmentButtonState = self.segmentButtonState.nextState()
+        }
+        
         self.segmentButton.setTitle(self.segmentButtonState.titleString(), forState: .Normal)
         switch self.segmentButtonState {
         case .total:
@@ -407,6 +367,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         case .thisWeek:
             self.mainBalance.text = "\(self.thisWeekSpent) $"
         }
+        
+        
+        self.userExpensesView.backgroundColor = MaterialColor.white
+        self.showAllExpensesUserBtn.alpha = 1
+        self.addNewExpenseUserBtn.alpha = 1
+        self.segmentButton.alpha = 1
+        self.mainBalance.alpha = 1
+        
+        
+        
+        
+
 
     }
     
@@ -484,32 +456,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     
     
-//    func toAddExpenseCycle() {
-//        if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
-//            addExpenseVC.currentStep = AddExpenseStep.description
-//            
-//            var owing = [String : Float]()
-//            owing.removeAll()
-//            
-//            for member in groupMembers {
-//                owing[member.name] = member.amountOwing
-//            }
-//            
-//            print(owing)
-//            
-//            var newExpense = GroupExpense()
-//            newExpense.addedBy = user.name 
-//            newExpense.group = user.defaultGroupName
-//            newExpense.groupId = user.defaultGroupId
-//            newExpense.groupMembers = groupMembers
-//            newExpense.owing = owing
-//            newExpense.firebaseDBRef = self.alphaRef
-//            
-//            addExpenseVC.newExpense = newExpense
-//            self.navigationController?.pushViewController(addExpenseVC, animated: true)
-//        }
-//    }
-    
+
     
     // MARK: - TableView
     

@@ -26,6 +26,7 @@ struct GroupExpense {
     var group = String()
     var groupId = String()
     var groupMembers = [User]()
+    var category = String()
     var owing = [String: Float]()
     var firebaseDBRef = FIRDatabaseReference()
     
