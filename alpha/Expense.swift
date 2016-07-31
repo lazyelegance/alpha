@@ -51,33 +51,38 @@ struct Expense {
         
         if results.count > 0 {
             for result in results {
-                
-                if let valueDictionary = result.value as? NSDictionary {
-                    var expense = Expense()
-                    for value in valueDictionary {
-                        
-                        
-                        expense.expenseId = result.key as! String
-                        expense.firebaseDBRef = ref
-                        
-                        switch value.key as! String {
-                        case "billAmount":
-                            expense.billAmount = value.value as! Float
-                        case "category":
-                            expense.category = value.value as! String
-                        case "description":
-                            expense.description = value.value as! String
-                        case "dateAdded":
-
-                            expense.dateAdded = value.value as! String
-                        default:
-                            break
+                if let resultKey = result.key as? String {
+                    if resultKey != "totals" {
+                        if let valueDictionary = result.value as? NSDictionary {
+                            var expense = Expense()
+                            for value in valueDictionary {
+                                
+                                
+                                expense.expenseId = result.key as! String
+                                expense.firebaseDBRef = ref
+                                
+                                switch value.key as! String {
+                                case "billAmount":
+                                    expense.billAmount = value.value as! Float
+                                case "category":
+                                    expense.category = value.value as! String
+                                case "description":
+                                    expense.description = value.value as! String
+                                case "dateAdded":
+                                    
+                                    expense.dateAdded = value.value as! String
+                                default:
+                                    break
+                                }
+                                
+                            }
+                            expenses.append(expense)
+                            
                         }
-                        
                     }
-                    expenses.append(expense)
-                    
                 }
+                
+                
             }
             
         }
