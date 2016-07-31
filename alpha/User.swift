@@ -19,7 +19,7 @@ struct User {
     var defaultGroupId = String()
     var defaultGroupName = String()
     var title = String()
-    var groups = [String : Bool]()
+    var groups = [String]()
     var photoURL = String()
     var current = false
     
@@ -56,7 +56,10 @@ struct User {
                         case "title":
                             user.title = value.value as! String
                         case "groups":
-                            user.groups = value.value as! [String:Bool]
+                            let userGroups = value.value as! [String:Bool]
+                            for userGroup in userGroups {
+                                user.groups.append(userGroup.0)
+                            }
                         default:
                             break
                         }
@@ -75,7 +78,6 @@ struct User {
     static func userFromFirebase(results: NSDictionary) -> User {
         var user = User()
         
-        
         if results.count > 0 {
             for value in results {
                 switch value.key as! String {
@@ -93,10 +95,13 @@ struct User {
                     user.email = value.value as! String
                 case "title":
                     user.title = value.value as! String
-                case "groups":
-                    user.groups = value.value as! [String:Bool]
                 case "photoURL":
                     user.photoURL = value.value as! String
+                case "groups":
+                    let userGroups = value.value as! [String:Bool]
+                    for userGroup in userGroups {
+                        user.groups.append(userGroup.0)
+                    }
                 default:
                     break
                 }

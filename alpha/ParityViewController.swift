@@ -12,7 +12,8 @@ import Material
 class ParityViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var currentStep = AddExpenseStep.description
     
-    var newExpense = GroupExpense()
+    var newGroupExpense = GroupExpense()
+    var expenseType: ExpenseType = .group 
     
     var parityText = "Shared Equally (1:1)"
     
@@ -49,7 +50,7 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
         super.viewDidLoad()
         
         
-        print(newExpense)
+        print(newGroupExpense)
         
         
         view.backgroundColor = currentStep.toColor()
@@ -75,9 +76,9 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
         option3.tag = 203
         option3.addTarget(self, action: #selector(self.showTableView), forControlEvents: .TouchUpInside)
         
-        if newExpense.groupMembers.count == 2 {
-            for member in newExpense.groupMembers {
-                if member.name != newExpense.addedBy {
+        if newGroupExpense.groupMembers.count == 2 {
+            for member in newGroupExpense.groupMembers {
+                if member.userId != newGroupExpense.addedBy {
                     option2.setTitle("Spent On \(member.name.capitalizedString) ", forState: .Normal)
                 }
             }
@@ -90,7 +91,7 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
         nextButton.addTarget(self, action: #selector(self.toNextInAddExpenseCycle), forControlEvents: .TouchUpInside)
         nextButton.setTitleColor(MaterialColor.white, forState: .Normal)
         tableView.alpha = 0
-        tableView.frame.size.height = CGFloat((Float(newExpense.groupMembers.count) * 50))
+        tableView.frame.size.height = CGFloat((Float(newGroupExpense.groupMembers.count) * 50))
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = currentStep.toColor()
@@ -110,7 +111,7 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
         
 //        view.addSubview(shareEquallySwitch)
         
-        parityQuestionLabel.text = "Whom did you spend $\(newExpense.billAmount) on?"
+        parityQuestionLabel.text = "Whom did you spend $\(newGroupExpense.billAmount) on?"
         
         
 //        nextButton = FlatButton(frame: CGRectMake(self.view.frame.width - 100, parityQuestionLabel.frame.origin.y + parityQuestionLabel.frame.size.height + 8 , 60, 60))
@@ -185,7 +186,7 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
 //                self.nextButton.frame.origin.y = buttonsNewYPosition
 //                self.backButton.frame.origin.y = buttonsNewYPosition
 //                parity.removeAll()
-//                for _ in newExpense.groupMembers {
+//                for _ in newGroupExpense.groupMembers {
 //                    parity.append(1)
 //                }
 //            } else {
@@ -195,7 +196,7 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
 //                self.nextButton.frame.origin.y = buttonsNewYPosition
 //                self.backButton.frame.origin.y = buttonsNewYPosition
 //                parity.removeAll()
-//                for _ in newExpense.groupMembers {
+//                for _ in newGroupExpense.groupMembers {
 //                    parity.append(0)
 //                }
 //                tableView.reloadData()
@@ -207,7 +208,7 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
     
     func showTableView() {
         parity.removeAll()
-        for _ in newExpense.groupMembers {
+        for _ in newGroupExpense.groupMembers {
             parity.append(0)
         }
         self.tableView.alpha = 1
@@ -218,12 +219,12 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
         
         switch sender.tag {
         case 201:
-            for _ in newExpense.groupMembers {
+            for _ in newGroupExpense.groupMembers {
                 parity.append(1)
             }
         case 202:
-            for member in newExpense.groupMembers {
-                if member.name == newExpense.addedBy {
+            for member in newGroupExpense.groupMembers {
+                if member.userId == newGroupExpense.addedBy {
                     parity.append(0)
                 } else {
                     parity.append(1)
@@ -272,8 +273,8 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
         
 
         
-        newExpense.parity.removeAll()
-        newExpense.spent.removeAll()
+        newGroupExpense.parity.removeAll()
+        newGroupExpense.spent.removeAll()
         
         var paritySum = 0
         
@@ -281,42 +282,42 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
             paritySum = paritySum + i
         }
         
-        for i in 0 ..< newExpense.groupMembers.count {
-            let member = newExpense.groupMembers[i]
+        for i in 0 ..< newGroupExpense.groupMembers.count {
+            let member = newGroupExpense.groupMembers[i]
             let memberParity = parity[i]
             
             //parity
-            newExpense.parity[member.name] = parity[i]
+            newGroupExpense.parity[member.userId] = parity[i]
             
             //spent
-            if member.name == newExpense.addedBy {
-                newExpense.spent[member.name] = 1
+            if member.userId == newGroupExpense.addedBy {
+                newGroupExpense.spent[member.userId] = 1
             } else {
-                newExpense.spent[member.name] = 0
+                newGroupExpense.spent[member.userId] = 0
             }
             
             //share
             if paritySum != 0 {
-                newExpense.share[member.name] = newExpense.billAmount * Float(memberParity) / Float(paritySum)
+                newGroupExpense.share[member.userId] = newGroupExpense.billAmount * Float(memberParity) / Float(paritySum)
             }
             
             //settlemet
-            if newExpense.spent.count > 0 {
-                if newExpense.share[member.name] != nil && newExpense.spent[member.name] != nil {
-                    newExpense.settlement[member.name] = (newExpense.billAmount * Float(newExpense.spent[member.name]!)) - newExpense.share[member.name]!
+            if newGroupExpense.spent.count > 0 {
+                if newGroupExpense.share[member.userId] != nil && newGroupExpense.spent[member.userId] != nil {
+                    newGroupExpense.settlement[member.userId] = (newGroupExpense.billAmount * Float(newGroupExpense.spent[member.userId]!)) - newGroupExpense.share[member.userId]!
                 }
             }
             
             //owing
-            if newExpense.settlement.count > 0 {
-                if newExpense.settlement[member.name] != nil {
-                    newExpense.owing[member.name] = newExpense.owing[member.name]! - newExpense.settlement[member.name]!
+            if newGroupExpense.settlement.count > 0 {
+                if newGroupExpense.settlement[member.userId] != nil {
+                    newGroupExpense.owing[member.userId] = newGroupExpense.owing[member.userId]! - newGroupExpense.settlement[member.userId]!
                 }
             }
         }
         
         
-        print(newExpense)
+        print(newGroupExpense)
         
         
         
@@ -326,14 +327,14 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
                 finishVC.parityText = "shared equally"
             } else {
                 finishVC.parityText = "spent on "
-                for member in newExpense.parity {
+                for member in newGroupExpense.parity {
                     if member.1 == 1 {
                         finishVC.parityText = finishVC.parityText + member.0
                     }
                 }
             }
-            
-            finishVC.newGroupExpense = self.newExpense
+            finishVC.expenseType = self.expenseType
+            finishVC.newGroupExpense = self.newGroupExpense
             self.navigationController?.pushViewController(finishVC, animated: true)
         }
     }
@@ -351,13 +352,13 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
     //MARK:- Table View
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return newExpense.groupMembers.count
+        return newGroupExpense.groupMembers.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("parityCell", forIndexPath: indexPath) as! ParitySelectionCell
         
-        if let user = newExpense.groupMembers[indexPath.row] as User? {
+        if let user = newGroupExpense.groupMembers[indexPath.row] as User? {
             cell.user = user
             cell.isClicked = false
         }

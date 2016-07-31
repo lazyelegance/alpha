@@ -26,6 +26,9 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     var tableViewY: CGFloat = 0
     
     var newExpense = Expense()
+    var newGroupExpense = GroupExpense()
+    var currentStep = AddExpenseStep.category
+    var expenseType: ExpenseType = .user
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,11 +109,24 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         //
         if let category = (categories[indexPath.row]).text as String? {
-            newExpense.category = category
-            if let finishVC = self.storyboard?.instantiateViewControllerWithIdentifier("finishViewController") as? FinishViewController {
-                finishVC.newExpense = newExpense
-                self.navigationController?.pushViewController(finishVC, animated: true)
+            switch expenseType {
+            case .user:
+                if let finishVC = self.storyboard?.instantiateViewControllerWithIdentifier("finishViewController") as? FinishViewController {
+                    newExpense.category = category
+                    finishVC.newExpense = newExpense
+                    self.navigationController?.pushViewController(finishVC, animated: true)
+                }
+                
+            case .group:
+                if let parityViewController = self.storyboard?.instantiateViewControllerWithIdentifier("parityViewController") as? ParityViewController {
+                    newExpense.category = category
+                    parityViewController.newGroupExpense = newGroupExpense
+//                    ParityViewController.expenseType = .group //Defaulting to group for now
+                    self.navigationController?.pushViewController(parityViewController, animated: true)
+                }
             }
+            
+            
         }
         
         

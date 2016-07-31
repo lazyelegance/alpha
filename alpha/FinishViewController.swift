@@ -62,99 +62,103 @@ class FinishViewController: UIViewController {
         backButton.setImage(MaterialIcon.arrowBack, forState: .Normal)
         
         backButton.addTarget(self, action: #selector(self.backOneStep), forControlEvents: .TouchUpInside)
-        saveButton.addTarget(self, action: #selector(self.saveExpense), forControlEvents: .TouchUpInside)
+        
+        switch expenseType {
+        case .user:
+            saveButton.addTarget(self, action: #selector(self.saveExpense), forControlEvents: .TouchUpInside)
+        case .group:
+            saveButton.addTarget(self, action: #selector(self.saveGroupExpense), forControlEvents: .TouchUpInside)
+        }
+        
         saveButton.setTitleColor(MaterialColor.white, forState: .Normal)
     }
     
     
     
     func backOneStep() {
-        print("back button")
         navigationController?.popViewControllerAnimated(true)
     }
     
-
     
-    func saveExpense() {
+    func goBacktoMainViewController() {
         
-
-        let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
-        
-        let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
-        
-        let formatter_mon = NSDateFormatter()
-        formatter_mon.dateFormat = "MM_yyyy"
-        let currmon = formatter_mon.stringFromDate(currDate)
-
-        let formatter_week = NSDateFormatter()
-        formatter_week.dateFormat = "w_yyyy"
-        let currweek = formatter_week.stringFromDate(currDate)
-        
-        if self.expenseType == .user {
-            let userExpensesRef = newExpense.firebaseDBRef
-            
-            let key = userExpensesRef.childByAutoId().key
-            
-            userExpensesRef.updateChildValues([key : ["description": newExpense.description, "billAmount": newExpense.billAmount, "category" : newExpense.category, "dateAdded" : "\(currDate)"]]) { (error, ref) in
-                if error != nil {
-                    print(error?.localizedDescription)
-                    return
-                }
-                
-                print("SuCESSS")
+        switch expenseType {
+        case .user:
+            self.navigationController?.popToRootViewControllerAnimated(true)
+        case .group:
+            if ((self.navigationController?.viewControllers[1].isKindOfClass(GroupMainViewController)) == true) {
+                self.navigationController?.popToViewController((self.navigationController?.viewControllers[1])!, animated: true)
+            } else {
+                self.navigationController?.popToRootViewControllerAnimated(true)
             }
-            
-            
-            
-            
-            userExpensesRef.child("totals").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-                
-                if let totals = Expense.totalsFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
-                    
-                    if let currentTotalSpent = totals["total"] as Float? {
-                        let newTotalSpent = currentTotalSpent + self.newExpense.billAmount
-                        userExpensesRef.child("totals/total").setValue(newTotalSpent)
+        }
+        
+    }
+    
+    
+    func restartAddExpense() {
+        //
+        if ((self.navigationController?.viewControllers[expenseType.firstStep()].isKindOfClass(AddExpenseController)) == true) {
+            self.navigationController?.popToViewController((self.navigationController?.viewControllers[expenseType.firstStep()])!, animated: true)
+        } else {
+            self.navigationController?.popToRootViewControllerAnimated(true)
+        }
 
-                        userExpensesRef.child("totals/\(currweek)").setValue(newTotalSpent)
-                    }
-                    
-                    if totals[currmon] != nil {
-                        if let currentMonSpent = totals[currmon] as Float? {
-                            let newMonSpent = currentMonSpent + self.newExpense.billAmount
-                            userExpensesRef.child("totals/\(currmon)").setValue(newMonSpent)
-                        }
-                    } else {
-                        userExpensesRef.child("totals/\(currmon)").setValue(self.newExpense.billAmount)
-                    }
-                    
-                    if totals[currweek] != nil {
-                        if let currentMonSpent = totals[currweek] as Float? {
-                            let newMonSpent = currentMonSpent + self.newExpense.billAmount
-                            userExpensesRef.child("totals/\(currweek)").setValue(newMonSpent)
-                        }
-                    } else {
-                        userExpensesRef.child("totals/\(currweek)").setValue(self.newExpense.billAmount)
-                    }
-
-                }
-                
-            })
+    }
+    
+    func saveGroupExpense() {
+        
+        if self.expenseType == .group {
+            let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
             
-
-        } else if self.expenseType == .group {
+            let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
+            
             let firebaseUserRef = newGroupExpense.firebaseDBRef.child("users")
             let firebaseGroupRef = newGroupExpense.firebaseDBRef.child("groups").child(newGroupExpense.groupId)
             let groupExpensesRef = newGroupExpense.firebaseDBRef.child("groupExpenses").child(newGroupExpense.groupId)
-            
+            let grpExpTotalsRef = groupExpensesRef.child("totals")
             let key = groupExpensesRef.childByAutoId().key
-
-            groupExpensesRef.updateChildValues([key : ["dateAdded": "\(currDate)","billAmount": newGroupExpense.billAmount, "addedBy": newGroupExpense.addedBy, "description": newGroupExpense.description, "group": newGroupExpense.group, "spent": newGroupExpense.spent, "parity" : newGroupExpense.parity, "share": newGroupExpense.share, "settlement": newGroupExpense.settlement, "owing": newGroupExpense.owing  ]]) { (error, ref) in
+            
+            groupExpensesRef.updateChildValues([key : ["dateAdded": "\(currDate)","billAmount": newGroupExpense.billAmount, "addedBy": newGroupExpense.addedBy, "description": newGroupExpense.description, "group": newGroupExpense.group, "spent": newGroupExpense.spent, "parity" : newGroupExpense.parity, "share": newGroupExpense.share, "settlement": newGroupExpense.settlement, "owing": newGroupExpense.owing, "category" : newGroupExpense.category  ]]) { (error, ref) in
                 if error != nil {
                     print(error?.localizedDescription)
                 } else {
                     print("Success Saving Expense")
                 }
             }
+            
+            
+            
+            grpExpTotalsRef.observeSingleEventOfType(.Value, withBlock: { (grptotals) in
+                if grptotals.exists() {
+                    if let totals = GroupExpense.totalsFromResults(grptotals.value! as! NSDictionary) as [String: AnyObject]? {
+                        
+                        if let currentTotalSpent = totals["totalSpent"] as? Float {
+                            let newTotalSpent = currentTotalSpent + self.newExpense.billAmount
+                            grpExpTotalsRef.child("totalSpent").setValue(newTotalSpent)
+                        } else {
+                            grpExpTotalsRef.child("total").setValue(self.newExpense.billAmount)
+                        }
+                        if let spentDictionery = totals["spent"] as? [String: Float] {
+                            if let currentUserSpent = spentDictionery[self.newGroupExpense.addedBy] as Float? {
+                                let newTotalSpent = currentUserSpent + self.newExpense.billAmount
+                                grpExpTotalsRef.child("spent/\(self.newGroupExpense.addedBy)").setValue(newTotalSpent)
+                            } else {
+                                grpExpTotalsRef.child("spent/\(self.newGroupExpense.addedBy)").setValue(self.newGroupExpense.billAmount)
+                            }
+                        } else {
+                            grpExpTotalsRef.child("spent/\(self.newGroupExpense.addedBy)").setValue(self.newGroupExpense.billAmount)
+                        }
+                        
+                        grpExpTotalsRef.child("owing").setValue(self.newGroupExpense.owing)
+                        
+                    }
+                } else {
+                    grpExpTotalsRef.child("owing").setValue(self.newGroupExpense.owing)
+                    grpExpTotalsRef.child("spent/\(self.newGroupExpense.addedBy)").setValue(self.newGroupExpense.billAmount)
+                    grpExpTotalsRef.child("total").setValue(self.newExpense.billAmount)
+                }
+            })
             
             firebaseGroupRef.child("lastExpense").setValue(key) { (error, ref) in
                 if error != nil {
@@ -176,27 +180,94 @@ class FinishViewController: UIViewController {
                     }
                 })
             }
+            
+        }
+        
+        goBacktoMainViewController()
+    }
+    
+
+    
+    func saveExpense() {
+        
+
+        let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
+        
+        let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
+        
+        let formatter_mon = NSDateFormatter()
+        formatter_mon.dateFormat = "MM_yyyy"
+        let currmon = "m_" + formatter_mon.stringFromDate(currDate)
+
+        let formatter_week = NSDateFormatter()
+        formatter_week.dateFormat = "w_yyyy"
+        let currweek = "w_" + formatter_week.stringFromDate(currDate)
+        
+        if self.expenseType == .user {
+            let userExpensesRef = newExpense.firebaseDBRef
+            
+            let key = userExpensesRef.childByAutoId().key
+            
+            userExpensesRef.updateChildValues([key : ["description": newExpense.description, "billAmount": newExpense.billAmount, "category" : newExpense.category, "dateAdded" : "\(currDate)"]]) { (error, ref) in
+                if error != nil {
+                    print(error?.localizedDescription)
+                    return
+                }
+                
+                print("SuCESSS")
+            }
+            
+            
+            
+            
+            userExpensesRef.child("totals").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                if snapshot.exists() {
+                    if let totals = Expense.totalsFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
+                        
+                        if let currentTotalSpent = totals["total"] as Float? {
+                            let newTotalSpent = currentTotalSpent + self.newExpense.billAmount
+                            userExpensesRef.child("totals/total").setValue(newTotalSpent)
+                        }
+                        
+                        if totals[currmon] != nil {
+                            if let currentMonSpent = totals[currmon] as Float? {
+                                let newMonSpent = currentMonSpent + self.newExpense.billAmount
+                                userExpensesRef.child("totals/\(currmon)").setValue(newMonSpent)
+                            }
+                        } else {
+                            userExpensesRef.child("totals/\(currmon)").setValue(self.newExpense.billAmount)
+                        }
+                        
+                        if totals[currweek] != nil {
+                            if let currentMonSpent = totals[currweek] as Float? {
+                                let newMonSpent = currentMonSpent + self.newExpense.billAmount
+                                userExpensesRef.child("totals/\(currweek)").setValue(newMonSpent)
+                            }
+                        } else {
+                            userExpensesRef.child("totals/\(currweek)").setValue(self.newExpense.billAmount)
+                        }
+                        
+                    }
+                } else {
+                    let newTotalSpent = self.newExpense.billAmount
+                    userExpensesRef.child("totals/total").setValue(newTotalSpent)
+                    userExpensesRef.child("totals/\(currweek)").setValue(newTotalSpent)
+                    userExpensesRef.child("totals/\(currmon)").setValue(newTotalSpent)
+                }
+                
+                
+            })
+            
 
         }
         
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        goBacktoMainViewController()
 
     }
     
-    
-    func saveGroupExpense()  {
-        print("SAVING")
 
-        //TO DO
-        
-    }
     
-    func restartAddExpense() {
-        //
-        if ((self.navigationController?.viewControllers[1].isKindOfClass(AddExpenseController)) == true) {
-            self.navigationController?.popToViewController((self.navigationController?.viewControllers[1])!, animated: true)
-        }
-    }
+    
     
 
     /*

@@ -9,10 +9,7 @@
 import Foundation
 import Material
 
-public enum ExpenseType {
-    case user
-    case group
-}
+
 
 public enum AddExpenseStep {
     case description

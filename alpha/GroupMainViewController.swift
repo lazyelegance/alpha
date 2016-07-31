@@ -41,6 +41,9 @@ class GroupMainViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var lastExpenseView: MaterialView!
     @IBOutlet weak var groupMembersView: MaterialView!
     @IBOutlet weak var groupMembersPlaceholder: UILabel!
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -57,6 +60,7 @@ class GroupMainViewController: UIViewController, UITableViewDelegate, UITableVie
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: - Prepare
     
     private func prepareView() {
         view.backgroundColor = MaterialColor.orange.darken1
@@ -100,26 +104,26 @@ class GroupMainViewController: UIViewController, UITableViewDelegate, UITableVie
         lastExpenseAmount.alpha = 0
         lastExpenseAddedBy.alpha = 0
         
-        if lastExpense.expenseId != "0" {
+        if lastExpense.expenseId != "0" && groupMembers.count > 0 {
+            
+            print(lastExpense)
             lastExpenseDetail.text = lastExpense.description
             
             lastExpenseAmount.text = "\(lastExpense.billAmount) $"
             lastExpenseAmount.alpha = 1
-            lastExpenseAddedBy.alpha = 1
+            
             
             for groupMember in groupMembers {
                 if groupMember.userId == lastExpense.addedBy {
+                    lastExpenseAddedBy.alpha = 1
                     lastExpenseAddedBy.text = "added by: \(groupMember.name)"
                 }
             }
-            
-            
-            
-            
         }
     }
     
     
+    // MARK: - Fetch
     
     private func getGroupData() {
         
@@ -135,6 +139,7 @@ class GroupMainViewController: UIViewController, UITableViewDelegate, UITableVie
                             user = User.userFromFirebase(userSnapshot.value! as! NSDictionary)
                             self.groupMembers.append(user)
                             self.prepareGroupMembersView()
+                            self.prepareLastExpenseView()
                         })
                     }
                 }
@@ -151,10 +156,14 @@ class GroupMainViewController: UIViewController, UITableViewDelegate, UITableVie
         }
 
         if let groupExpensesTotalsRef = firebaseRef.child("groupExpenses/\(groupId)/totals") as FIRDatabaseReference? {
-            print(groupExpensesTotalsRef)
+        
             groupExpensesTotalsRef.observeSingleEventOfType(.Value, withBlock: { (expenseTotals) in
-                self.groupExpenseTotals = GroupExpenseTotals.totalsFromResults(self.groupId, results: expenseTotals.value! as! NSDictionary)
-                self.prepareGroupHeaderView()
+                if expenseTotals.exists() {
+                    self.groupExpenseTotals = GroupExpenseTotals.totalsFromResults(self.groupId, results: expenseTotals.value! as! NSDictionary)
+                    self.prepareGroupHeaderView()
+                } else {
+                    self.groupOwing.text = "group doesnt have expenses"
+                }
             })
         }
     }
@@ -163,7 +172,7 @@ class GroupMainViewController: UIViewController, UITableViewDelegate, UITableVie
 
     
 
-    
+    // MARK: - TableView
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return groupMembers.count;
@@ -202,8 +211,47 @@ class GroupMainViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        //to do 
+        //to profile view
 
+    }
+    
+    // MARK: - Buttons
+    
+    @IBAction func seeAllGroupExpenses(sender: AnyObject) {
+        if let expensesListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListViewController") as? ExpensesListViewController {
+            expensesListViewController.expenseType = .group
+            expensesListViewController.groupExpensesRef = self.firebaseRef.child("groupExpenses/\(groupId)")
+            expensesListViewController.groupName = self.group.name
+            self.navigationController?.pushViewController(expensesListViewController, animated: true)
+        }
+    }
+    
+    
+    @IBAction func addGroupExpense(sender: AnyObject) {
+        //to do
+        if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
+
+            var owing = [String : Float]()
+            owing.removeAll()
+            
+            for member in groupMembers {
+                owing[member.userId] = member.amountOwing
+            }
+            
+            var newGroupExpense = GroupExpense()
+            newGroupExpense.groupId = self.groupId
+            newGroupExpense.firebaseDBRef = firebaseRef
+            newGroupExpense.group = self.group.name
+            newGroupExpense.groupMembers = groupMembers
+            newGroupExpense.owing = owing
+            newGroupExpense.addedBy = currentUser.userId
+            
+            addExpenseVC.newGroupExpense = newGroupExpense
+            addExpenseVC.currentStep = AddExpenseStep.description
+            addExpenseVC.expenseType = ExpenseType.group
+            self.navigationController?.pushViewController(addExpenseVC, animated: true)
+        }
     }
  
 

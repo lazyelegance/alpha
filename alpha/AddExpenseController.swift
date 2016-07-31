@@ -27,17 +27,12 @@ class AddExpenseController: UIViewController, TextFieldDelegate {
     
     var startOverButton: FlatButton!
     
-
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         prepareView()
         prepareTextField()
         prepareButtons()
-
-        
 
     }
 
@@ -106,57 +101,47 @@ class AddExpenseController: UIViewController, TextFieldDelegate {
         return true
     }
     
+
+
+    
     func toNextInAddExpenseCycle() {
         
         expenseTextField.resignFirstResponder()
         
         if expenseTextField.text?.isEmpty == false {
-            switch currentStep {
-            case .description:
-                newExpense.description = expenseTextField.text!
-            case .billAmount:
-                newExpense.billAmount = (expenseTextField.text! as NSString).floatValue
-            case .category:
-                newExpense.category = expenseTextField.text!
-            default:
-                return
-            }
-            
-            
-            switch currentStep.nextStep() {
-            case .parity:
-                if let parityVC = self.storyboard?.instantiateViewControllerWithIdentifier("parityViewController") as? ParityViewController {
-                    parityVC.currentStep = self.currentStep.nextStep()
-                    parityVC.newExpense = self.newGroupExpense
-                    self.navigationController?.pushViewController(parityVC, animated: true)
-                    
-                }
-            case .finish:
-                if let finishVC = self.storyboard?.instantiateViewControllerWithIdentifier("finishViewController") as? FinishViewController {
-                    
-                    
-                    finishVC.newExpense = self.newExpense
-                    self.navigationController?.pushViewController(finishVC, animated: true)
-                }
-            case .category:
-                if let categoryVC = self.storyboard?.instantiateViewControllerWithIdentifier("categoryViewController") as? CategoryViewController {
-                    categoryVC.newExpense = self.newExpense
-                    self.navigationController?.pushViewController(categoryVC, animated: true)
-                    
-                }
-                
-            default:
+            if currentStep == .description {
                 if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
-                    addExpenseVC.currentStep = self.currentStep.nextStep()
-                    addExpenseVC.newExpense = self.newExpense
+                    
+                    addExpenseVC.currentStep = .billAmount
+                    addExpenseVC.expenseType = self.expenseType
+                    switch expenseType {
+                    case .user:
+                        newExpense.description = expenseTextField.text!
+                        addExpenseVC.newExpense = self.newExpense
+                    case .group:
+                        newGroupExpense.description = expenseTextField.text!
+                        addExpenseVC.newGroupExpense = self.newGroupExpense
+                    }
                     self.navigationController?.pushViewController(addExpenseVC, animated: true)
                 }
+            } else if currentStep == .billAmount {
+                if let categoryViewController = self.storyboard?.instantiateViewControllerWithIdentifier("categoryViewController") as? CategoryViewController {
+                    
+                    categoryViewController.currentStep = .category
+                    categoryViewController.expenseType = self.expenseType
+                    switch expenseType {
+                    case .user:
+                        newExpense.billAmount = (expenseTextField.text! as NSString).floatValue
+                        categoryViewController.newExpense = self.newExpense
+                    case .group:
+                        newGroupExpense.billAmount = (expenseTextField.text! as NSString).floatValue
+                        categoryViewController.newGroupExpense = self.newGroupExpense
+                    }
+                    self.navigationController?.pushViewController(categoryViewController, animated: true)
+                }
             }
-            
         }
-        
-        
-        
+
     }
     
     func showNextButton() {
