@@ -15,10 +15,24 @@ struct Group {
     var name = String()
     var members = [String]()
     var lastExpense = String()
+    var imageString = String()
+    var imageURLString = String()
     
     init() {
         self.groupId = "0"
+        self.imageString = "default_group"
     }
+    
+    //temp
+    
+    init(name: String, lastExpense: String) {
+        self.init()
+        self.name = name
+        self.lastExpense = lastExpense
+        
+    }
+    
+    
     
     static func groupFromFirebase(groupId: String, results: NSDictionary) -> Group {
         var group = Group()
@@ -42,6 +56,8 @@ struct Group {
                     
                 case "lastExpense":
                     group.lastExpense = result.value as! String
+                case "imageString":
+                    group.imageString = result.value as! String
                 default:
                     break
                 }

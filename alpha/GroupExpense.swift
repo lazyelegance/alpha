@@ -10,6 +10,8 @@ import Foundation
 import Firebase
 import FirebaseDatabase
 
+
+
 struct GroupExpense {
     //
     var expenseId = String()
@@ -29,8 +31,62 @@ struct GroupExpense {
     
     
     init() {
+        self.expenseId = "0"
         self.description = "New Group Expense"
         self.billAmount = 0.00
+    }
+    
+    static func totalsFromResults(results: NSDictionary) -> [String : AnyObject] {
+        
+        var totals = [String: AnyObject]()
+        totals.removeAll()
+        
+        if results.count > 0 {
+            print(results)
+            for result in results {
+                totals[result.key as! String] = (result.value)
+                
+            }
+            
+            return totals
+        }
+        
+        
+        return ["total": 0.0]
+    }
+    
+    static func expenseFromResults(expenseId: String, results: NSDictionary) -> GroupExpense {
+        var expense = GroupExpense()
+        
+        if results.count > 0 {
+            expense.expenseId = expenseId
+            for value in results {
+                switch value.key as! String {
+                case "addedBy":
+                    expense.addedBy = value.value as! String
+                case "billAmount":
+                    expense.billAmount = value.value as! Float
+                case "dateAdded":
+                    expense.dateAdded = value.value as! String
+                case "description":
+                    expense.description = value.value as! String
+                case "defaultGroupId":
+                    expense.owing = value.value as! [String: Float]
+                case "spent":
+                    expense.spent = value.value as! [String: Int]
+                case "share":
+                    expense.share = value.value as! [String: Float]
+                case "parity":
+                    expense.parity = value.value as! [String: Int]
+                case "settlement":
+                    expense.settlement = value.value as! [String: Float]
+                default:
+                    break
+                }
+            }
+        }
+        
+        return expense
     }
     
     

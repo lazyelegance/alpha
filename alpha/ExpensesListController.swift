@@ -8,10 +8,16 @@
 
 import UIKit
 import Material
+import Firebase
+import FirebaseDatabase
 
 class ExpensesListController: UITableViewController {
     
     var expenses = [Expense]()
+    
+    var expensesRef = FIRDatabaseReference()
+    
+    var expenseType = ExpenseType.user
 
 
     @IBOutlet weak var headerView: UIView!
@@ -20,25 +26,40 @@ class ExpensesListController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        
-        headerLabel.text = "All" + " Expenses"
-        headerView.backgroundColor = MaterialColor.teal.lighten1
-        headerView.frame.size.height = 90
-        
-        tableView.backgroundColor = MaterialColor.teal.lighten1
-        tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableViewAutomaticDimension
+        prepareview()
+        preparetableview()
+        getExpenses()
     }
+    
+//    override func viewWillAppear(animated: Bool) {
+//        getExpenses()
+//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    
+    private func prepareview() {
+        headerLabel.text = "All" + " Expenses"
+        headerView.backgroundColor = MaterialColor.teal.lighten1
+        headerView.frame.size.height = 90
+    }
+    
+    private func preparetableview() {
+        tableView.backgroundColor = MaterialColor.teal.lighten1
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
+    }
+    
+    private func getExpenses() {
+        expensesRef.observeEventType(.Value, withBlock: { (expSnapshot) in
+            self.expenses = Expense.expensesFromResults(expSnapshot.value! as! NSDictionary, ref: expSnapshot.ref)
+            print("here")
+            print(self.expenses)
+            self.tableView.reloadData()
+        })
     }
 
     // MARK: - Table view data source
@@ -57,7 +78,7 @@ class ExpensesListController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("expensesCell", forIndexPath: indexPath) as! ExpensesCell
 
-        if let expense = expenses[indexPath.row] as? Expense {
+        if let expense = expenses[indexPath.row] as Expense? {
             cell.expense = expense
         }
 
@@ -70,50 +91,5 @@ class ExpensesListController: UITableViewController {
         return 100
     }
  
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
