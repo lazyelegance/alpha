@@ -69,17 +69,26 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     private func getExpenses() {
         
         print(self.expenseType)
+        self.expenses.removeAll()
         switch self.expenseType {
         case .user:
             expensesRef.observeEventType(.Value, withBlock: { (expSnapshot) in
-                self.expenses = Expense.expensesFromResults(expSnapshot.value! as! NSDictionary, ref: expSnapshot.ref)
-                self.tableView.reloadData()
+                if expSnapshot.exists() {
+                    self.expenses = Expense.expensesFromResults(expSnapshot.value! as! NSDictionary, ref: expSnapshot.ref)
+                    print(self.expenses.count)
+                    print(self.expenses)
+                    self.tableView.reloadData()
+                }
+                
             })
         case .group:
             print(groupExpensesRef)
              groupExpensesRef.observeEventType(.Value, withBlock: { (grpExpSnapshot) in
-                self.groupExpenses = GroupExpense.expensesFromFirebase(grpExpSnapshot.value! as! NSDictionary, firebasereference: grpExpSnapshot.ref)
-                self.tableView.reloadData()
+                if grpExpSnapshot.exists() {
+                    self.groupExpenses = GroupExpense.expensesFromFirebase(grpExpSnapshot.value! as! NSDictionary, firebasereference: grpExpSnapshot.ref)
+                    self.tableView.reloadData()
+                }
+                
              })
         }
         
@@ -98,6 +107,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     // MARK: - TableView
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print(expenses)
         switch expenseType {
         case .user:
             return expenses.count
@@ -120,6 +130,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         
         switch expenseType {
         case .user:
+            print(expenses.count)
             let expenseCell = tableView.dequeueReusableCellWithIdentifier("expenseCell", forIndexPath: indexPath) as! ExpenseCell
             if let expense = expenses[indexPath.row] as Expense? {
                 expenseCell.expense = expense
