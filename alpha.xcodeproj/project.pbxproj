@@ -17,6 +17,7 @@
 		63547D8D1D38C7E100A00434 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63547D8C1D38C7E100A00434 /* GoogleService-Info.plist */; };
 		63547D8F1D39DAE800A00434 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63547D8E1D39DAE800A00434 /* LoginViewController.swift */; };
 		63547D931D39F4F300A00434 /* AsyncImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63547D921D39F4F300A00434 /* AsyncImageView.m */; };
+		63634F921D50903400600D6C /* ExpenseGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63634F911D50903400600D6C /* ExpenseGraph.swift */; };
 		6366107A1D47B7B500D13CC3 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636610791D47B7B500D13CC3 /* CategoryViewController.swift */; };
 		63A04CD31D4E130D00657C0E /* ExpenseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A04CD21D4E130D00657C0E /* ExpenseType.swift */; };
 		63B71C481D3E3BA500087A8E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B71C471D3E3BA500087A8E /* User.swift */; };
@@ -75,6 +76,7 @@
 		63547D8E1D39DAE800A00434 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		63547D911D39F4F300A00434 /* AsyncImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImageView.h; sourceTree = "<group>"; };
 		63547D921D39F4F300A00434 /* AsyncImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImageView.m; sourceTree = "<group>"; };
+		63634F911D50903400600D6C /* ExpenseGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseGraph.swift; sourceTree = "<group>"; };
 		636610791D47B7B500D13CC3 /* CategoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		63A04CD21D4E130D00657C0E /* ExpenseType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseType.swift; sourceTree = "<group>"; };
 		63B71C471D3E3BA500087A8E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 				63C122E91D4C78D500F7AD91 /* ExpensesListViewController.swift */,
 				63EC26BF1D4B46AC00CB7222 /* GroupMainViewController.swift */,
 				633BC3121D3B1BF40015BAAA /* GroupExpense.swift */,
+				63634F911D50903400600D6C /* ExpenseGraph.swift */,
 				63C7A61F1D4C01060030A788 /* GroupExpenseTotals.swift */,
 				63B71C491D3E6FB200087A8E /* Group.swift */,
 				63C7A61D1D4BF0C50030A788 /* GroupCell.swift */,
@@ -524,6 +527,7 @@
 				63547D931D39F4F300A00434 /* AsyncImageView.m in Sources */,
 				63C7A61E1D4BF0C50030A788 /* GroupCell.swift in Sources */,
 				63EC26C01D4B46AC00CB7222 /* GroupMainViewController.swift in Sources */,
+				63634F921D50903400600D6C /* ExpenseGraph.swift in Sources */,
 				632CDE061D46221800B3AB79 /* Expense.swift in Sources */,
 				63A04CD31D4E130D00657C0E /* ExpenseType.swift in Sources */,
 				63B71C481D3E3BA500087A8E /* User.swift in Sources */,

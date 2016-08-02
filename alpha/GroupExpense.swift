@@ -138,7 +138,7 @@ struct GroupExpense {
                         }
                     }
                 }
-            }
+            }   
         }
         
         return expenses
