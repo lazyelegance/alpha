@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		630FB1E71D3A5114003534A0 /* AddExpenseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630FB1E61D3A5114003534A0 /* AddExpenseController.swift */; };
 		630FB1E91D3A51AE003534A0 /* AddExpenseStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630FB1E81D3A51AE003534A0 /* AddExpenseStep.swift */; };
+		6312DEAA1D54CFE10045AA34 /* ExpensesTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312DEA91D54CFE10045AA34 /* ExpensesTestViewController.swift */; };
 		632CDE061D46221800B3AB79 /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632CDE051D46221800B3AB79 /* Expense.swift */; };
 		633BC3131D3B1BF40015BAAA /* GroupExpense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633BC3121D3B1BF40015BAAA /* GroupExpense.swift */; };
 		633BC3151D3B6C520015BAAA /* ParityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633BC3141D3B6C520015BAAA /* ParityViewController.swift */; };
@@ -17,7 +18,6 @@
 		63547D8D1D38C7E100A00434 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63547D8C1D38C7E100A00434 /* GoogleService-Info.plist */; };
 		63547D8F1D39DAE800A00434 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63547D8E1D39DAE800A00434 /* LoginViewController.swift */; };
 		63547D931D39F4F300A00434 /* AsyncImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63547D921D39F4F300A00434 /* AsyncImageView.m */; };
-		63634F921D50903400600D6C /* ExpenseGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63634F911D50903400600D6C /* ExpenseGraph.swift */; };
 		6366107A1D47B7B500D13CC3 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636610791D47B7B500D13CC3 /* CategoryViewController.swift */; };
 		63A04CD31D4E130D00657C0E /* ExpenseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A04CD21D4E130D00657C0E /* ExpenseType.swift */; };
 		63B71C481D3E3BA500087A8E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B71C471D3E3BA500087A8E /* User.swift */; };
@@ -66,6 +66,7 @@
 		53D4A6299A9620992F2B1493 /* Pods-alphaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-alphaTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-alphaTests/Pods-alphaTests.debug.xcconfig"; sourceTree = "<group>"; };
 		630FB1E61D3A5114003534A0 /* AddExpenseController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddExpenseController.swift; sourceTree = "<group>"; };
 		630FB1E81D3A51AE003534A0 /* AddExpenseStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddExpenseStep.swift; sourceTree = "<group>"; };
+		6312DEA91D54CFE10045AA34 /* ExpensesTestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpensesTestViewController.swift; sourceTree = "<group>"; };
 		632CDE051D46221800B3AB79 /* Expense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
 		633BC3121D3B1BF40015BAAA /* GroupExpense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupExpense.swift; sourceTree = "<group>"; };
 		633BC3141D3B6C520015BAAA /* ParityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParityViewController.swift; sourceTree = "<group>"; };
@@ -76,7 +77,6 @@
 		63547D8E1D39DAE800A00434 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		63547D911D39F4F300A00434 /* AsyncImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImageView.h; sourceTree = "<group>"; };
 		63547D921D39F4F300A00434 /* AsyncImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImageView.m; sourceTree = "<group>"; };
-		63634F911D50903400600D6C /* ExpenseGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseGraph.swift; sourceTree = "<group>"; };
 		636610791D47B7B500D13CC3 /* CategoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		63A04CD21D4E130D00657C0E /* ExpenseType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseType.swift; sourceTree = "<group>"; };
 		63B71C471D3E3BA500087A8E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -172,7 +172,6 @@
 				63C122E91D4C78D500F7AD91 /* ExpensesListViewController.swift */,
 				63EC26BF1D4B46AC00CB7222 /* GroupMainViewController.swift */,
 				633BC3121D3B1BF40015BAAA /* GroupExpense.swift */,
-				63634F911D50903400600D6C /* ExpenseGraph.swift */,
 				63C7A61F1D4C01060030A788 /* GroupExpenseTotals.swift */,
 				63B71C491D3E6FB200087A8E /* Group.swift */,
 				63C7A61D1D4BF0C50030A788 /* GroupCell.swift */,
@@ -186,6 +185,7 @@
 				633BC3161D3B7A8E0015BAAA /* FinishViewController.swift */,
 				63547D8B1D38C77F00A00434 /* alpha-Bridging-Header.h */,
 				63CBEBCD1D38BACD0002DB65 /* Main.storyboard */,
+				6312DEA91D54CFE10045AA34 /* ExpensesTestViewController.swift */,
 				634B4B111D3F974D0022B3D2 /* ParitySelectionCell.swift */,
 				63547D901D39F4F300A00434 /* AsyncImageView */,
 				63CBEBD01D38BACD0002DB65 /* Assets.xcassets */,
@@ -516,6 +516,7 @@
 			files = (
 				633BC3131D3B1BF40015BAAA /* GroupExpense.swift in Sources */,
 				63C7A6201D4C01060030A788 /* GroupExpenseTotals.swift in Sources */,
+				6312DEAA1D54CFE10045AA34 /* ExpensesTestViewController.swift in Sources */,
 				63C122EA1D4C78D500F7AD91 /* ExpensesListViewController.swift in Sources */,
 				63547D8F1D39DAE800A00434 /* LoginViewController.swift in Sources */,
 				63CD56FC1D4C84C30007966B /* ExpenseCell.swift in Sources */,
@@ -527,7 +528,6 @@
 				63547D931D39F4F300A00434 /* AsyncImageView.m in Sources */,
 				63C7A61E1D4BF0C50030A788 /* GroupCell.swift in Sources */,
 				63EC26C01D4B46AC00CB7222 /* GroupMainViewController.swift in Sources */,
-				63634F921D50903400600D6C /* ExpenseGraph.swift in Sources */,
 				632CDE061D46221800B3AB79 /* Expense.swift in Sources */,
 				63A04CD31D4E130D00657C0E /* ExpenseType.swift in Sources */,
 				63B71C481D3E3BA500087A8E /* User.swift in Sources */,
