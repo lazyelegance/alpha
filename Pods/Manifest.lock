@@ -1,4 +1,7 @@
 PODS:
+  - Charts (2.2.5):
+    - Charts/Core (= 2.2.5)
+  - Charts/Core (2.2.5)
   - Crashlytics (3.7.2):
     - Fabric (~> 1.6.3)
   - Fabric (1.6.7)
@@ -52,6 +55,7 @@ PODS:
     - Fabric
 
 DEPENDENCIES:
+  - Charts
   - Crashlytics
   - Fabric
   - Firebase
@@ -62,6 +66,7 @@ DEPENDENCIES:
   - TwitterCore
 
 SPEC CHECKSUMS:
+  Charts: b48fcc8d7190de910ff9e9748f5360c8ea7856e5
   Crashlytics: 130ab943f8c78cda7a814b434f270b2e2c8a3cba
   Fabric: caf7580c725e64db144f610ac65cd60956911dc7
   Firebase: 6250071f0e2440a5c4c67b8cb6b868f868237ac3
@@ -80,6 +85,6 @@ SPEC CHECKSUMS:
   Material: 2d46a44719b1f19e52956518af8aea54ac714963
   TwitterCore: 817eae3e291fa4125b47789e26a4f6f024115c1f
 
-PODFILE CHECKSUM: afd62cf38fa604f437cc68f1a494588078c92ac6
+PODFILE CHECKSUM: 5cd9104494428e68b8544e0b171679bc24d1f3c0
 
 COCOAPODS: 1.0.1
