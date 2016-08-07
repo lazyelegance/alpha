@@ -43,6 +43,44 @@ struct Expense {
         return ["total": 0.0]
     }
     
+    static func categoryFromResults(results: NSDictionary) -> [String : Float] {
+        
+        var totals = [String: Float]()
+        totals.removeAll()
+        
+        if results.count > 0 {
+            
+            for result in results {
+                totals[result.key as! String] = (result.value as! Float)
+                
+            }
+            
+            return totals
+        }
+        
+        
+        return ["total": 0.0]
+    }
+    
+    static func categoriesFromResults(results: NSDictionary) -> [String : [String: Float]] {
+        
+        var categories = [String: [String: Float]]()
+        categories.removeAll()
+        
+        if results.count > 0 {
+            
+            for result in results {
+                categories[result.key as! String] = (result.value as! [String: Float])
+                
+            }
+            
+            return categories
+        }
+        
+        
+        return ["noCategory": ["none":0.0]]
+    }
+    
     static func expensesFromResults(results: NSDictionary, ref: FIRDatabaseReference) -> [Expense] {
         var expenses = [Expense]()
         expenses.removeAll()

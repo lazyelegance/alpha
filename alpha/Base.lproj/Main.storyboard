@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="16A270f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="syP-2a-Inb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="16A270f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="cbv-fS-GSu">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -60,13 +60,84 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="pip-3h-sSH">
-                                <rect key="frame" x="20" y="184" width="560" height="243"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" indicatorStyle="white" translatesAutoresizingMaskIntoConstraints="NO" id="Y0u-77-yYX">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gr6-Me-esi" customClass="MaterialView">
-                                        <rect key="frame" x="0.0" y="0.0" width="560" height="110"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zb1-uQ-sRr" customClass="MaterialView">
+                                        <rect key="frame" x="20" y="20" width="560" height="80"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sTl-w5-KNN" customClass="FlatButton" customModule="Material">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_user" translatesAutoresizingMaskIntoConstraints="NO" id="OOo-N1-KTP" customClass="AsyncImageView">
+                                                <rect key="frame" x="8" y="10" width="60" height="60"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="OOo-N1-KTP" secondAttribute="height" multiplier="1:1" id="6O7-lt-R0W"/>
+                                                    <constraint firstAttribute="width" constant="60" id="CuC-fk-yRO"/>
+                                                    <constraint firstAttribute="height" constant="40" id="YtS-f7-zjX"/>
+                                                </constraints>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="YtS-f7-zjX"/>
+                                                    </mask>
+                                                </variation>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NUD-6y-J0B">
+                                                <rect key="frame" x="78" y="8" width="41" height="25"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="25" id="cAl-f6-FCQ"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="Roboto-Light" family="Roboto" pointSize="17"/>
+                                                <color key="textColor" red="0.59797350890000001" green="0.59797350890000001" blue="0.59797350890000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expenses" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kWA-Vt-Fmj">
+                                                <rect key="frame" x="78" y="35" width="91" height="25"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="25" id="SuJ-cp-shP"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="21"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="NUD-6y-J0B" firstAttribute="leading" secondItem="kWA-Vt-Fmj" secondAttribute="leading" id="6vJ-hl-PM9"/>
+                                            <constraint firstItem="OOo-N1-KTP" firstAttribute="leading" secondItem="Zb1-uQ-sRr" secondAttribute="leading" constant="8" id="LG8-Rj-cce"/>
+                                            <constraint firstItem="OOo-N1-KTP" firstAttribute="top" secondItem="Zb1-uQ-sRr" secondAttribute="top" constant="10" id="Rrk-I9-LHN"/>
+                                            <constraint firstItem="kWA-Vt-Fmj" firstAttribute="top" secondItem="NUD-6y-J0B" secondAttribute="bottom" constant="2" id="aC3-qw-ea1"/>
+                                            <constraint firstItem="kWA-Vt-Fmj" firstAttribute="leading" secondItem="OOo-N1-KTP" secondAttribute="trailing" constant="10" id="c62-WE-Yw3"/>
+                                            <constraint firstItem="kWA-Vt-Fmj" firstAttribute="top" secondItem="Zb1-uQ-sRr" secondAttribute="top" constant="8" id="fWw-6b-2pt"/>
+                                            <constraint firstItem="NUD-6y-J0B" firstAttribute="leading" secondItem="Zb1-uQ-sRr" secondAttribute="leading" constant="8" id="kFa-gP-bUh"/>
+                                            <constraint firstAttribute="height" constant="80" id="lze-N8-Fu9"/>
+                                            <constraint firstItem="NUD-6y-J0B" firstAttribute="leading" secondItem="OOo-N1-KTP" secondAttribute="trailing" constant="10" id="o8K-DT-HRy"/>
+                                            <constraint firstItem="NUD-6y-J0B" firstAttribute="top" secondItem="kWA-Vt-Fmj" secondAttribute="bottom" constant="5" id="oEN-F1-MDP"/>
+                                            <constraint firstItem="OOo-N1-KTP" firstAttribute="centerY" secondItem="Zb1-uQ-sRr" secondAttribute="centerY" id="oXC-4w-RUG"/>
+                                            <constraint firstItem="NUD-6y-J0B" firstAttribute="top" secondItem="Zb1-uQ-sRr" secondAttribute="topMargin" id="qkq-fe-7aN"/>
+                                            <constraint firstItem="kWA-Vt-Fmj" firstAttribute="leading" secondItem="Zb1-uQ-sRr" secondAttribute="leading" constant="8" id="vxb-ys-c17"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="80" id="yhH-Kf-LhQ"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                                <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="lze-N8-Fu9"/>
+                                                <exclude reference="yhH-Kf-LhQ"/>
+                                                <exclude reference="kFa-gP-bUh"/>
+                                                <exclude reference="oEN-F1-MDP"/>
+                                                <exclude reference="c62-WE-Yw3"/>
+                                                <exclude reference="fWw-6b-2pt"/>
+                                                <exclude reference="vxb-ys-c17"/>
+                                            </mask>
+                                        </variation>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gr6-Me-esi" customClass="MaterialView">
+                                        <rect key="frame" x="20" y="110" width="560" height="310"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sTl-w5-KNN" customClass="FlatButton" customModule="Material">
                                                 <rect key="frame" x="522" y="10" width="30" height="25"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="9"/>
                                             </button>
@@ -86,26 +157,21 @@
                                                     </mask>
                                                 </variation>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wdl-vw-epN" customClass="FlatButton" customModule="Material">
-                                                <rect key="frame" x="8" y="82" width="80" height="20"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wdl-vw-epN" customClass="FlatButton" customModule="Material">
+                                                <rect key="frame" x="8" y="282" width="81" height="20"/>
                                                 <constraints>
+                                                    <constraint firstAttribute="width" constant="80" id="anN-ab-9yF"/>
                                                     <constraint firstAttribute="height" constant="20" id="rx4-66-zzI"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="9"/>
                                                 <state key="normal" title="SEE ALL EXPENSES"/>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="anN-ab-9yF"/>
+                                                    </mask>
+                                                </variation>
                                                 <connections>
                                                     <action selector="showAllExpenses_User:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hwb-aU-MfZ"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8dz-4q-NPb" customClass="FlatButton" customModule="Material">
-                                                <rect key="frame" x="471" y="82" width="81" height="20"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="20" id="Ln5-wd-7LO"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="9"/>
-                                                <state key="normal" title="ADD NEW EXPENSE"/>
-                                                <connections>
-                                                    <action selector="addNewExpense_User:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wEY-Xu-bD9"/>
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You Have Spent" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uaQ-oC-VmI">
@@ -123,10 +189,36 @@
                                                     </mask>
                                                 </variation>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8dz-4q-NPb" customClass="FlatButton" customModule="Material">
+                                                <rect key="frame" x="471" y="282" width="81" height="20"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="20" id="Ln5-wd-7LO"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="9"/>
+                                                <state key="normal" title="ADD NEW EXPENSE"/>
+                                                <connections>
+                                                    <action selector="addNewExpense_User:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wEY-Xu-bD9"/>
+                                                </connections>
+                                            </button>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wxb-C8-eoR" customClass="PieChartView" customModule="Charts">
+                                                <rect key="frame" x="10" y="82" width="540" height="200"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="wxb-C8-eoR" secondAttribute="height" multiplier="1:1" id="4HO-pK-3Q4"/>
+                                                    <constraint firstAttribute="height" constant="200" id="hAU-TQ-OsV"/>
+                                                </constraints>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="4HO-pK-3Q4"/>
+                                                    </mask>
+                                                </variation>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
+                                            <constraint firstItem="wxb-C8-eoR" firstAttribute="centerX" secondItem="Gr6-Me-esi" secondAttribute="centerX" id="B3L-qh-cDa"/>
                                             <constraint firstItem="Wdl-vw-epN" firstAttribute="leading" secondItem="Gr6-Me-esi" secondAttribute="leading" constant="8" id="EaE-EB-4UO"/>
+                                            <constraint firstItem="8dz-4q-NPb" firstAttribute="leading" secondItem="wxb-C8-eoR" secondAttribute="trailing" constant="10" id="Gdd-y6-DYJ"/>
+                                            <constraint firstItem="wxb-C8-eoR" firstAttribute="leading" secondItem="Wdl-vw-epN" secondAttribute="trailing" constant="10" id="JCy-gF-L7b"/>
                                             <constraint firstItem="sTl-w5-KNN" firstAttribute="trailing" secondItem="8dz-4q-NPb" secondAttribute="trailing" id="LGp-Yt-EFE"/>
                                             <constraint firstAttribute="bottom" secondItem="Ecv-xq-tFK" secondAttribute="bottom" id="LnM-dv-n9f"/>
                                             <constraint firstItem="uaQ-oC-VmI" firstAttribute="top" secondItem="Gr6-Me-esi" secondAttribute="top" constant="10" id="SIs-Pg-arO"/>
@@ -135,15 +227,20 @@
                                             <constraint firstItem="sTl-w5-KNN" firstAttribute="bottom" secondItem="uaQ-oC-VmI" secondAttribute="bottom" id="VeH-uL-42U"/>
                                             <constraint firstItem="8dz-4q-NPb" firstAttribute="top" secondItem="Wdl-vw-epN" secondAttribute="top" id="W2j-ls-Hox"/>
                                             <constraint firstAttribute="bottom" secondItem="8dz-4q-NPb" secondAttribute="bottom" constant="8" id="WuO-bs-hM7"/>
+                                            <constraint firstItem="wxb-C8-eoR" firstAttribute="top" secondItem="Ecv-xq-tFK" secondAttribute="bottom" id="Y44-9K-xMw"/>
                                             <constraint firstItem="uaQ-oC-VmI" firstAttribute="leading" secondItem="Gr6-Me-esi" secondAttribute="leading" constant="10" id="Z07-Fn-bFi"/>
                                             <constraint firstAttribute="trailing" secondItem="8dz-4q-NPb" secondAttribute="trailing" constant="8" id="aiC-qY-Pzd"/>
                                             <constraint firstAttribute="height" constant="150" id="atd-op-dCn"/>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="80" id="ePa-6n-iN7"/>
+                                            <constraint firstAttribute="trailing" secondItem="wxb-C8-eoR" secondAttribute="trailing" constant="10" id="eWx-mm-iqb"/>
                                             <constraint firstItem="sTl-w5-KNN" firstAttribute="top" secondItem="uaQ-oC-VmI" secondAttribute="top" id="eX9-9F-Qna"/>
                                             <constraint firstItem="Ecv-xq-tFK" firstAttribute="top" secondItem="uaQ-oC-VmI" secondAttribute="bottom" id="iid-1n-ByZ"/>
                                             <constraint firstAttribute="trailing" secondItem="Ecv-xq-tFK" secondAttribute="trailing" constant="30" id="mCW-85-ODl"/>
+                                            <constraint firstItem="8dz-4q-NPb" firstAttribute="top" secondItem="wxb-C8-eoR" secondAttribute="bottom" id="nKc-zq-jFB"/>
+                                            <constraint firstItem="uaQ-oC-VmI" firstAttribute="bottom" secondItem="sTl-w5-KNN" secondAttribute="bottom" id="ogZ-pp-tN1"/>
                                             <constraint firstItem="Ecv-xq-tFK" firstAttribute="leading" secondItem="Gr6-Me-esi" secondAttribute="leading" constant="30" id="qnT-4b-IHX"/>
                                             <constraint firstItem="8dz-4q-NPb" firstAttribute="top" secondItem="Ecv-xq-tFK" secondAttribute="bottom" id="t3e-vE-M73"/>
+                                            <constraint firstItem="wxb-C8-eoR" firstAttribute="leading" secondItem="Gr6-Me-esi" secondAttribute="leading" constant="10" id="wNp-4G-ply"/>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="80" id="x8Q-JZ-VOD"/>
                                         </constraints>
                                         <userDefinedRuntimeAttributes>
@@ -160,12 +257,15 @@
                                                 <exclude reference="ePa-6n-iN7"/>
                                                 <exclude reference="x8Q-JZ-VOD"/>
                                                 <exclude reference="LnM-dv-n9f"/>
+                                                <exclude reference="JCy-gF-L7b"/>
                                                 <exclude reference="VeH-uL-42U"/>
+                                                <exclude reference="Gdd-y6-DYJ"/>
+                                                <exclude reference="t3e-vE-M73"/>
                                             </mask>
                                         </variation>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ysd-KG-Rto" customClass="MaterialView">
-                                        <rect key="frame" x="0.0" y="130" width="560" height="113"/>
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ysd-KG-Rto" customClass="MaterialView">
+                                        <rect key="frame" x="20" y="483" width="560" height="113"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your Groups" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lg3-og-E4Q">
                                                 <rect key="frame" x="10" y="10" width="77" height="25"/>
@@ -208,6 +308,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="80" id="0pY-Mi-oBG"/>
                                             <constraint firstAttribute="trailing" secondItem="SYr-yF-QRt" secondAttribute="trailing" constant="8" id="L1Q-aS-d29"/>
+                                            <constraint firstAttribute="height" constant="113" id="N4b-FZ-HRP"/>
                                             <constraint firstItem="SYr-yF-QRt" firstAttribute="top" secondItem="Lg3-og-E4Q" secondAttribute="bottom" constant="10" id="Qb2-Vs-mFe"/>
                                             <constraint firstAttribute="height" constant="150" id="dse-j8-XA5"/>
                                             <constraint firstItem="Lg3-og-E4Q" firstAttribute="leading" secondItem="ysd-KG-Rto" secondAttribute="leading" constant="10" id="g3y-GR-FZs"/>
@@ -233,92 +334,29 @@
                                         </variation>
                                     </view>
                                 </subviews>
-                            </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zb1-uQ-sRr" customClass="MaterialView">
-                                <rect key="frame" x="20" y="84" width="560" height="80"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_user" translatesAutoresizingMaskIntoConstraints="NO" id="OOo-N1-KTP" customClass="AsyncImageView">
-                                        <rect key="frame" x="8" y="10" width="60" height="60"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="OOo-N1-KTP" secondAttribute="height" multiplier="1:1" id="6O7-lt-R0W"/>
-                                            <constraint firstAttribute="width" constant="60" id="CuC-fk-yRO"/>
-                                            <constraint firstAttribute="height" constant="40" id="YtS-f7-zjX"/>
-                                        </constraints>
-                                        <variation key="default">
-                                            <mask key="constraints">
-                                                <exclude reference="YtS-f7-zjX"/>
-                                            </mask>
-                                        </variation>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NUD-6y-J0B">
-                                        <rect key="frame" x="78" y="8" width="41" height="25"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="25" id="cAl-f6-FCQ"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Roboto-Light" family="Roboto" pointSize="17"/>
-                                        <color key="textColor" red="0.59797350890000001" green="0.59797350890000001" blue="0.59797350890000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expenses" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kWA-Vt-Fmj">
-                                        <rect key="frame" x="78" y="35" width="91" height="25"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="25" id="SuJ-cp-shP"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="21"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="NUD-6y-J0B" firstAttribute="leading" secondItem="kWA-Vt-Fmj" secondAttribute="leading" id="6vJ-hl-PM9"/>
-                                    <constraint firstItem="OOo-N1-KTP" firstAttribute="leading" secondItem="Zb1-uQ-sRr" secondAttribute="leading" constant="8" id="LG8-Rj-cce"/>
-                                    <constraint firstItem="kWA-Vt-Fmj" firstAttribute="top" secondItem="NUD-6y-J0B" secondAttribute="bottom" constant="2" id="aC3-qw-ea1"/>
-                                    <constraint firstItem="kWA-Vt-Fmj" firstAttribute="leading" secondItem="OOo-N1-KTP" secondAttribute="trailing" constant="10" id="c62-WE-Yw3"/>
-                                    <constraint firstItem="kWA-Vt-Fmj" firstAttribute="top" secondItem="Zb1-uQ-sRr" secondAttribute="top" constant="8" id="fWw-6b-2pt"/>
-                                    <constraint firstItem="NUD-6y-J0B" firstAttribute="leading" secondItem="Zb1-uQ-sRr" secondAttribute="leading" constant="8" id="kFa-gP-bUh"/>
-                                    <constraint firstAttribute="height" constant="80" id="lze-N8-Fu9"/>
-                                    <constraint firstItem="NUD-6y-J0B" firstAttribute="leading" secondItem="OOo-N1-KTP" secondAttribute="trailing" constant="10" id="o8K-DT-HRy"/>
-                                    <constraint firstItem="NUD-6y-J0B" firstAttribute="top" secondItem="kWA-Vt-Fmj" secondAttribute="bottom" constant="5" id="oEN-F1-MDP"/>
-                                    <constraint firstItem="OOo-N1-KTP" firstAttribute="centerY" secondItem="Zb1-uQ-sRr" secondAttribute="centerY" id="oXC-4w-RUG"/>
-                                    <constraint firstItem="NUD-6y-J0B" firstAttribute="top" secondItem="Zb1-uQ-sRr" secondAttribute="topMargin" id="qkq-fe-7aN"/>
-                                    <constraint firstItem="kWA-Vt-Fmj" firstAttribute="leading" secondItem="Zb1-uQ-sRr" secondAttribute="leading" constant="8" id="vxb-ys-c17"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="80" id="yhH-Kf-LhQ"/>
+                                    <constraint firstItem="Zb1-uQ-sRr" firstAttribute="top" secondItem="Y0u-77-yYX" secondAttribute="top" constant="20" id="9xB-tl-gHY"/>
+                                    <constraint firstItem="Gr6-Me-esi" firstAttribute="top" secondItem="Zb1-uQ-sRr" secondAttribute="bottom" constant="10" id="DXm-Pe-k29"/>
+                                    <constraint firstAttribute="trailing" secondItem="ysd-KG-Rto" secondAttribute="trailing" constant="20" id="NTN-it-aJu"/>
+                                    <constraint firstItem="Gr6-Me-esi" firstAttribute="leading" secondItem="Y0u-77-yYX" secondAttribute="leading" constant="20" id="Rc7-9G-apH"/>
+                                    <constraint firstAttribute="trailing" secondItem="Zb1-uQ-sRr" secondAttribute="trailing" constant="20" id="TCq-0F-zoB"/>
+                                    <constraint firstItem="ysd-KG-Rto" firstAttribute="top" secondItem="Gr6-Me-esi" secondAttribute="bottom" constant="10" id="boJ-9e-0DE"/>
+                                    <constraint firstAttribute="bottom" secondItem="ysd-KG-Rto" secondAttribute="bottom" constant="42" id="c4q-hQ-Osu"/>
+                                    <constraint firstItem="ysd-KG-Rto" firstAttribute="leading" secondItem="Y0u-77-yYX" secondAttribute="leading" constant="20" id="gUe-yt-16x"/>
+                                    <constraint firstAttribute="trailing" secondItem="Gr6-Me-esi" secondAttribute="trailing" constant="20" id="h0B-h6-NIc"/>
+                                    <constraint firstItem="Zb1-uQ-sRr" firstAttribute="centerX" secondItem="Y0u-77-yYX" secondAttribute="centerX" id="phF-8Y-mvg"/>
+                                    <constraint firstItem="Zb1-uQ-sRr" firstAttribute="leading" secondItem="Y0u-77-yYX" secondAttribute="leading" constant="20" id="uIC-T3-yhM"/>
                                 </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                                        <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="5"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="yhH-Kf-LhQ"/>
-                                        <exclude reference="kFa-gP-bUh"/>
-                                        <exclude reference="oEN-F1-MDP"/>
-                                        <exclude reference="c62-WE-Yw3"/>
-                                        <exclude reference="fWw-6b-2pt"/>
-                                        <exclude reference="vxb-ys-c17"/>
-                                    </mask>
-                                </variation>
-                            </view>
+                                <inset key="scrollIndicatorInsets" minX="0.0" minY="0.0" maxX="3" maxY="0.0"/>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" red="0.68166852678571432" green="0.87765791974748875" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="Zb1-uQ-sRr" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="CId-ot-iCF"/>
-                            <constraint firstItem="pip-3h-sSH" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="CRx-Zi-EIj"/>
-                            <constraint firstItem="Zb1-uQ-sRr" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="20" id="J1j-33-T1T"/>
-                            <constraint firstItem="pip-3h-sSH" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="Xe3-40-YAQ"/>
-                            <constraint firstItem="pip-3h-sSH" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="l9w-YW-na6"/>
-                            <constraint firstItem="Zb1-uQ-sRr" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="oG6-Ma-uaO"/>
-                            <constraint firstItem="pip-3h-sSH" firstAttribute="top" secondItem="Zb1-uQ-sRr" secondAttribute="bottom" constant="20" id="w8a-ah-mfJ"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Y0u-77-yYX" secondAttribute="bottom" id="Ceq-7E-Ne0"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Y0u-77-yYX" secondAttribute="trailing" constant="-20" id="H08-iD-OZf"/>
+                            <constraint firstItem="Y0u-77-yYX" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="P7p-kv-w3Z"/>
+                            <constraint firstItem="Y0u-77-yYX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="qFD-G7-uHX"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="l9w-YW-na6"/>
-                            </mask>
-                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="x27-PJ-44d"/>
                     <connections>
@@ -332,6 +370,7 @@
                         <outlet property="segmentButton" destination="sTl-w5-KNN" id="OMl-nV-4GB"/>
                         <outlet property="showAllExpensesUserBtn" destination="Wdl-vw-epN" id="VxA-95-EX7"/>
                         <outlet property="spentHeaderLabel" destination="uaQ-oC-VmI" id="HKu-sx-DQc"/>
+                        <outlet property="userChartView" destination="wxb-C8-eoR" id="1Cw-VQ-uT1"/>
                         <outlet property="userExpensesView" destination="Gr6-Me-esi" id="Y9D-Oh-j30"/>
                         <outlet property="userGroupsView" destination="ysd-KG-Rto" id="fsi-Rm-2O5"/>
                     </connections>
@@ -1117,7 +1156,7 @@
                                                 <rect key="frame" x="0.0" y="28" width="544" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EP5-lG-25n" id="4Xs-E1-xNK">
-                                                    <rect key="frame" x="0.0" y="0.0" width="544" height="43.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="544" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -1159,10 +1198,10 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="7xH-VX-9MC">
+                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" distribution="fillEqually" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="7xH-VX-9MC">
                                 <rect key="frame" x="169" y="455" width="262" height="28"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxF-up-tpG" customClass="FlatButton" customModule="Material">
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxF-up-tpG" customClass="FlatButton" customModule="Material">
                                         <rect key="frame" x="0.0" y="0.0" width="116" height="28"/>
                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="13"/>
                                         <state key="normal" title="SEE ALL EXPENSES">
@@ -1180,7 +1219,7 @@
                                             <action selector="seeAllGroupExpenses:" destination="1jY-3F-qx5" eventType="touchUpInside" id="HJy-I5-wuc"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j0d-xR-7Uv" customClass="FlatButton" customModule="Material">
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j0d-xR-7Uv" customClass="FlatButton" customModule="Material">
                                         <rect key="frame" x="146" y="0.0" width="116" height="28"/>
                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="13"/>
                                         <state key="normal" title="ADD NEW EXPENSE">
