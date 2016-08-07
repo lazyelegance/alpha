@@ -11,6 +11,10 @@ import Firebase
 import FirebaseAuth
 import FirebaseDatabase
 import Material
+import Charts
+
+
+
 
 
 enum SegementButtonState {
@@ -42,7 +46,7 @@ enum SegementButtonState {
     
 }
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ChartViewDelegate {
     
     private var fabMenu: Menu!
     private var flatMenu: Menu!
@@ -62,16 +66,26 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var thisWeekSpent: Float = 0.0
     var totals = [String : Float]()
     
+    var expenseCategories = [String: [String: Float]]()
+    var expenseCategoriesTotal = [String: Float]()
+    var expenseCategoriesThisMonth = [String: Float]()
+    var expenseCategoriesThisWeek = [String: Float]()
+    var yVals = [BarChartDataEntry]()
+    var xVals = [String]()
+    
     var userGroups = [Group]()
     var groupExpenses = [GroupExpense]()
 
-    @IBOutlet weak var groupsTableView: UITableView!
+    
     
     @IBOutlet weak var headerView: MaterialView!
 
     @IBOutlet weak var userExpensesView: MaterialView!
-    
     @IBOutlet weak var userGroupsView: MaterialView!
+    
+    
+    @IBOutlet weak var userChartView: PieChartView!
+    @IBOutlet weak var groupsTableView: UITableView!
     
     
     
@@ -106,6 +120,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         prepareExpenseData()
         
+        prepareChartView()
+        
         
 
 
@@ -127,8 +143,80 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         view.backgroundColor = MaterialColor.indigo.accent3
     }
     
+    // MARK: - ChartView
+    func chartValueSelected(chartView: ChartViewBase, entry: ChartDataEntry, dataSetIndex: Int, highlight: ChartHighlight) {
+        print(entry)
+        print(dataSetIndex)
+        print(highlight)
+    }
     
+    private func prepareChartView() {
+        
+        
+        
+        //userChartView.setExtraOffsets(left: 5, top: 5, right: 5, bottom: 5)
+        userChartView.delegate = self
+        userChartView.highlightValues(nil)
+        //        chartView.holeRadiusPercent = 0.1
+        //        chartView.transparentCircleRadiusPercent = 1
+        
+        
+        userChartView.descriptionText = ""
+        userChartView.drawHoleEnabled = false
+        userChartView.usePercentValuesEnabled = true
+        userChartView.drawSlicesUnderHoleEnabled = true
+        userChartView.legend.position = .RightOfChartCenter
+        
+        userChartView.legend.form = .Square
+        userChartView.drawSliceTextEnabled = false
+        userChartView.alpha = 0
+    }
     
+    private func prepareChartViewData(chartData: [String: Float]) {
+        if chartData.count > 0 {
+            
+            xVals.removeAll()
+            yVals.removeAll()
+            
+            var i = 0
+            
+            for expense in chartData {
+                let entry = BarChartDataEntry(value: Double(expense.1), xIndex: i)
+                yVals.append(entry)
+                i = i + 1
+                xVals.append(expense.0)
+            }
+            
+            print("yvals == \(yVals)")
+            print("xvals == \(xVals)")
+            
+            let dataSet = PieChartDataSet(yVals: yVals, label: "")
+            
+            dataSet.sliceSpace = 2.0
+            
+            let colors = [MaterialColor.red.darken1,MaterialColor.blue.darken1,MaterialColor.green.darken1,MaterialColor.orange.darken1,MaterialColor.amber.darken1,MaterialColor.indigo.darken1,MaterialColor.purple.darken1,MaterialColor.yellow.darken1]
+            
+            
+            dataSet.colors = colors.sort({_, _ in arc4random() % 2 == 0})
+            
+            //dataSet.colors = ChartColorTemplates.liberty()
+            let data = PieChartData(xVals: xVals, dataSets: [dataSet])
+            
+            let pFormatter = NSNumberFormatter()
+            pFormatter.numberStyle = .PercentStyle
+            pFormatter.maximumFractionDigits = 1
+            pFormatter.percentSymbol = " %"
+            pFormatter.multiplier = 0.5
+            data.setValueFormatter(pFormatter)
+            data.setValueFont(UIFont.systemFontOfSize(10))
+            data.setValueTextColor(MaterialColor.white)
+            
+            userChartView.alpha = 1
+            userChartView.data = data
+            userChartView.animate(yAxisDuration: 0.5, easingOption: ChartEasingOption.EaseOutCirc)
+
+        }
+    }
     
     
     private func prepareUIElements() {
@@ -263,9 +351,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                     self.addNewExpenseUserBtn.alpha = 1
                                     self.userExpensesView.backgroundColor = MaterialColor.white
                                 }
-                                
-
-                                
+                            })
+                            
+                            expensesRef.child("categories").observeEventType(.Value, withBlock: { (categoriessnapshot) in
+                                if categoriessnapshot.exists() {
+                                    //print(categoriessnapshot.value!)
+                                    self.expenseCategories = Expense.categoriesFromResults(categoriessnapshot.value! as! NSDictionary)
+                                    self.updateGraphData()
+                                } else {
+                                    
+                                }
                             })
                             
                             
@@ -322,8 +417,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     
-    func updateSpentField(sender: AnyObject) {
-        
+    func calculateDateValues() -> (String, String) {
         let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
         
         let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
@@ -337,26 +431,75 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let formatter_week = NSDateFormatter()
         formatter_week.dateFormat = "w_yyyy"
         let currweek = "w_" + formatter_week.stringFromDate(currDate)
-        print(currDate)
-        print(currmon)
-        print(currweek)
+        
+        return (currmon, currweek)
+    }
+    
+    func updateGraphData() {
+        
+        let (currmon, currweek) = self.calculateDateValues()
+        
+        
+        if self.expenseCategories.count > 0 {
+            for expenseCategrory in self.expenseCategories {
+                if let expenseCategoryDetail = expenseCategrory.1 as [String: Float]? {
+                    
+                    if let thisExpTotal = expenseCategoryDetail["total"] as Float? {
+                        self.expenseCategoriesTotal[expenseCategrory.0] = thisExpTotal
+                    } else {
+                        self.expenseCategoriesTotal[expenseCategrory.0] = 0.0
+                    }
+                    if let thisExpTotal = expenseCategoryDetail[currmon] as Float? {
+                        self.expenseCategoriesThisMonth[expenseCategrory.0] = thisExpTotal
+                    } else {
+                        self.expenseCategoriesThisMonth[expenseCategrory.0] = 0.0
+                    }
+                    if let thisExpTotal = expenseCategoryDetail[currweek] as Float? {
+                        self.expenseCategoriesThisWeek[expenseCategrory.0] = thisExpTotal
+                    } else {
+                        self.expenseCategoriesThisWeek[expenseCategrory.0] = 0.0
+                    }
+                }
+            }
+        }
 
-        
-        if self.totals["total"] != nil {
-            self.totalSpent = self.totals["total"] as Float!
+        switch self.segmentButtonState {
+        case .total:
+            prepareChartViewData(self.expenseCategoriesTotal)
+        case .thisMonth:
+            prepareChartViewData(self.expenseCategoriesThisMonth)
+        case .thisWeek:
+            prepareChartViewData(self.expenseCategoriesThisWeek)
         }
         
-        if self.totals[currmon] != nil {
-            self.thisMonthSpent = self.totals[currmon] as Float!
+        
+    }
+    
+    func updateSpentField(sender: AnyObject) {
+        
+        let (currmon, currweek) = self.calculateDateValues()
+        
+        if self.totals.count > 0 {
+            if self.totals["total"] != nil {
+                self.totalSpent = self.totals["total"] as Float!
+            }
+            
+            if self.totals[currmon] != nil {
+                self.thisMonthSpent = self.totals[currmon] as Float!
+            }
+            
+            if self.totals[currweek] != nil {
+                self.thisWeekSpent = self.totals[currweek] as Float!
+            }
+            
+            if sender.tag != nil && sender.tag == 110 {
+                self.segmentButtonState = self.segmentButtonState.nextState()
+            }
+            
+
         }
         
-        if self.totals[currweek] != nil {
-            self.thisWeekSpent = self.totals[currweek] as Float!
-        }
         
-        if sender.tag != nil && sender.tag == 110 {
-            self.segmentButtonState = self.segmentButtonState.nextState()
-        }
         
         self.segmentButton.setTitle(self.segmentButtonState.titleString(), forState: .Normal)
         switch self.segmentButtonState {
@@ -376,9 +519,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.mainBalance.alpha = 1
         
         
-        
-        
-
+        self.updateGraphData()
 
     }
     

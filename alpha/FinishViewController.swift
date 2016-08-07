@@ -257,6 +257,47 @@ class FinishViewController: UIViewController {
                 
                 
             })
+            let category = self.newExpense.category
+            let categoryRef = userExpensesRef.child("categories/\(category)")
+            
+            categoryRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                if snapshot.exists() {
+                    if let categoryDetail = Expense.categoryFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
+                        
+                        if let currentTotalSpent = categoryDetail["total"] as Float? {
+                            let newTotalSpent = currentTotalSpent + self.newExpense.billAmount
+                            categoryRef.child("total").setValue(newTotalSpent)
+                        }
+                        
+                        if categoryDetail[currmon] != nil {
+                            if let currentMonSpent = categoryDetail[currmon] as Float? {
+                                let newMonSpent = currentMonSpent + self.newExpense.billAmount
+                                categoryRef.child("\(currmon)").setValue(newMonSpent)
+                            }
+                        } else {
+                            categoryRef.child("\(currmon)").setValue(self.newExpense.billAmount)
+                        }
+                        
+                        if categoryDetail[currweek] != nil {
+                            if let currentMonSpent = categoryDetail[currweek] as Float? {
+                                let newMonSpent = currentMonSpent + self.newExpense.billAmount
+                                categoryRef.child("\(currweek)").setValue(newMonSpent)
+                            }
+                        } else {
+                            categoryRef.child("\(currweek)").setValue(self.newExpense.billAmount)
+                        }
+                        
+                    }
+                } else {
+                    let newTotalSpent = self.newExpense.billAmount
+                    
+                    categoryRef.child("total").setValue(newTotalSpent)
+                    categoryRef.child("\(currweek)").setValue(newTotalSpent)
+                    categoryRef.child("\(currmon)").setValue(newTotalSpent)
+                }
+                
+                
+            })
             
 
         }
