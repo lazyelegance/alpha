@@ -90,7 +90,7 @@ struct Expense {
         if results.count > 0 {
             for result in results {
                 if let resultKey = result.key as? String {
-                    if resultKey != "totals" {
+                    if resultKey != "totals" || resultKey != "categories" {
                         if let valueDictionary = result.value as? NSDictionary {
                             var expense = Expense()
                             for value in valueDictionary {

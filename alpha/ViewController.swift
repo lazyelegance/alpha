@@ -113,14 +113,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
 
         self.navigationController?.navigationBar.hidden = true
-        prepareView()
-        prepareUIElements()
+        
         //prepareMenu()
         alphaRef = FIRDatabase.database().reference()
         
-        prepareExpenseData()
         
-        prepareChartView()
         
         
 
@@ -128,7 +125,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     
-    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        
+        if (FIRAuth.auth()?.currentUser) != nil {
+            prepareView()
+            prepareUIElements()
+            prepareExpenseData()
+            prepareChartView()
+        } else {
+            showLoginScreen()
+        }
+    }
     
     
     override func didReceiveMemoryWarning() {
@@ -206,7 +214,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             pFormatter.numberStyle = .PercentStyle
             pFormatter.maximumFractionDigits = 1
             pFormatter.percentSymbol = " %"
-            pFormatter.multiplier = 0.5
+            pFormatter.multiplier = 1
             data.setValueFormatter(pFormatter)
             data.setValueFont(UIFont.systemFontOfSize(10))
             data.setValueTextColor(MaterialColor.white)
@@ -320,69 +328,70 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             if let userRef = alphaRef.child("users/\(currentUser.uid)") as FIRDatabaseReference? {
                 
                 userRef.observeEventType(.Value, withBlock: { (snapshot) in
-                    
-                    self.user = User.userFromFirebase(snapshot.value! as! NSDictionary)
-                    self.prepareUIElements()
-                    
-                    self.userGroups.removeAll()
-                    for groupId in self.user.groups {
-                        if let groupRef = self.alphaRef.child("groups/\(groupId)") as FIRDatabaseReference? {
-                            groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
-                                self.userGroups.append(Group.groupFromFirebase(groupId, results: groupSnapshot.value! as! NSDictionary))
-                                self.groupsTableView.reloadData()
-                                self.userGroupsView.alpha = 1
-                            })
+                    if snapshot.exists() {
+                        self.user = User.userFromFirebase(snapshot.value! as! NSDictionary)
+                        self.prepareUIElements()
+                        
+                        self.userGroups.removeAll()
+                        for groupId in self.user.groups {
+                            if let groupRef = self.alphaRef.child("groups/\(groupId)") as FIRDatabaseReference? {
+                                groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
+                                    self.userGroups.append(Group.groupFromFirebase(groupId, results: groupSnapshot.value! as! NSDictionary))
+                                    self.groupsTableView.reloadData()
+                                    self.userGroupsView.alpha = 1
+                                })
+                            }
                         }
-                    }
-                    
-                    
-                    
-                    if let userId = self.user.userId as String? {
-                        if let expensesRef = self.alphaRef.child("expenses/\(userId)") as FIRDatabaseReference? {
-                            
-                            self.totals.removeAll()
-                            expensesRef.child("totals").observeEventType(.Value, withBlock: { (totalssnapshot) in
-                                if totalssnapshot.exists() {
-                                    self.totals = Expense.totalsFromResults(totalssnapshot.value! as! NSDictionary)
-                                    self.updateSpentField(self)
-                                } else {
-                                    self.spentHeaderLabel.text = "You have not added any expenses yet. Click below to start"
-                                    self.addNewExpenseUserBtn.setTitle("ADD YOUR FIRST EXPENSE", forState: .Normal)
-                                    self.addNewExpenseUserBtn.alpha = 1
-                                    self.userExpensesView.backgroundColor = MaterialColor.white
-                                }
-                            })
-                            
-                            expensesRef.child("categories").observeEventType(.Value, withBlock: { (categoriessnapshot) in
-                                if categoriessnapshot.exists() {
-                                    //print(categoriessnapshot.value!)
-                                    self.expenseCategories = Expense.categoriesFromResults(categoriessnapshot.value! as! NSDictionary)
-                                    self.updateGraphData()
-                                } else {
-                                    
-                                }
-                            })
-                            
-                            
-                            
-                        }
-                    }
-                    
-                    
-                    if let groupId = self.user.defaultGroupId as String? {
                         
                         
-                        if let groupRef = self.alphaRef.child("groups/\(groupId)") as FIRDatabaseReference? {
-                            groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
-                                self.group = Group.groupFromFirebase(self.user.defaultGroupId, results: groupSnapshot.value! as! NSDictionary)
-                                for member in self.group.members {
-                                    if let memberRef = self.alphaRef.child("users/\(member)") as FIRDatabaseReference? {
-                                        memberRef.observeEventType(.Value, withBlock: { (memberSnapshot) in
-                                            self.groupMembers.append(User.userFromFirebase(memberSnapshot.value! as! NSDictionary))
-                                        })
+                        
+                        if let userId = self.user.userId as String? {
+                            if let expensesRef = self.alphaRef.child("expenses/\(userId)") as FIRDatabaseReference? {
+                                
+                                self.totals.removeAll()
+                                expensesRef.child("totals").observeEventType(.Value, withBlock: { (totalssnapshot) in
+                                    if totalssnapshot.exists() {
+                                        self.totals = Expense.totalsFromResults(totalssnapshot.value! as! NSDictionary)
+                                        self.updateSpentField(self)
+                                    } else {
+                                        self.spentHeaderLabel.text = "You have not added any expenses yet. Click below to start"
+                                        self.addNewExpenseUserBtn.setTitle("ADD YOUR FIRST EXPENSE", forState: .Normal)
+                                        self.addNewExpenseUserBtn.alpha = 1
+                                        self.userExpensesView.backgroundColor = MaterialColor.white
                                     }
-                                }
-                            })
+                                })
+                                
+                                expensesRef.child("categories").observeEventType(.Value, withBlock: { (categoriessnapshot) in
+                                    if categoriessnapshot.exists() {
+                                        //print(categoriessnapshot.value!)
+                                        self.expenseCategories = Expense.categoriesFromResults(categoriessnapshot.value! as! NSDictionary)
+                                        self.updateGraphData()
+                                    } else {
+                                        
+                                    }
+                                })
+                                
+                                
+                                
+                            }
+                        }
+                        
+                        
+                        if let groupId = self.user.defaultGroupId as String? {
+                            
+                            
+                            if let groupRef = self.alphaRef.child("groups/\(groupId)") as FIRDatabaseReference? {
+                                groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
+                                    self.group = Group.groupFromFirebase(self.user.defaultGroupId, results: groupSnapshot.value! as! NSDictionary)
+                                    for member in self.group.members {
+                                        if let memberRef = self.alphaRef.child("users/\(member)") as FIRDatabaseReference? {
+                                            memberRef.observeEventType(.Value, withBlock: { (memberSnapshot) in
+                                                self.groupMembers.append(User.userFromFirebase(memberSnapshot.value! as! NSDictionary))
+                                            })
+                                        }
+                                    }
+                                })
+                            }
                         }
                     }
                 })
