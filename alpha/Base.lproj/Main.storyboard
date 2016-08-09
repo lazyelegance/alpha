@@ -157,7 +157,7 @@
                                                     </mask>
                                                 </variation>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wdl-vw-epN" customClass="FlatButton" customModule="Material">
+                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wdl-vw-epN" customClass="FlatButton" customModule="Material">
                                                 <rect key="frame" x="8" y="282" width="81" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="80" id="anN-ab-9yF"/>
@@ -1000,12 +1000,18 @@
                                         <color key="textColor" red="0.59797350890000001" green="0.59797350890000001" blue="0.59797350890000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IdC-tx-GUN" customClass="RaisedButton" customModule="Material">
+                                        <rect key="frame" x="506" y="8" width="46" height="30"/>
+                                        <state key="normal" title="MENU"/>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="Uea-b7-EvL" firstAttribute="top" secondItem="f5T-Ht-y3E" secondAttribute="top" constant="8" id="1kG-fI-8Qb"/>
                                     <constraint firstItem="OdJ-dP-Ydk" firstAttribute="top" secondItem="Uea-b7-EvL" secondAttribute="bottom" constant="8" id="3H3-nE-Wrj"/>
                                     <constraint firstItem="FrC-uP-MOF" firstAttribute="centerY" secondItem="f5T-Ht-y3E" secondAttribute="centerY" id="5wM-vi-XwU"/>
+                                    <constraint firstItem="IdC-tx-GUN" firstAttribute="top" secondItem="f5T-Ht-y3E" secondAttribute="top" constant="8" id="6uQ-24-4v3"/>
+                                    <constraint firstAttribute="trailing" secondItem="IdC-tx-GUN" secondAttribute="trailing" constant="8" id="GRc-zU-eVw"/>
                                     <constraint firstItem="Uea-b7-EvL" firstAttribute="leading" secondItem="f5T-Ht-y3E" secondAttribute="leading" constant="8" id="JFc-Ba-F8M"/>
                                     <constraint firstItem="Uea-b7-EvL" firstAttribute="leading" secondItem="FrC-uP-MOF" secondAttribute="trailing" constant="8" id="OAu-ro-YbD"/>
                                     <constraint firstItem="OdJ-dP-Ydk" firstAttribute="leading" secondItem="f5T-Ht-y3E" secondAttribute="leading" constant="8" id="OTk-Yb-eMl"/>
@@ -1157,7 +1163,7 @@
                                                 <rect key="frame" x="0.0" y="28" width="544" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EP5-lG-25n" id="4Xs-E1-xNK">
-                                                    <rect key="frame" x="0.0" y="0.0" width="544" height="43"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="544" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -1199,11 +1205,11 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" distribution="fillEqually" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="7xH-VX-9MC">
-                                <rect key="frame" x="169" y="455" width="262" height="28"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="7xH-VX-9MC">
+                                <rect key="frame" x="169" y="455" width="262" height="30"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxF-up-tpG" customClass="FlatButton" customModule="Material">
-                                        <rect key="frame" x="0.0" y="0.0" width="116" height="28"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxF-up-tpG" customClass="FlatButton" customModule="Material">
+                                        <rect key="frame" x="0.0" y="0.0" width="116" height="30"/>
                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="13"/>
                                         <state key="normal" title="SEE ALL EXPENSES">
                                             <color key="titleColor" red="0.99019607840000001" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1220,8 +1226,8 @@
                                             <action selector="seeAllGroupExpenses:" destination="1jY-3F-qx5" eventType="touchUpInside" id="HJy-I5-wuc"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j0d-xR-7Uv" customClass="FlatButton" customModule="Material">
-                                        <rect key="frame" x="146" y="0.0" width="116" height="28"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j0d-xR-7Uv" customClass="FlatButton" customModule="Material">
+                                        <rect key="frame" x="146" y="0.0" width="116" height="30"/>
                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="13"/>
                                         <state key="normal" title="ADD NEW EXPENSE">
                                             <color key="titleColor" red="0.99019607840000001" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
