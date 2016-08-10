@@ -1,16 +1,16 @@
 //
-//  ExpenseCell.swift
+//  GroupExpenseCell.swift
 //  alpha
 //
-//  Created by Ezra Bathini on 30/07/16.
+//  Created by Ezra Bathini on 10/08/16.
 //  Copyright © 2016 Ezra Bathini. All rights reserved.
 //
 
 import UIKit
 import Material
 
-class ExpenseCell: MaterialTableViewCell {
-
+class GroupExpenseCell: MaterialTableViewCell {
+    
     @IBOutlet weak var expenseImageView: UIImageView!
     
     @IBOutlet weak var expenseDescription: UILabel!
@@ -21,10 +21,10 @@ class ExpenseCell: MaterialTableViewCell {
     
     @IBOutlet weak var dateAddedLabel: UILabel!
     
-    var expense: Expense? {
+    var groupExpense: GroupExpense? {
         didSet {
-            if let item = expense {
-
+            if let item = groupExpense {
+                
                 //expenseImageView.image = UIImage(named: "discounts-marker")
                 expenseDescription.text = item.description
                 billAmountLabel.text = "\(item.billAmount)"
@@ -51,11 +51,11 @@ class ExpenseCell: MaterialTableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
-
+    
 }

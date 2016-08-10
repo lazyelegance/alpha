@@ -287,8 +287,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //btn2.borderColor = MaterialColor.white
         btn2.pulseColor = MaterialColor.blue.accent3
         //btn2.borderWidth = 1
-        btn2.setTitle("Add Expense".uppercaseString, forState: .Normal)
-        btn2.addTarget(self, action: #selector(self.toAddExpenseCycle), forControlEvents: .TouchUpInside)
+//        btn2.setTitle("Add Expense".uppercaseString, forState: .Normal)
+//        btn2.addTarget(self, action: #selector(self.toAddExpenseCycle), forControlEvents: .TouchUpInside)
         view.addSubview(btn2)
         
         
@@ -298,7 +298,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         btn3.pulseColor = MaterialColor.blue.accent3
         //        btn3.borderWidth = 1
         btn3.setTitle("See Expenses".uppercaseString, forState: .Normal)
-        btn3.addTarget(self, action: #selector(self.toListExpenses), forControlEvents: .TouchUpInside)
+//        btn3.addTarget(self, action: #selector(self.toListExpenses), forControlEvents: .TouchUpInside)
         view.addSubview(btn3)
         
         let btn4: FlatButton = FlatButton()
@@ -576,33 +576,33 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
 
-    func toListExpenses() {
-        if let userId = self.user.userId as String? {
-            if let expensesListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListViewController") as? ExpensesListViewController {
-                expensesListViewController.expenseType = .user
-                expensesListViewController.expensesRef = self.alphaRef.child("expenses/\(userId)")
-                self.navigationController?.pushViewController(expensesListViewController, animated: true)
-            }
-        }
-        
-    }
-    
-    func toAddExpenseCycle() {
-        if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
-            addExpenseVC.currentStep = AddExpenseStep.description
-            addExpenseVC.expenseType = ExpenseType.user
-            
-            
-            var newExpense = Expense()
-            
-            if let userId = self.user.userId as String? {
-                newExpense.firebaseDBRef = alphaRef.child("expenses/\(userId)")
-            }
-            
-            addExpenseVC.newExpense = newExpense
-            self.navigationController?.pushViewController(addExpenseVC, animated: true)
-        }
-    }
+//    func toListExpenses() {
+//        if let userId = self.user.userId as String? {
+//            if let expensesListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListViewController") as? ExpensesListViewController {
+//                expensesListViewController.expenseType = .user
+//                expensesListViewController.expensesRef = self.alphaRef.child("expenses/\(userId)")
+//                self.navigationController?.pushViewController(expensesListViewController, animated: true)
+//            }
+//        }
+//        
+//    }
+//    
+//    func toAddExpenseCycle() {
+//        if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
+//            addExpenseVC.currentStep = AddExpenseStep.description
+//            addExpenseVC.expenseType = ExpenseType.user
+//            
+//            
+//            var newExpense = Expense()
+//            
+//            if let userId = self.user.userId as String? {
+//                newExpense.firebaseDBRef = alphaRef.child("expenses/\(userId)")
+//            }
+//            
+//            addExpenseVC.newExpense = newExpense
+//            self.navigationController?.pushViewController(addExpenseVC, animated: true)
+//        }
+//    }
     
     
     
