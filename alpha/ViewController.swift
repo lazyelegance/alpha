@@ -148,7 +148,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // MARK: - Prepare View
     
     private func prepareView() {
-        view.backgroundColor = MaterialColor.indigo.accent3
+        view.backgroundColor = MaterialColor.indigo.base
+
+        
+        headerView.backgroundColor = MaterialColor.white
+        userExpensesView.backgroundColor = MaterialColor.white
+        userGroupsView.backgroundColor = MaterialColor.white
     }
     
     // MARK: - ChartView
@@ -160,7 +165,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     private func prepareChartView() {
         
-        
+        userChartView.backgroundColor = userExpensesView.backgroundColor
         
         //userChartView.setExtraOffsets(left: 5, top: 5, right: 5, bottom: 5)
         userChartView.delegate = self
@@ -244,7 +249,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         headerView.alpha = 0
         userGroupsView.alpha = 0
         
-        userExpensesView.backgroundColor = self.view.backgroundColor
+//        userExpensesView.backgroundColor = self.view.backgroundColor
         
         
         if user.userId != "1" {
@@ -357,7 +362,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                         self.spentHeaderLabel.text = "You have not added any expenses yet. Click below to start"
                                         self.addNewExpenseUserBtn.setTitle("ADD YOUR FIRST EXPENSE", forState: .Normal)
                                         self.addNewExpenseUserBtn.alpha = 1
-                                        self.userExpensesView.backgroundColor = MaterialColor.white
+//                                        self.userExpensesView.backgroundColor = MaterialColor.white
                                     }
                                 })
                                 
@@ -520,8 +525,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.mainBalance.text = "\(self.thisWeekSpent) $"
         }
         
-        
-        self.userExpensesView.backgroundColor = MaterialColor.white
+
         self.showAllExpensesUserBtn.alpha = 1
         self.addNewExpenseUserBtn.alpha = 1
         self.segmentButton.alpha = 1

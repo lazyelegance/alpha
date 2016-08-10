@@ -45,12 +45,14 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     
     private func prepareview() {
 
-        view.backgroundColor = MaterialColor.red.lighten1
+        view.backgroundColor = MaterialColor.amber.base
+        
 
     }
     
     private func preparetableview() {
         
+        tableView.backgroundColor = MaterialColor.clear
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
     }
@@ -132,6 +134,10 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         case .user:
             let expenseCell = tableView.dequeueReusableCellWithIdentifier("expenseCell", forIndexPath: indexPath) as! ExpenseCell
             if let expense = expenses[indexPath.row] as Expense? {
+                expenseCell.backgroundColor = MaterialColor.amber.lighten1
+                if indexPath.row % 2 == 1 {
+                   expenseCell.backgroundColor = MaterialColor.amber.lighten2
+                }
                 expenseCell.expense = expense
                 return expenseCell
             }

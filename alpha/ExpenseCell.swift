@@ -24,6 +24,8 @@ class ExpenseCell: MaterialTableViewCell {
     var expense: Expense? {
         didSet {
             if let item = expense {
+                
+                
 
                 //expenseImageView.image = UIImage(named: "discounts-marker")
                 expenseDescription.text = item.description
