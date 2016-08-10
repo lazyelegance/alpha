@@ -19,7 +19,7 @@ struct Expense {
     var firebaseDBRef = FIRDatabaseReference()
     
     init() {
-        self.description = "New User Expense"
+        self.description = "New User Expense --"
         self.billAmount = 0.00
     }
     
@@ -90,7 +90,7 @@ struct Expense {
         if results.count > 0 {
             for result in results {
                 if let resultKey = result.key as? String {
-                    if resultKey != "totals" || resultKey != "categories" {
+                    if resultKey != "totals" && resultKey != "categories" {
                         if let valueDictionary = result.value as? NSDictionary {
                             var expense = Expense()
                             for value in valueDictionary {

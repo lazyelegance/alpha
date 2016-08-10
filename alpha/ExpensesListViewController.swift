@@ -130,28 +130,33 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         
         switch expenseType {
         case .user:
-            print(expenses.count)
             let expenseCell = tableView.dequeueReusableCellWithIdentifier("expenseCell", forIndexPath: indexPath) as! ExpenseCell
             if let expense = expenses[indexPath.row] as Expense? {
                 expenseCell.expense = expense
                 return expenseCell
             }
         case .group:
-            let groupExpense = groupExpenses[indexPath.row]
-            cell.selectionStyle = .None
-            cell.textLabel!.text = groupExpense.description
-            cell.textLabel!.font = RobotoFont.regular
             
-            cell.detailTextLabel?.text = "\(groupExpense.billAmount)$"
-            cell.detailTextLabel!.font = RobotoFont.regular
-            cell.detailTextLabel!.textColor = MaterialColor.grey.darken1
-            cell.imageView?.image = UIImage(named: "purse")
-            cell.imageView?.image!.resize(toWidth: 20)
-            cell.imageView?.layer.masksToBounds = true
-            
-            cell.imageView!.layer.cornerRadius = 5
-            cell.imageView!.layer.borderColor = MaterialColor.white.CGColor
-            cell.imageView?.layer.borderWidth = 5
+            let groupExpenseCell = tableView.dequeueReusableCellWithIdentifier("groupExpenseCell", forIndexPath: indexPath) as! GroupExpenseCell
+            if let groupExpense = groupExpenses[indexPath.row] as GroupExpense? {
+                groupExpenseCell.groupExpense = groupExpense
+                return groupExpenseCell
+            }
+//            let groupExpense = groupExpenses[indexPath.row]
+//            cell.selectionStyle = .None
+//            cell.textLabel!.text = groupExpense.description
+//            cell.textLabel!.font = RobotoFont.regular
+//            
+//            cell.detailTextLabel?.text = "\(groupExpense.billAmount)$"
+//            cell.detailTextLabel!.font = RobotoFont.regular
+//            cell.detailTextLabel!.textColor = MaterialColor.grey.darken1
+//            cell.imageView?.image = UIImage(named: "purse")
+//            cell.imageView?.image!.resize(toWidth: 20)
+//            cell.imageView?.layer.masksToBounds = true
+//            
+//            cell.imageView!.layer.cornerRadius = 5
+//            cell.imageView!.layer.borderColor = MaterialColor.white.CGColor
+//            cell.imageView?.layer.borderWidth = 5
         }
  
         
