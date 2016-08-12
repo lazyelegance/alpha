@@ -156,7 +156,7 @@
                                                     </mask>
                                                 </variation>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wdl-vw-epN" customClass="FlatButton" customModule="Material">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wdl-vw-epN" customClass="FlatButton" customModule="Material">
                                                 <rect key="frame" x="8" y="232" width="81" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="80" id="anN-ab-9yF"/>
@@ -1148,68 +1148,6 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f5T-Ht-y3E" customClass="MaterialView">
-                                <rect key="frame" x="10" y="50" width="580" height="74"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="wallet" translatesAutoresizingMaskIntoConstraints="NO" id="FrC-uP-MOF" customClass="AsyncImageView">
-                                        <rect key="frame" x="8" y="27" width="40" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="40" id="Tdi-tj-3fE"/>
-                                            <constraint firstAttribute="height" constant="40" id="yCT-3T-xVC"/>
-                                        </constraints>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expenses" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uea-b7-EvL">
-                                        <rect key="frame" x="56" y="8" width="86" height="25"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="25" id="6Pl-X8-Nf3"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="20"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OdJ-dP-Ydk">
-                                        <rect key="frame" x="56" y="41" width="40" height="25"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="25" id="azX-oo-odC"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Roboto-Thin" family="Roboto" pointSize="17"/>
-                                        <color key="textColor" red="0.59797350890000001" green="0.59797350890000001" blue="0.59797350890000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="Uea-b7-EvL" firstAttribute="top" secondItem="f5T-Ht-y3E" secondAttribute="top" constant="8" id="1kG-fI-8Qb"/>
-                                    <constraint firstItem="OdJ-dP-Ydk" firstAttribute="top" secondItem="Uea-b7-EvL" secondAttribute="bottom" constant="8" id="3H3-nE-Wrj"/>
-                                    <constraint firstItem="FrC-uP-MOF" firstAttribute="centerY" secondItem="f5T-Ht-y3E" secondAttribute="centerY" id="5wM-vi-XwU"/>
-                                    <constraint firstAttribute="bottom" secondItem="OdJ-dP-Ydk" secondAttribute="bottom" constant="8" id="Egt-Vy-EjL"/>
-                                    <constraint firstItem="Uea-b7-EvL" firstAttribute="leading" secondItem="f5T-Ht-y3E" secondAttribute="leading" constant="8" id="JFc-Ba-F8M"/>
-                                    <constraint firstItem="FrC-uP-MOF" firstAttribute="top" secondItem="f5T-Ht-y3E" secondAttribute="top" constant="27" id="KW4-cn-WDh"/>
-                                    <constraint firstItem="Uea-b7-EvL" firstAttribute="leading" secondItem="FrC-uP-MOF" secondAttribute="trailing" constant="8" id="OAu-ro-YbD"/>
-                                    <constraint firstItem="OdJ-dP-Ydk" firstAttribute="leading" secondItem="f5T-Ht-y3E" secondAttribute="leading" constant="8" id="OTk-Yb-eMl"/>
-                                    <constraint firstItem="OdJ-dP-Ydk" firstAttribute="leading" secondItem="Uea-b7-EvL" secondAttribute="leading" id="gwt-kX-rXY"/>
-                                    <constraint firstItem="FrC-uP-MOF" firstAttribute="leading" secondItem="f5T-Ht-y3E" secondAttribute="leading" constant="8" id="hqi-u7-NaV"/>
-                                    <constraint firstAttribute="bottom" secondItem="OdJ-dP-Ydk" secondAttribute="bottom" constant="28" id="iVm-Qv-0im"/>
-                                    <constraint firstAttribute="height" constant="80" id="sOl-YD-SsT"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                                        <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="sOl-YD-SsT"/>
-                                        <exclude reference="KW4-cn-WDh"/>
-                                        <exclude reference="JFc-Ba-F8M"/>
-                                        <exclude reference="OTk-Yb-eMl"/>
-                                        <exclude reference="iVm-Qv-0im"/>
-                                    </mask>
-                                </variation>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.28482540680000001" blue="0.24095055470000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -1453,7 +1391,7 @@
                                 </variation>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" distribution="fillEqually" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="7xH-VX-9MC">
-                                <rect key="frame" x="20" y="405" width="210" height="26"/>
+                                <rect key="frame" x="20" y="405" width="210" height="24"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxF-up-tpG" customClass="FlatButton" customModule="Material">
                                         <rect key="frame" x="0.0" y="0.0" width="90" height="24"/>
