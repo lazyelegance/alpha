@@ -10,7 +10,7 @@ import UIKit
 import Material
 import FirebaseDatabase
 
-class ExpensesListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ExpensesListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ExpenseCellDelegate {
     
     var expenseType = ExpenseType.user
     
@@ -70,15 +70,12 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     
     private func getExpenses() {
         
-        print(self.expenseType)
         self.expenses.removeAll()
         switch self.expenseType {
         case .user:
             expensesRef.observeEventType(.Value, withBlock: { (expSnapshot) in
                 if expSnapshot.exists() {
                     self.expenses = Expense.expensesFromResults(expSnapshot.value! as! NSDictionary, ref: expSnapshot.ref)
-                    print(self.expenses.count)
-                    print(self.expenses)
                     self.tableView.reloadData()
                 }
                 
@@ -139,6 +136,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                    expenseCell.backgroundColor = MaterialColor.amber.lighten2
                 }
                 expenseCell.expense = expense
+                expenseCell.expenseCellDelegate = self
                 return expenseCell
             }
         case .group:
@@ -148,21 +146,6 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                 groupExpenseCell.groupExpense = groupExpense
                 return groupExpenseCell
             }
-//            let groupExpense = groupExpenses[indexPath.row]
-//            cell.selectionStyle = .None
-//            cell.textLabel!.text = groupExpense.description
-//            cell.textLabel!.font = RobotoFont.regular
-//            
-//            cell.detailTextLabel?.text = "\(groupExpense.billAmount)$"
-//            cell.detailTextLabel!.font = RobotoFont.regular
-//            cell.detailTextLabel!.textColor = MaterialColor.grey.darken1
-//            cell.imageView?.image = UIImage(named: "purse")
-//            cell.imageView?.image!.resize(toWidth: 20)
-//            cell.imageView?.layer.masksToBounds = true
-//            
-//            cell.imageView!.layer.cornerRadius = 5
-//            cell.imageView!.layer.borderColor = MaterialColor.white.CGColor
-//            cell.imageView?.layer.borderWidth = 5
         }
  
         
@@ -174,9 +157,88 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        //to do
-        //to profile view
-        
+        switch expenseType {
+        case .user:
+            if let expenseCell = tableView.cellForRowAtIndexPath(indexPath) as? ExpenseCell {
+                expenseCell.toggleEditStack()
+            }
+        default:
+            break
+        }
     }
+    
+    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        switch expenseType {
+        case .user:
+            if let expenseCell = tableView.cellForRowAtIndexPath(indexPath) as? ExpenseCell {
+                expenseCell.toggleEditStack()
+            }
+        default:
+            break
+        }
+    }
+    
+    func deleteUserExpense(expense: Expense) {
+        expensesRef.child(expense.expenseId).removeValueWithCompletionBlock { (error, ref) in
+            if error != nil {
+                print(error?.localizedDescription)
+            }
+        }
 
+        expensesRef.child("totals").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+            if snapshot.exists() {
+                if let totals = Expense.totalsFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
+
+                    if let currentTotalSpent = totals["total"] as Float? {
+                        let newTotalSpent = currentTotalSpent - expense.billAmount
+                        self.expensesRef.child("totals/total").setValue(newTotalSpent)
+                    }
+
+                    if totals[expense.month] != nil {
+                        if let currentMonSpent = totals[expense.month] as Float? {
+                            let newMonSpent = currentMonSpent - expense.billAmount
+                            self.expensesRef.child("totals/\(expense.month)").setValue(newMonSpent)
+                        }
+                    }
+
+                    if totals[expense.week] != nil {
+                        if let currentMonSpent = totals[expense.week] as Float? {
+                            let newMonSpent = currentMonSpent - expense.billAmount
+                            self.expensesRef.child("totals/\(expense.week)").setValue(newMonSpent)
+                        }
+                    }
+                    
+                }
+            }
+        })
+        
+        expensesRef.child("categories/\(expense.category)").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+            if snapshot.exists() {
+                print(snapshot)
+                print("categories/\(expense.category)/\(expense.month)")
+                if let totals = Expense.categoryFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
+                    
+                    if let currentTotalSpent = totals["total"] as Float? {
+                        let newTotalSpent = currentTotalSpent - expense.billAmount
+                        self.expensesRef.child("categories/\(expense.category)/total").setValue(newTotalSpent)
+                    }
+                    
+                    if totals[expense.month] != nil {
+                        if let currentMonSpent = totals[expense.month] as Float? {
+                            let newMonSpent = currentMonSpent - expense.billAmount
+                            self.expensesRef.child("categories/\(expense.category)/\(expense.month)").setValue(newMonSpent)
+                        }
+                    }
+                    
+                    if totals[expense.week] != nil {
+                        if let currentMonSpent = totals[expense.week] as Float? {
+                            let newMonSpent = currentMonSpent - expense.billAmount
+                            self.expensesRef.child("categories/\(expense.category)/\(expense.week)").setValue(newMonSpent)
+                        }
+                    }
+                    
+                }
+            }
+        })
+    }
 }

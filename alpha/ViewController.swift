@@ -560,8 +560,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             if let userId = self.user.userId as String? {
                 newExpense.firebaseDBRef = alphaRef.child("expenses/\(userId)")
             }
+            print(newExpense)
             
             addExpenseVC.newExpense = newExpense
+            
             self.navigationController?.pushViewController(addExpenseVC, animated: true)
         }
     }
