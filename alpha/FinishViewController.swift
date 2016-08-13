@@ -219,7 +219,7 @@ class FinishViewController: UIViewController {
             
             let key = userExpensesRef.childByAutoId().key
             
-            userExpensesRef.updateChildValues([key : ["description": newExpense.description, "billAmount": newExpense.billAmount, "category" : newExpense.category, "dateAdded" : "\(currDate)"]]) { (error, ref) in
+            userExpensesRef.updateChildValues([key : ["description": newExpense.description, "billAmount": newExpense.billAmount, "category" : newExpense.category, "dateAdded" : "\(currDate)", "month" : currmon, "week": currweek ]]) { (error, ref) in
                 if error != nil {
                     print(error?.localizedDescription)
                     return

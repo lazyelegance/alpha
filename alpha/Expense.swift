@@ -16,6 +16,8 @@ struct Expense {
     var billAmount: Float
     var dateAdded = String()
     var category = String()
+    var month = String()
+    var week = String()
     var firebaseDBRef = FIRDatabaseReference()
     
     init() {
@@ -107,8 +109,11 @@ struct Expense {
                                 case "description":
                                     expense.description = value.value as! String
                                 case "dateAdded":
-                                    
                                     expense.dateAdded = value.value as! String
+                                case "month":
+                                    expense.month = value.value as! String
+                                case "week":
+                                    expense.week = value.value as! String
                                 default:
                                     break
                                 }
