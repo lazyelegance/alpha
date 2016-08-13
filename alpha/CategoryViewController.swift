@@ -30,6 +30,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     var currentStep = AddExpenseStep.category
     var expenseType: ExpenseType = .user
     
+    @IBOutlet weak var backButton: FabButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         tableViewY = titleLabel.frame.origin.y + titleLabel.frame.size.height + 5
@@ -48,6 +49,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     
     private func prepareView() {
         view.backgroundColor = MaterialColor.indigo.accent1
+        backButton.setImage(MaterialIcon.arrowBack, forState: .Normal)
     }
     
 
@@ -58,7 +60,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         categories.append(Category(text: "Entertainment", detail: ".", image: UIImage(named: "ic_local_activity_white")))
         categories.append(Category(text: "Groceries", detail: "?", image: UIImage(named: "ic_local_grocery_store_white")))
         categories.append(Category(text: "Fuel", detail: "?", image: UIImage(named: "ic_local_gas_station_white")))
-        categories.append(Category(text: "Subscription", detail: "?", image: UIImage(named: "ic_subscriptions_white")))
+        categories.append(Category(text: "Subscriptions", detail: "?", image: UIImage(named: "ic_subscriptions_white")))
         
     }
     
@@ -69,7 +71,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.dataSource = self
         tableView.delegate = self
         tableView.frame = CGRectMake(10, tableViewY, self.view.frame.size.width - 20, 350)
-        
+        tableView.estimatedRowHeight = 40
         self.view.addSubview(tableView)
     }
     
@@ -77,7 +79,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count;
+        return categories.count + 1;
     }
     
     /// Returns the number of sections.
@@ -88,48 +90,72 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     /// Prepares the cells within the tableView.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell: MaterialTableViewCell = MaterialTableViewCell(style: .Subtitle, reuseIdentifier: "Cell")
-        
-        let item: Category = categories[indexPath.row]
-        cell.selectionStyle = .None
-        cell.textLabel!.text = item.text
-        cell.textLabel!.font = RobotoFont.regular
-        cell.textLabel?.textColor = MaterialColor.white
-        cell.imageView!.image = item.image?.resize(toWidth: 40)
-        cell.imageView!.layer.cornerRadius = 20
         cell.backgroundColor = MaterialColor.indigo.accent1
         cell.contentView.backgroundColor = MaterialColor.clear
+        
+        cell.selectionStyle = .None
+        
+        if indexPath.row == categories.count {
+            cell.textLabel!.text = "+ Add New"
+            cell.textLabel!.font = RobotoFont.mediumWithSize(10)
+            cell.textLabel?.textColor = MaterialColor.white
+            
+            return cell
+        }
+        
+        let item: Category = categories[indexPath.row]
+        
+        cell.textLabel!.text = item.text
+        cell.textLabel!.font = RobotoFont.mediumWithSize(10)
+        cell.textLabel?.textColor = MaterialColor.white
         
         return cell
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 60
-    }
+//    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+//        return 40
+//    }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        //
-        if let category = (categories[indexPath.row]).text as String? {
-            switch expenseType {
-            case .user:
-                if let finishVC = self.storyboard?.instantiateViewControllerWithIdentifier("finishViewController") as? FinishViewController {
-                    newExpense.category = category
-                    finishVC.newExpense = newExpense
-                    self.navigationController?.pushViewController(finishVC, animated: true)
-                }
-                
-            case .group:
-                if let parityViewController = self.storyboard?.instantiateViewControllerWithIdentifier("parityViewController") as? ParityViewController {
-                    newExpense.category = category
-                    parityViewController.newGroupExpense = newGroupExpense
-//                    ParityViewController.expenseType = .group //Defaulting to group for now
-                    self.navigationController?.pushViewController(parityViewController, animated: true)
+        
+        if indexPath.row != categories.count {
+            if let category = (categories[indexPath.row]).text as String? {
+                switch expenseType {
+                case .user:
+                    if let finishVC = self.storyboard?.instantiateViewControllerWithIdentifier("finishViewController") as? FinishViewController {
+                        newExpense.category = category
+                        finishVC.newExpense = newExpense
+                        self.navigationController?.pushViewController(finishVC, animated: true)
+                    }
+                    
+                case .group:
+                    if let parityViewController = self.storyboard?.instantiateViewControllerWithIdentifier("parityViewController") as? ParityViewController {
+                        newExpense.category = category
+                        parityViewController.newGroupExpense = newGroupExpense
+                        //                    ParityViewController.expenseType = .group //Defaulting to group for now
+                        self.navigationController?.pushViewController(parityViewController, animated: true)
+                    }
                 }
             }
+        } else {
             
-            
+            if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
+                
+                addExpenseVC.currentStep = .category
+                addExpenseVC.expenseType = self.expenseType
+                switch expenseType {
+                case .user:
+                    addExpenseVC.newExpense = self.newExpense
+                case .group:
+                    addExpenseVC.newGroupExpense = self.newGroupExpense
+                }
+                self.navigationController?.pushViewController(addExpenseVC, animated: true)
+            }
+            print("to new add")
         }
-        
-        
+    }
+    @IBAction func backOneStep(sender: AnyObject) {
+        self.navigationController?.popViewControllerAnimated(true)
     }
 }
 
