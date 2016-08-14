@@ -11,7 +11,7 @@ import Material
 import FirebaseDatabase
 import FirebaseAuth
 
-class ExpensesListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ExpenseCellDelegate, GroupExpenseCellDelegate {
+class ExpensesListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var expenseType = ExpenseType.user
     
@@ -135,7 +135,6 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                    expenseCell.backgroundColor = MaterialColor.amber.lighten2
                 }
                 expenseCell.expense = expense
-                expenseCell.expenseCellDelegate = self
                 return expenseCell
             }
         case .group:
@@ -147,7 +146,6 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                     groupExpenseCell.backgroundColor = MaterialColor.teal.lighten2
                 }
                 groupExpenseCell.groupExpense = groupExpense
-                groupExpenseCell.groupExpenseCellDelegate = self
                 
                 return groupExpenseCell
             }
@@ -161,30 +159,81 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         return 80
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        switch expenseType {
-        case .user:
-            if let expenseCell = tableView.cellForRowAtIndexPath(indexPath) as? ExpenseCell {
-                expenseCell.toggleEditStack()
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if expenseType == .group {
+            if let grpExpCell = tableView.cellForRowAtIndexPath(indexPath) as? GroupExpenseCell {
+                if grpExpCell.groupExpense?.addedBy != FIRAuth.auth()?.currentUser?.uid {
+                    return false
+                }
             }
-        case .group:
-            if let groupExpenseCell = tableView.cellForRowAtIndexPath(indexPath) as? GroupExpenseCell {
-                groupExpenseCell.toggleEditStack()
+        }
+        return true
+    }
+    
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        
+        let edit = UITableViewRowAction(style: .Default, title: "Edit") { (action, index) in
+            print("edit")
+        }
+        
+        edit.backgroundColor = MaterialColor.blue.accent3
+        
+        
+        let delete = UITableViewRowAction(style: .Default, title: "Delete") { (action, index) in
+            print("delete")
+            switch self.expenseType {
+            case .user:
+                if let expense = self.expenses[index.row] as Expense? {
+                    self.deleteUserExpense(expense)
+                }
+            case .group:
+                if let groupExpense = self.groupExpenses[index.row] as GroupExpense? {
+                    self.deleteGroupExpense(groupExpense)
+                }
+            }
+        }
+        
+        return  [delete, edit]
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if editingStyle == .Delete {
+            switch expenseType {
+            case .user:
+                if let expense = expenses[indexPath.row] as Expense? {
+                    deleteUserExpense(expense)
+                }
+            default:
+                break
             }
         }
     }
     
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+//        switch expenseType {
+//        case .user:
+//            if let expenseCell = tableView.cellForRowAtIndexPath(indexPath) as? ExpenseCell {
+//                expenseCell.toggleEditStack()
+//            }
+//        case .group:
+//            if let groupExpenseCell = tableView.cellForRowAtIndexPath(indexPath) as? GroupExpenseCell {
+//                groupExpenseCell.toggleEditStack()
+//            }
+//        }
+    }
+    
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        switch expenseType {
-        case .user:
-            if let expenseCell = tableView.cellForRowAtIndexPath(indexPath) as? ExpenseCell {
-                expenseCell.toggleEditStack()
-            }
-        case .group:
-            if let groupExpenseCell = tableView.cellForRowAtIndexPath(indexPath) as? GroupExpenseCell {
-                groupExpenseCell.toggleEditStack()
-            }
-        }
+//        switch expenseType {
+//        case .user:
+//            if let expenseCell = tableView.cellForRowAtIndexPath(indexPath) as? ExpenseCell {
+//                expenseCell.toggleEditStack()
+//            }
+//        case .group:
+//            if let groupExpenseCell = tableView.cellForRowAtIndexPath(indexPath) as? GroupExpenseCell {
+//                groupExpenseCell.toggleEditStack()
+//            }
+//        }
     }
     
     

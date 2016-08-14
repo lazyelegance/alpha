@@ -1019,53 +1019,6 @@
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Are you Sure?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eix-rA-8Jt">
-                                                            <rect key="frame" x="239" y="17" width="107" height="21"/>
-                                                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="15"/>
-                                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1Qj-Hl-0Uk">
-                                                            <rect key="frame" x="255" y="40" width="74" height="20"/>
-                                                            <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zqw-WH-PqI" customClass="RaisedButton" customModule="Material">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="32" height="20"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="height" constant="20" id="X7n-hb-haG"/>
-                                                                    </constraints>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                                    <state key="normal" title="Edit">
-                                                                        <color key="titleColor" red="0.99019607840000001" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                    </state>
-                                                                    <userDefinedRuntimeAttributes>
-                                                                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                                                                            <color key="value" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                                        </userDefinedRuntimeAttribute>
-                                                                    </userDefinedRuntimeAttributes>
-                                                                    <connections>
-                                                                        <action selector="editButton1Action:" destination="fCu-hL-pLb" eventType="touchUpInside" id="Mzz-O4-KZB"/>
-                                                                    </connections>
-                                                                </button>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qWm-e0-A4d" customClass="RaisedButton" customModule="Material">
-                                                                    <rect key="frame" x="42" y="0.0" width="32" height="20"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="height" constant="20" id="TxG-nF-7ln"/>
-                                                                    </constraints>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                                    <state key="normal" title="Delete">
-                                                                        <color key="titleColor" red="0.99019607840000001" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                    </state>
-                                                                    <userDefinedRuntimeAttributes>
-                                                                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                                                                            <color key="value" red="1" green="0.3230556154" blue="0.31307147549999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                        </userDefinedRuntimeAttribute>
-                                                                    </userDefinedRuntimeAttributes>
-                                                                    <connections>
-                                                                        <action selector="deleteExpense:" destination="fCu-hL-pLb" eventType="touchUpInside" id="Bag-QV-Krb"/>
-                                                                    </connections>
-                                                                </button>
-                                                            </subviews>
-                                                        </stackView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V7p-tp-PHO">
                                                             <rect key="frame" x="18" y="48" width="8" height="30"/>
                                                             <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="12"/>
@@ -1074,9 +1027,7 @@
                                                         </label>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="1Qj-Hl-0Uk" firstAttribute="centerY" secondItem="hMK-zK-btd" secondAttribute="centerY" id="0ag-8t-8mh"/>
                                                         <constraint firstItem="CJg-Yc-S8C" firstAttribute="top" secondItem="V7p-tp-PHO" secondAttribute="top" id="20c-cl-Wfc"/>
-                                                        <constraint firstItem="1Qj-Hl-0Uk" firstAttribute="top" secondItem="Eix-rA-8Jt" secondAttribute="bottom" id="7nt-D5-4Db"/>
                                                         <constraint firstItem="FGa-Qc-kZu" firstAttribute="top" secondItem="oqR-4H-avy" secondAttribute="bottom" constant="8" id="8DI-vj-zin"/>
                                                         <constraint firstItem="FGa-Qc-kZu" firstAttribute="top" secondItem="CJg-Yc-S8C" secondAttribute="bottom" id="9Kh-Wt-ort"/>
                                                         <constraint firstItem="CJg-Yc-S8C" firstAttribute="bottom" secondItem="V7p-tp-PHO" secondAttribute="bottom" id="ANe-dZ-yd5"/>
@@ -1085,9 +1036,7 @@
                                                         <constraint firstItem="CJg-Yc-S8C" firstAttribute="leading" secondItem="V7p-tp-PHO" secondAttribute="trailing" id="NJc-E0-9kh"/>
                                                         <constraint firstItem="V7p-tp-PHO" firstAttribute="leading" secondItem="Ahv-Vi-0ah" secondAttribute="leading" id="OOh-E4-OLQ"/>
                                                         <constraint firstItem="FGa-Qc-kZu" firstAttribute="trailing" secondItem="hMK-zK-btd" secondAttribute="trailingMargin" id="Sgn-IS-LI4"/>
-                                                        <constraint firstItem="Eix-rA-8Jt" firstAttribute="centerX" secondItem="hMK-zK-btd" secondAttribute="centerX" id="V7S-QI-exg"/>
                                                         <constraint firstItem="oqR-4H-avy" firstAttribute="centerY" secondItem="hMK-zK-btd" secondAttribute="centerY" id="X0z-4N-Lro"/>
-                                                        <constraint firstItem="1Qj-Hl-0Uk" firstAttribute="centerX" secondItem="hMK-zK-btd" secondAttribute="centerX" id="llx-nT-L7F"/>
                                                         <constraint firstItem="oqR-4H-avy" firstAttribute="trailing" secondItem="hMK-zK-btd" secondAttribute="trailingMargin" id="mkQ-Pc-th6"/>
                                                         <constraint firstItem="FGa-Qc-kZu" firstAttribute="leading" secondItem="Ahv-Vi-0ah" secondAttribute="leading" id="sMk-pF-TFi"/>
                                                         <constraint firstItem="Ahv-Vi-0ah" firstAttribute="top" secondItem="hMK-zK-btd" secondAttribute="topMargin" id="vIc-Hs-ahQ"/>
@@ -1109,14 +1058,10 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <outlet property="areYouSureButton" destination="Eix-rA-8Jt" id="EKo-o8-iUF"/>
                                                     <outlet property="billAmountLabel" destination="CJg-Yc-S8C" id="uX6-eV-w4u"/>
                                                     <outlet property="categoryButton" destination="oqR-4H-avy" id="cH1-1G-99o"/>
                                                     <outlet property="dateAddedLabel" destination="FGa-Qc-kZu" id="7Oc-bY-fsG"/>
                                                     <outlet property="dollarSignLabel" destination="V7p-tp-PHO" id="fQK-ZZ-hdd"/>
-                                                    <outlet property="editButton1" destination="Zqw-WH-PqI" id="fi4-Pq-MZt"/>
-                                                    <outlet property="editButton2" destination="qWm-e0-A4d" id="3jv-sh-ugJ"/>
-                                                    <outlet property="editStack" destination="1Qj-Hl-0Uk" id="OqN-yT-t8L"/>
                                                     <outlet property="expenseDescription" destination="Ahv-Vi-0ah" id="sFe-vk-q5s"/>
                                                 </connections>
                                             </tableViewCell>
@@ -1127,47 +1072,6 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="584" height="100"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="hs7-h1-C9N">
-                                                            <rect key="frame" x="255" y="40" width="74" height="20"/>
-                                                            <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kQw-EP-w0h" customClass="RaisedButton" customModule="Material">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="32" height="20"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="height" constant="20" id="4QS-7Z-uMK"/>
-                                                                    </constraints>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                                    <state key="normal" title="Edit">
-                                                                        <color key="titleColor" red="0.99019607840000001" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                    </state>
-                                                                    <userDefinedRuntimeAttributes>
-                                                                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                                                                            <color key="value" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                                        </userDefinedRuntimeAttribute>
-                                                                    </userDefinedRuntimeAttributes>
-                                                                    <connections>
-                                                                        <action selector="editButton1Action:" destination="kZf-bu-xP9" eventType="touchUpInside" id="KNG-ZX-Gth"/>
-                                                                    </connections>
-                                                                </button>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uOT-hf-Kea" customClass="RaisedButton" customModule="Material">
-                                                                    <rect key="frame" x="42" y="0.0" width="32" height="20"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="height" constant="20" id="0Z7-FM-vvx"/>
-                                                                    </constraints>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                                    <state key="normal" title="Delete">
-                                                                        <color key="titleColor" red="0.99019607840000001" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                    </state>
-                                                                    <userDefinedRuntimeAttributes>
-                                                                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                                                                            <color key="value" red="1" green="0.3230556154" blue="0.31307147549999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                        </userDefinedRuntimeAttribute>
-                                                                    </userDefinedRuntimeAttributes>
-                                                                    <connections>
-                                                                        <action selector="deleteExpense:" destination="kZf-bu-xP9" eventType="touchUpInside" id="DKR-TO-37g"/>
-                                                                    </connections>
-                                                                </button>
-                                                            </subviews>
-                                                        </stackView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Acg-mS-sVk">
                                                             <rect key="frame" x="18" y="8" width="35.5" height="40"/>
                                                             <constraints>
@@ -1219,28 +1123,18 @@
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Are you Sure?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DZh-TB-i9t">
-                                                            <rect key="frame" x="239" y="17" width="107" height="21"/>
-                                                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="15"/>
-                                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="jDV-Mp-Ne1" firstAttribute="top" secondItem="Acg-mS-sVk" secondAttribute="bottom" id="4M8-T4-aSh"/>
                                                         <constraint firstItem="Acg-mS-sVk" firstAttribute="top" secondItem="rgD-OA-Nuc" secondAttribute="topMargin" id="7MG-B7-0ON"/>
                                                         <constraint firstItem="SCV-2s-ZdP" firstAttribute="leading" secondItem="jDV-Mp-Ne1" secondAttribute="trailing" id="9Kb-u0-HLV"/>
                                                         <constraint firstItem="w0V-Uo-6K2" firstAttribute="bottom" secondItem="rgD-OA-Nuc" secondAttribute="bottomMargin" id="E6H-J8-qWV"/>
-                                                        <constraint firstItem="hs7-h1-C9N" firstAttribute="centerX" secondItem="rgD-OA-Nuc" secondAttribute="centerX" id="HWa-aV-dyX"/>
                                                         <constraint firstItem="SCV-2s-ZdP" firstAttribute="top" secondItem="jDV-Mp-Ne1" secondAttribute="top" id="Sgr-1l-M6U"/>
                                                         <constraint firstItem="jDV-Mp-Ne1" firstAttribute="leading" secondItem="Acg-mS-sVk" secondAttribute="leading" id="U3S-oy-SEj"/>
                                                         <constraint firstItem="w0V-Uo-6K2" firstAttribute="top" secondItem="SCV-2s-ZdP" secondAttribute="bottom" id="X2j-Rh-3Ps"/>
                                                         <constraint firstItem="w0V-Uo-6K2" firstAttribute="top" secondItem="gVK-Mv-sy1" secondAttribute="bottom" constant="8" id="Y42-Wx-xG9"/>
-                                                        <constraint firstItem="DZh-TB-i9t" firstAttribute="centerX" secondItem="rgD-OA-Nuc" secondAttribute="centerX" id="YcB-fu-oDq"/>
                                                         <constraint firstItem="w0V-Uo-6K2" firstAttribute="leading" secondItem="Acg-mS-sVk" secondAttribute="leading" id="cNy-0W-dbb"/>
-                                                        <constraint firstItem="hs7-h1-C9N" firstAttribute="top" secondItem="DZh-TB-i9t" secondAttribute="bottom" constant="2" id="dYg-jn-L1L"/>
                                                         <constraint firstItem="gVK-Mv-sy1" firstAttribute="trailing" secondItem="rgD-OA-Nuc" secondAttribute="trailingMargin" id="mxa-DW-75J"/>
-                                                        <constraint firstItem="hs7-h1-C9N" firstAttribute="centerY" secondItem="rgD-OA-Nuc" secondAttribute="centerY" id="pdq-fn-Euy"/>
                                                         <constraint firstItem="Acg-mS-sVk" firstAttribute="leading" secondItem="rgD-OA-Nuc" secondAttribute="leadingMargin" constant="10" id="rnZ-k1-T85"/>
                                                         <constraint firstItem="gVK-Mv-sy1" firstAttribute="centerY" secondItem="rgD-OA-Nuc" secondAttribute="centerY" id="sSo-qD-L6q"/>
                                                         <constraint firstItem="w0V-Uo-6K2" firstAttribute="trailing" secondItem="rgD-OA-Nuc" secondAttribute="trailingMargin" id="wTa-PK-ksr"/>
@@ -1262,14 +1156,10 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <outlet property="areYouSureButton" destination="DZh-TB-i9t" id="18y-W9-ck2"/>
                                                     <outlet property="billAmountLabel" destination="SCV-2s-ZdP" id="ddK-O3-evA"/>
                                                     <outlet property="categoryButton" destination="gVK-Mv-sy1" id="a89-oq-eph"/>
                                                     <outlet property="dateAddedLabel" destination="w0V-Uo-6K2" id="Y0M-wX-5an"/>
                                                     <outlet property="dollarSignLabel" destination="jDV-Mp-Ne1" id="sgm-jT-IHd"/>
-                                                    <outlet property="editButton1" destination="kQw-EP-w0h" id="Pfj-QC-2Ei"/>
-                                                    <outlet property="editButton2" destination="uOT-hf-Kea" id="TEZ-Z1-fuz"/>
-                                                    <outlet property="editStack" destination="hs7-h1-C9N" id="inf-dh-a03"/>
                                                     <outlet property="expenseDescription" destination="Acg-mS-sVk" id="Var-xV-aqt"/>
                                                 </connections>
                                             </tableViewCell>
