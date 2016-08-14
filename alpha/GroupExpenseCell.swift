@@ -9,6 +9,10 @@
 import UIKit
 import Material
 
+protocol GroupExpenseCellDelegate {
+    func deleteGroupExpense(groupExpense: GroupExpense)
+}
+
 class GroupExpenseCell: MaterialTableViewCell {
     
     @IBOutlet weak var expenseImageView: UIImageView!
@@ -21,11 +25,18 @@ class GroupExpenseCell: MaterialTableViewCell {
     
     @IBOutlet weak var dateAddedLabel: UILabel!
     
+    
+    @IBOutlet weak var dollarSignLabel: UILabel!
+    
+
+    
+    var groupExpenseCellDelegate: GroupExpenseCellDelegate?
+
+    
     var groupExpense: GroupExpense? {
         didSet {
             if let item = groupExpense {
-                
-                //expenseImageView.image = UIImage(named: "discounts-marker")
+
                 expenseDescription.text = item.description
                 billAmountLabel.text = "\(item.billAmount)"
                 
@@ -44,6 +55,10 @@ class GroupExpenseCell: MaterialTableViewCell {
             }
         }
     }
+    
+    
+
+    
     
     
     
