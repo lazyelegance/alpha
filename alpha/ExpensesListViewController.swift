@@ -11,7 +11,7 @@ import Material
 import FirebaseDatabase
 import FirebaseAuth
 
-class ExpensesListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating {
+class ExpensesListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ExpenseSearchControllerDelegate {
     
     var expenseType = ExpenseType.user
     
@@ -31,7 +31,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     
     @IBOutlet weak var tableView: UITableView!
     
-    var searchController = UISearchController(searchResultsController: nil)
+    var searchController: ExpenseSearchController!
     
     
     override func viewDidLoad() {
@@ -60,17 +60,25 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     
     private func preparetableview() {
         
+        
         tableView.backgroundColor = MaterialColor.clear
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
     }
     
     private func prepareSearchController() {
-        searchController.searchResultsUpdater = self
+        
+        
+        searchController = ExpenseSearchController(searchResultsController: self, searchBarFrame: CGRectMake(0.0, 0.0, tableView.frame.size.width, 50.0), searchBarFont: RobotoFont.mediumWithSize(10), searchBarTextColor: MaterialColor.black, searchBarTintColor: MaterialColor.amber.base)
+        searchController.expenseSearchDelete = self
+        //searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         searchController.hidesNavigationBarDuringPresentation = false
-        tableView.tableHeaderView = searchController.searchBar
+        searchController.expenseSearchBar.sizeToFit()
+        tableView.tableHeaderView = searchController.expenseSearchBar
+        
+        // CGRectGetHeight(searchController.expenseSearchBar.frame))
         
     }
     
@@ -116,8 +124,10 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func filterContentForSearchText(searchText: String, scope: String = "All") {
+        print(searchText)
         switch expenseType {
         case .user:
+            print("user")
             filteredExpenses = expenses.filter { expense in
                 return expense.description.lowercaseString.containsString(searchText.lowercaseString)
             }
@@ -131,6 +141,28 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     }
 
  
+
+    func didStartSearching() {
+        
+    }
+    
+    func didTapOnSearchButton() {
+        
+    }
+    
+    func didTapOnCancelButton() {
+        
+    }
+    
+    func didChangeSearchText(searchText: String) {
+        filterContentForSearchText(searchText)
+    }
+    
+    
+    
+    
+    
+    
     
     // MARK: - TableView
     
@@ -138,12 +170,12 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         
         switch expenseType {
         case .user:
-            if searchController.active && searchController.searchBar.text != "" {
+            if searchController.expenseSearchBar.text != "" {
                 return filteredExpenses.count
             }
             return expenses.count
         case .group:
-            if searchController.active && searchController.searchBar.text != "" {
+            if searchController.active && searchController.expenseSearchBar.text != "" {
                 return fileteredGroupExpenses.count
             }
             return groupExpenses.count
@@ -169,7 +201,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             if indexPath.row % 2 == 1 {
                 expenseCell.backgroundColor = MaterialColor.amber.lighten2
             }
-            if searchController.active && searchController.searchBar.text != "" {
+            if searchController.expenseSearchBar.text != "" {
                 if let expense = filteredExpenses[indexPath.row] as Expense? {
                     expenseCell.expense = expense
                     return expenseCell
