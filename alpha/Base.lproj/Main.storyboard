@@ -159,7 +159,7 @@
                                                     </mask>
                                                 </variation>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wdl-vw-epN" customClass="FlatButton" customModule="Material">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wdl-vw-epN" customClass="FlatButton" customModule="Material">
                                                 <rect key="frame" x="8" y="232" width="81" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="80" id="anN-ab-9yF"/>
@@ -1429,10 +1429,10 @@
                                 </variation>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" distribution="fillEqually" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="7xH-VX-9MC">
-                                <rect key="frame" x="20" y="405" width="210" height="26"/>
+                                <rect key="frame" x="20" y="405" width="210" height="24"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxF-up-tpG" customClass="FlatButton" customModule="Material">
-                                        <rect key="frame" x="0.0" y="0.0" width="90" height="26"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="90" height="24"/>
                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="10"/>
                                         <state key="normal" title="SEE ALL EXPENSES">
                                             <color key="titleColor" red="0.99019607840000001" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1450,7 +1450,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j0d-xR-7Uv" customClass="FlatButton" customModule="Material">
-                                        <rect key="frame" x="120" y="0.0" width="90" height="26"/>
+                                        <rect key="frame" x="120" y="0.0" width="90" height="24"/>
                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="10"/>
                                         <state key="normal" title="ADD NEW EXPENSE">
                                             <color key="titleColor" red="0.99019607840000001" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1559,7 +1559,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="YOU ARE ABOUT TO ADD" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x5v-Su-lfh">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="YOU ARE ABOUT TO ADD" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x5v-Su-lfh">
                                 <rect key="frame" x="20" y="60" width="114" height="14"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="W8h-Sz-CSo"/>
@@ -1573,7 +1573,7 @@
                                     </mask>
                                 </variation>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qed-pd-Xey" customClass="MaterialView">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qed-pd-Xey" customClass="MaterialView">
                                 <rect key="frame" x="20" y="84" width="560" height="126"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o0O-9B-2yZ">
@@ -1671,11 +1671,11 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="W2b-Wi-ETf">
-                                <rect key="frame" x="456" y="220" width="124" height="24"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="W2b-Wi-ETf">
+                                <rect key="frame" x="456" y="220" width="124" height="23"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UX0-PI-NPH" customClass="FlatButton" customModule="Material">
-                                        <rect key="frame" x="0.0" y="0.0" width="35" height="24"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="35" height="23"/>
                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="9"/>
                                         <state key="normal" title="CANCEL">
                                             <color key="titleColor" red="1" green="0.3230556154" blue="0.31307147549999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1686,7 +1686,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p7C-g2-RiB" customClass="FlatButton" customModule="Material">
-                                        <rect key="frame" x="45" y="0.0" width="39" height="24"/>
+                                        <rect key="frame" x="45" y="0.0" width="39" height="23"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="QjC-fo-vFG"/>
                                             <constraint firstAttribute="width" constant="40" id="ZWW-U7-MwG"/>
@@ -1699,8 +1699,8 @@
                                             <mask key="constraints">
                                                 <exclude reference="QjC-fo-vFG"/>
                                                 <exclude reference="ZWW-U7-MwG"/>
-                                                <exclude reference="jUQ-ee-hkP"/>
                                                 <exclude reference="dU4-no-D4C"/>
+                                                <exclude reference="jUQ-ee-hkP"/>
                                             </mask>
                                         </variation>
                                         <connections>
@@ -1708,7 +1708,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WPw-bx-bCu" customClass="RaisedButton" customModule="Material">
-                                        <rect key="frame" x="94" y="0.0" width="30" height="24"/>
+                                        <rect key="frame" x="94" y="0.0" width="30" height="23"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="F3h-xP-ByD"/>
                                             <constraint firstAttribute="width" constant="40" id="MLc-7X-tGZ"/>

@@ -11,14 +11,16 @@ import Material
 import FirebaseDatabase
 import FirebaseAuth
 
-class ExpensesListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ExpensesListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating {
     
     var expenseType = ExpenseType.user
     
     var expenses = [Expense]()
+    var filteredExpenses = [Expense]()
     var expensesRef = FIRDatabaseReference()
     
     var groupExpenses = [GroupExpense]()
+    var fileteredGroupExpenses = [GroupExpense]()
     var groupExpensesRef = FIRDatabaseReference()
     
     var groupName = String()
@@ -28,6 +30,10 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet weak var headerDetail: UILabel!
     
     @IBOutlet weak var tableView: UITableView!
+    
+    var searchController = UISearchController(searchResultsController: nil)
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,6 +41,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         preparetableview()
         getExpenses()
         prepareHeaderView()
+        prepareSearchController()
 
         // Do any additional setup after loading the view.
     }
@@ -56,6 +63,15 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         tableView.backgroundColor = MaterialColor.clear
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
+    }
+    
+    private func prepareSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        searchController.hidesNavigationBarDuringPresentation = false
+        tableView.tableHeaderView = searchController.searchBar
+        
     }
     
     private func prepareHeaderView() {
@@ -92,24 +108,44 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    // MARK: - Search
+    
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
     }
-    */
+    
+    func filterContentForSearchText(searchText: String, scope: String = "All") {
+        switch expenseType {
+        case .user:
+            filteredExpenses = expenses.filter { expense in
+                return expense.description.lowercaseString.containsString(searchText.lowercaseString)
+            }
+        case .group:
+            fileteredGroupExpenses = groupExpenses.filter { expense in
+                return expense.description.lowercaseString.containsString(searchText.lowercaseString)
+            }
+        }
+        
+        tableView.reloadData()
+    }
+
+ 
     
     // MARK: - TableView
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(expenses)
+        
         switch expenseType {
         case .user:
+            if searchController.active && searchController.searchBar.text != "" {
+                return filteredExpenses.count
+            }
             return expenses.count
         case .group:
+            if searchController.active && searchController.searchBar.text != "" {
+                return fileteredGroupExpenses.count
+            }
             return groupExpenses.count
         }
     }
@@ -129,25 +165,39 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         switch expenseType {
         case .user:
             let expenseCell = tableView.dequeueReusableCellWithIdentifier("expenseCell", forIndexPath: indexPath) as! ExpenseCell
-            if let expense = expenses[indexPath.row] as Expense? {
-                expenseCell.backgroundColor = MaterialColor.amber.lighten1
-                if indexPath.row % 2 == 1 {
-                   expenseCell.backgroundColor = MaterialColor.amber.lighten2
-                }
-                expenseCell.expense = expense
-                return expenseCell
+            expenseCell.backgroundColor = MaterialColor.amber.lighten1
+            if indexPath.row % 2 == 1 {
+                expenseCell.backgroundColor = MaterialColor.amber.lighten2
             }
+            if searchController.active && searchController.searchBar.text != "" {
+                if let expense = filteredExpenses[indexPath.row] as Expense? {
+                    expenseCell.expense = expense
+                    return expenseCell
+                }
+            } else {
+                if let expense = expenses[indexPath.row] as Expense? {
+                    expenseCell.expense = expense
+                    return expenseCell
+                }
+            }
+            
         case .group:
             
             let groupExpenseCell = tableView.dequeueReusableCellWithIdentifier("groupExpenseCell", forIndexPath: indexPath) as! GroupExpenseCell
-            if let groupExpense = groupExpenses[indexPath.row] as GroupExpense? {
-                groupExpenseCell.backgroundColor = MaterialColor.teal.lighten1
-                if indexPath.row % 2 == 1 {
-                    groupExpenseCell.backgroundColor = MaterialColor.teal.lighten2
+            groupExpenseCell.backgroundColor = MaterialColor.teal.lighten1
+            if indexPath.row % 2 == 1 {
+                groupExpenseCell.backgroundColor = MaterialColor.teal.lighten2
+            }
+            if searchController.active && searchController.searchBar.text != "" {
+                if let groupExpense = fileteredGroupExpenses[indexPath.row] as GroupExpense? {
+                    groupExpenseCell.groupExpense = groupExpense
+                    return groupExpenseCell
                 }
-                groupExpenseCell.groupExpense = groupExpense
-                
-                return groupExpenseCell
+            } else {
+                if let groupExpense = groupExpenses[indexPath.row] as GroupExpense? {
+                    groupExpenseCell.groupExpense = groupExpense
+                    return groupExpenseCell
+                }
             }
         }
  
@@ -183,12 +233,31 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             print("delete")
             switch self.expenseType {
             case .user:
-                if let expense = self.expenses[index.row] as Expense? {
-                    self.deleteUserExpense(expense)
+                
+                if self.searchController.active && self.searchController.searchBar.text != "" {
+                    if let expense = self.filteredExpenses[index.row] as Expense? {
+                        self.deleteUserExpense(expense)
+                        self.filteredExpenses.removeAtIndex(index.row)
+                        self.tableView.reloadData()
+                    }
+                } else {
+                    if let expense = self.expenses[index.row] as Expense? {
+                        self.deleteUserExpense(expense)
+                    }
                 }
+                
+                
             case .group:
-                if let groupExpense = self.groupExpenses[index.row] as GroupExpense? {
-                    self.deleteGroupExpense(groupExpense)
+                if self.searchController.active && self.searchController.searchBar.text != "" {
+                    if let groupExpense = self.fileteredGroupExpenses[index.row] as GroupExpense? {
+                        self.deleteGroupExpense(groupExpense)
+                        self.fileteredGroupExpenses.removeAtIndex(index.row)
+                        self.tableView.reloadData()
+                    }
+                } else {
+                    if let groupExpense = self.groupExpenses[index.row] as GroupExpense? {
+                        self.deleteGroupExpense(groupExpense)
+                    }
                 }
             }
         }
@@ -196,45 +265,9 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         return  [delete, edit]
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        
-        if editingStyle == .Delete {
-            switch expenseType {
-            case .user:
-                if let expense = expenses[indexPath.row] as Expense? {
-                    deleteUserExpense(expense)
-                }
-            default:
-                break
-            }
-        }
-    }
+
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        switch expenseType {
-//        case .user:
-//            if let expenseCell = tableView.cellForRowAtIndexPath(indexPath) as? ExpenseCell {
-//                expenseCell.toggleEditStack()
-//            }
-//        case .group:
-//            if let groupExpenseCell = tableView.cellForRowAtIndexPath(indexPath) as? GroupExpenseCell {
-//                groupExpenseCell.toggleEditStack()
-//            }
-//        }
-    }
-    
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-//        switch expenseType {
-//        case .user:
-//            if let expenseCell = tableView.cellForRowAtIndexPath(indexPath) as? ExpenseCell {
-//                expenseCell.toggleEditStack()
-//            }
-//        case .group:
-//            if let groupExpenseCell = tableView.cellForRowAtIndexPath(indexPath) as? GroupExpenseCell {
-//                groupExpenseCell.toggleEditStack()
-//            }
-//        }
-    }
+
     
     
     // MARK: - DELETE EXPENSE
