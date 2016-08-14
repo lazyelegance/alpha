@@ -47,7 +47,7 @@ class ExpenseCell: MaterialTableViewCell {
     var expense: Expense? {
         didSet {
             if let item = expense {
-                print(item)
+
                 editStack.alpha = 0
                 areYouSureButton.alpha = 0
                 deleteButtonState = DeleteButtonState.delete

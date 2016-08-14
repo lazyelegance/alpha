@@ -9,8 +9,9 @@
 import UIKit
 import Material
 import FirebaseDatabase
+import FirebaseAuth
 
-class ExpensesListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ExpenseCellDelegate {
+class ExpensesListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ExpenseCellDelegate, GroupExpenseCellDelegate {
     
     var expenseType = ExpenseType.user
     
@@ -44,10 +45,10 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     private func prepareview() {
-
         view.backgroundColor = MaterialColor.amber.base
-        
-
+        if expenseType == .group {
+            view.backgroundColor = MaterialColor.teal.base
+        }
     }
     
     private func preparetableview() {
@@ -58,8 +59,6 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     private func prepareHeaderView() {
-        
-        
         switch self.expenseType {
         case .user:
             headerDetail.text = "for " + userName
@@ -143,7 +142,13 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             
             let groupExpenseCell = tableView.dequeueReusableCellWithIdentifier("groupExpenseCell", forIndexPath: indexPath) as! GroupExpenseCell
             if let groupExpense = groupExpenses[indexPath.row] as GroupExpense? {
+                groupExpenseCell.backgroundColor = MaterialColor.teal.lighten1
+                if indexPath.row % 2 == 1 {
+                    groupExpenseCell.backgroundColor = MaterialColor.teal.lighten2
+                }
                 groupExpenseCell.groupExpense = groupExpense
+                groupExpenseCell.groupExpenseCellDelegate = self
+                
                 return groupExpenseCell
             }
         }
@@ -162,8 +167,10 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             if let expenseCell = tableView.cellForRowAtIndexPath(indexPath) as? ExpenseCell {
                 expenseCell.toggleEditStack()
             }
-        default:
-            break
+        case .group:
+            if let groupExpenseCell = tableView.cellForRowAtIndexPath(indexPath) as? GroupExpenseCell {
+                groupExpenseCell.toggleEditStack()
+            }
         }
     }
     
@@ -173,10 +180,15 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             if let expenseCell = tableView.cellForRowAtIndexPath(indexPath) as? ExpenseCell {
                 expenseCell.toggleEditStack()
             }
-        default:
-            break
+        case .group:
+            if let groupExpenseCell = tableView.cellForRowAtIndexPath(indexPath) as? GroupExpenseCell {
+                groupExpenseCell.toggleEditStack()
+            }
         }
     }
+    
+    
+    // MARK: - DELETE EXPENSE
     
     func deleteUserExpense(expense: Expense) {
         expensesRef.child(expense.expenseId).removeValueWithCompletionBlock { (error, ref) in
@@ -240,5 +252,11 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                 }
             }
         })
+    }
+    
+    
+    
+    func deleteGroupExpense(groupExpense: GroupExpense) {
+        print("deleting group expense")
     }
 }

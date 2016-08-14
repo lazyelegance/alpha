@@ -116,11 +116,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         //prepareMenu()
         alphaRef = FIRDatabase.database().reference()
-        
-        
-        
-        
-
 
     }
 
@@ -194,10 +189,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             var i = 0
             
             for expense in chartData {
-                let entry = BarChartDataEntry(value: Double(expense.1), xIndex: i)
-                yVals.append(entry)
-                i = i + 1
-                xVals.append(expense.0)
+                
+                if expense.1 > 0 {
+                    let entry = BarChartDataEntry(value: Double(expense.1), xIndex: i)
+                    yVals.append(entry)
+                    i = i + 1
+                    xVals.append(expense.0)
+                }
+                
             }
             
             print("yvals == \(yVals)")
@@ -227,6 +226,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             userChartView.alpha = 1
             userChartView.data = data
             userChartView.animate(yAxisDuration: 0.5, easingOption: ChartEasingOption.EaseOutCirc)
+            
 
         }
     }
