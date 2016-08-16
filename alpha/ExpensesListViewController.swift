@@ -33,6 +33,12 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     
     var searchController: ExpenseSearchController!
     
+    @IBOutlet weak var searchButton: UIButton!
+    
+    @IBAction func searchButtonClicked(sender: AnyObject) {
+        
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
