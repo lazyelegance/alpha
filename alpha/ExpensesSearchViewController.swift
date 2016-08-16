@@ -28,10 +28,17 @@ class ExpensesSearchViewController: UIViewController, UITableViewDelegate, UITab
     
     var categories = ["Food", "Fuel", "Rent"]
     var months = ["July 2016", "June 2016"]
-    
 
+    var expenseType = ExpenseType.user
     
-    var expanded = false
+    var expenses = [Expense]()
+    var groupExpenses = [GroupExpense]()
+    
+    
+    var categoryViewExpanded = false
+    var monthsViewExpanded = false
+    var showMoreCategoriesText = "Show More"
+    var showMoreMonthsText = "Show More"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,7 +93,7 @@ class ExpensesSearchViewController: UIViewController, UITableViewDelegate, UITab
         
         if tableView.tag == 11 {
             if indexPath.row == categories.count {
-                searchCategoryCell.textLabel?.text = "Show More"
+                searchCategoryCell.textLabel?.text = showMoreCategoriesText
                 searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
             } else {
                 let category = categories[indexPath.row]
@@ -98,7 +105,7 @@ class ExpensesSearchViewController: UIViewController, UITableViewDelegate, UITab
         
         if tableView.tag == 22 {
             if indexPath.row == months.count {
-                searchCategoryCell.textLabel?.text = "Show More"
+                searchCategoryCell.textLabel?.text = showMoreMonthsText
                 searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
             } else {
                 let month = months[indexPath.row]
@@ -113,19 +120,60 @@ class ExpensesSearchViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 20
+        return 30
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if tableView.tag == 11 {
-            if !self.expanded {
-                self.categoryViewHeight.constant = 300
-                
-            } else {
-                self.categoryViewHeight.constant = 90
+            if indexPath.row == categories.count {
+                toggleCategoryView()
             }
-            self.expanded = !self.expanded
+            
+        } else if tableView.tag == 22 {
+            if indexPath.row == months.count {
+                toggleMonthsView()
+            }
         }
+    }
+    
+    func toggleCategoryView()  {
+        if !self.categoryViewExpanded {
+            self.categoryViewHeight.constant = 300
+            self.showMoreCategoriesText = "Show Less"
+        } else {
+            self.categoryViewHeight.constant = 120
+            self.showMoreCategoriesText = "Show More"
+        }
+        self.categoryViewExpanded = !self.categoryViewExpanded
+        
+        if self.monthsViewExpanded {
+            self.monthsViewHeight.constant = 120
+            self.showMoreMonthsText = "Show More"
+            self.monthsViewExpanded = !self.monthsViewExpanded
+        }
+        categoriesTableView.reloadData()
+        monthsTableView.reloadData()
+    
+    }
+    
+    func toggleMonthsView() {
+        if !self.monthsViewExpanded {
+            self.monthsViewHeight.constant = 300
+            self.showMoreMonthsText = "Show Less"
+            
+        } else {
+            self.monthsViewHeight.constant = 120
+            self.showMoreMonthsText = "Show More"
+        }
+        self.monthsViewExpanded = !self.monthsViewExpanded
+        
+        if self.categoryViewExpanded {
+            self.categoryViewHeight.constant = 120
+            self.showMoreCategoriesText = "Show More"
+            self.categoryViewExpanded = !self.categoryViewExpanded
+        }
+        categoriesTableView.reloadData()
+        monthsTableView.reloadData()
     }
 
     /*

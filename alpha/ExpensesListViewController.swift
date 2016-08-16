@@ -31,14 +31,47 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var categoryView: MaterialView!
+    @IBOutlet weak var monthsView: MaterialView!
+    
+    @IBOutlet weak var categoryViewHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var monthsViewHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var categoriesTableView: UITableView!
+    @IBOutlet weak var monthsTableView: UITableView!
+    
+    var searchExpanded = false
+    var categoryViewExpanded = false
+    var monthsViewExpanded = false
+    var showMoreCategoriesText = "Show More"
+    var showMoreMonthsText = "Show More"
+    
     var searchController: ExpenseSearchController!
     
     @IBOutlet weak var searchButton: UIButton!
     
     @IBAction func searchButtonClicked(sender: AnyObject) {
+        if !self.searchExpanded {
+            
+            self.categoryViewHeight.constant = 120
+            self.monthsViewHeight.constant = 120
+            searchButton.setTitle("Close", forState: .Normal)
+        } else {
+            categoryViewHeight.constant = 0
+            monthsViewHeight.constant = 0
+            searchButton.setTitle("Search", forState: .Normal)
+        }
         
+        UIView.animateWithDuration(0.5, animations: {
+            self.view.layoutIfNeeded()
+        })
+        self.searchExpanded = !self.searchExpanded
     }
     
+    
+    var categories = ["Food", "Fuel", "Rent"]
+    var months = ["July 2016", "June 2016"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +95,8 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         if expenseType == .group {
             view.backgroundColor = MaterialColor.teal.base
         }
+        categoryViewHeight.constant = 0
+        monthsViewHeight.constant = 0
     }
     
     private func preparetableview() {
@@ -70,6 +105,8 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         tableView.backgroundColor = MaterialColor.clear
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
+        
+        
     }
     
     private func prepareSearchController() {
@@ -176,15 +213,28 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         
         switch expenseType {
         case .user:
-            if searchController.expenseSearchBar.text != "" {
-                return filteredExpenses.count
+            switch tableView.tag {
+            case 11:
+                return categories.count
+            case 22:
+                return months.count
+            case 33:
+                return expenses.count
+            default:
+                return 0
             }
-            return expenses.count
+            
         case .group:
-            if searchController.active && searchController.expenseSearchBar.text != "" {
-                return fileteredGroupExpenses.count
+            switch tableView.tag {
+            case 11:
+                return categories.count
+            case 22:
+                return months.count
+            case 33:
+                return groupExpenses.count
+            default:
+                return 0
             }
-            return groupExpenses.count
         }
     }
     
@@ -202,6 +252,38 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         
         switch expenseType {
         case .user:
+            let searchCategoryCell: MaterialTableViewCell = MaterialTableViewCell(style: .Default, reuseIdentifier: "searchCategoryCell")
+            
+            
+            searchCategoryCell.selectionStyle = .None
+            searchCategoryCell.textLabel!.font = RobotoFont.mediumWithSize(10)
+            
+            if tableView.tag == 11 {
+                if indexPath.row == categories.count {
+                    searchCategoryCell.textLabel?.text = showMoreCategoriesText
+                    searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
+                } else {
+                    let category = categories[indexPath.row]
+                    searchCategoryCell.textLabel?.text = category
+                    
+                }
+                return searchCategoryCell
+            }
+            
+            if tableView.tag == 22 {
+                if indexPath.row == months.count {
+                    searchCategoryCell.textLabel?.text = showMoreMonthsText
+                    searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
+                } else {
+                    let month = months[indexPath.row]
+                    searchCategoryCell.textLabel?.text = month
+                    
+                }
+                return searchCategoryCell
+            }
+            
+            
+            
             let expenseCell = tableView.dequeueReusableCellWithIdentifier("expenseCell", forIndexPath: indexPath) as! ExpenseCell
             expenseCell.backgroundColor = MaterialColor.amber.lighten1
             if indexPath.row % 2 == 1 {
@@ -244,7 +326,11 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 80
+        if tableView.tag == 33 {
+            return 80
+        } else {
+            return 30
+        }
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

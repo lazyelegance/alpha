@@ -83,6 +83,24 @@ struct Expense {
         return ["noCategory": ["none":0.0]]
     }
     
+    static func categoryNamesFromResults(results: NSDictionary) -> [String] {
+        
+        var categoryNames = [String]()
+        categoryNames.removeAll()
+        
+        if results.count > 0 {
+            
+            for result in results {
+                categoryNames.append(result.key as! String)
+            }
+            
+            return categoryNames
+        }
+        
+        
+        return ["noCategory"]
+    }
+    
     static func expensesFromResults(results: NSDictionary, ref: FIRDatabaseReference) -> [Expense] {
         var expenses = [Expense]()
         expenses.removeAll()
