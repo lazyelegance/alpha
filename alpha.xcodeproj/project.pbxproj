@@ -35,6 +35,7 @@
 		63CBEBDF1D38BACD0002DB65 /* alphaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CBEBDE1D38BACD0002DB65 /* alphaTests.swift */; };
 		63CBEBEA1D38BACD0002DB65 /* alphaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CBEBE91D38BACD0002DB65 /* alphaUITests.swift */; };
 		63CD56FC1D4C84C30007966B /* ExpenseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CD56FB1D4C84C30007966B /* ExpenseCell.swift */; };
+		63CDF7FE1D62F75700465EBF /* ExpensesSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CDF7FD1D62F75700465EBF /* ExpensesSearchViewController.swift */; };
 		63EC26C01D4B46AC00CB7222 /* GroupMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EC26BF1D4B46AC00CB7222 /* GroupMainViewController.swift */; };
 		6B998F7B7EF0BB4A9B5F55AE /* Pods_alphaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3DE9B19B18A878CD6E1FFA /* Pods_alphaTests.framework */; };
 		8D32934CCC36D5015B2DE628 /* Pods_alpha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8612B91C744E842E93D6644 /* Pods_alpha.framework */; };
@@ -102,6 +103,7 @@
 		63CBEBE91D38BACD0002DB65 /* alphaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = alphaUITests.swift; sourceTree = "<group>"; };
 		63CBEBEB1D38BACD0002DB65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		63CD56FB1D4C84C30007966B /* ExpenseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseCell.swift; sourceTree = "<group>"; };
+		63CDF7FD1D62F75700465EBF /* ExpensesSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpensesSearchViewController.swift; sourceTree = "<group>"; };
 		63EC26BF1D4B46AC00CB7222 /* GroupMainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupMainViewController.swift; sourceTree = "<group>"; };
 		C8568E0BA8BF3F348896ED86 /* Pods_alphaUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_alphaUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8612B91C744E842E93D6644 /* Pods_alpha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_alpha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -175,6 +177,7 @@
 				63CD56FB1D4C84C30007966B /* ExpenseCell.swift */,
 				63BCAECE1D5B17ED00093C3F /* GroupExpenseCell.swift */,
 				63C122E91D4C78D500F7AD91 /* ExpensesListViewController.swift */,
+				63CDF7FD1D62F75700465EBF /* ExpensesSearchViewController.swift */,
 				635061BF1D609A50007BE050 /* ExpenseSearchController.swift */,
 				635061C11D60A112007BE050 /* ExpenseSearchBar.swift */,
 				63EC26BF1D4B46AC00CB7222 /* GroupMainViewController.swift */,
@@ -537,6 +540,7 @@
 				632CDE061D46221800B3AB79 /* Expense.swift in Sources */,
 				63A04CD31D4E130D00657C0E /* ExpenseType.swift in Sources */,
 				63B71C481D3E3BA500087A8E /* User.swift in Sources */,
+				63CDF7FE1D62F75700465EBF /* ExpensesSearchViewController.swift in Sources */,
 				63BCAECF1D5B17ED00093C3F /* GroupExpenseCell.swift in Sources */,
 				635061C01D609A50007BE050 /* ExpenseSearchController.swift in Sources */,
 				633BC3151D3B6C520015BAAA /* ParityViewController.swift in Sources */,
