@@ -1272,12 +1272,47 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FGT-qu-BOp" customClass="MaterialView">
+                                <rect key="frame" x="10" y="171" width="580" height="90"/>
+                                <subviews>
+                                    <tableView clipsSubviews="YES" tag="22" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="68s-Og-lLj">
+                                        <rect key="frame" x="0.0" y="0.0" width="580" height="90"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <prototypes>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="searchCategoryCell" rowHeight="10" id="Ud2-y9-Tft">
+                                                <rect key="frame" x="0.0" y="28" width="580" height="10"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Ud2-y9-Tft" id="PzL-6S-vRh">
+                                                    <rect key="frame" x="0.0" y="0.0" width="580" height="10"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </tableViewCellContentView>
+                                            </tableViewCell>
+                                        </prototypes>
+                                    </tableView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="68s-Og-lLj" secondAttribute="bottom" id="1aN-bZ-BJr"/>
+                                    <constraint firstAttribute="height" constant="90" id="ZIF-SE-sE7"/>
+                                    <constraint firstItem="68s-Og-lLj" firstAttribute="leading" secondItem="FGT-qu-BOp" secondAttribute="leading" id="dvb-uU-ePR"/>
+                                    <constraint firstAttribute="trailing" secondItem="68s-Og-lLj" secondAttribute="trailing" id="kEp-dn-3Mv"/>
+                                    <constraint firstItem="68s-Og-lLj" firstAttribute="top" secondItem="FGT-qu-BOp" secondAttribute="top" id="rkw-e2-TjP"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.15476265549659729" green="0.7204241156578064" blue="0.69345968961715698" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="xUc-e1-7Ha" firstAttribute="leading" secondItem="Bt6-T2-K3R" secondAttribute="leadingMargin" constant="-10" id="0qj-lf-viZ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="FGT-qu-BOp" secondAttribute="trailing" constant="-10" id="3n2-v7-GQ6"/>
                             <constraint firstItem="xUc-e1-7Ha" firstAttribute="top" secondItem="aFB-lK-35r" secondAttribute="bottom" constant="8" id="HQZ-Lq-wIK"/>
                             <constraint firstItem="aFB-lK-35r" firstAttribute="top" secondItem="sga-bl-vZj" secondAttribute="bottom" constant="8" id="MxE-fl-5II"/>
+                            <constraint firstItem="FGT-qu-BOp" firstAttribute="top" secondItem="xUc-e1-7Ha" secondAttribute="bottom" constant="5" id="P9l-La-Z7L"/>
+                            <constraint firstItem="FGT-qu-BOp" firstAttribute="leading" secondItem="Bt6-T2-K3R" secondAttribute="leadingMargin" constant="-10" id="QYx-Wh-S84"/>
                             <constraint firstAttribute="trailingMargin" secondItem="aFB-lK-35r" secondAttribute="trailing" constant="-10" id="d3s-xG-cY0"/>
                             <constraint firstItem="aFB-lK-35r" firstAttribute="leading" secondItem="Bt6-T2-K3R" secondAttribute="leadingMargin" constant="-10" id="tQD-Qs-msk"/>
                             <constraint firstAttribute="trailingMargin" secondItem="xUc-e1-7Ha" secondAttribute="trailing" constant="-10" id="uv7-pl-b85"/>
@@ -1288,6 +1323,9 @@
                         <outlet property="categoryView" destination="xUc-e1-7Ha" id="Jbv-iS-6a3"/>
                         <outlet property="categoryViewHeight" destination="KRZ-6J-0a5" id="BvQ-B5-sQQ"/>
                         <outlet property="headerView" destination="aFB-lK-35r" id="WSm-lG-Yv2"/>
+                        <outlet property="monthsTableView" destination="68s-Og-lLj" id="el5-e9-QJb"/>
+                        <outlet property="monthsView" destination="FGT-qu-BOp" id="bm8-LM-rmD"/>
+                        <outlet property="monthsViewHeight" destination="ZIF-SE-sE7" id="kKt-EQ-Pn0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rQL-5d-Iio" userLabel="First Responder" sceneMemberID="firstResponder"/>

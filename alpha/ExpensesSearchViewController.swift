@@ -16,25 +16,20 @@ class ExpensesSearchViewController: UIViewController, UITableViewDelegate, UITab
     @IBOutlet weak var headerView: MaterialView!
 
     @IBOutlet weak var categoryView: MaterialView!
-    
-    @IBOutlet weak var categoryViewHeight: NSLayoutConstraint!
     @IBOutlet weak var monthsView: MaterialView!
     
-    @IBOutlet weak var categoriesTableView: UITableView!
+    @IBOutlet weak var categoryViewHeight: NSLayoutConstraint!
     
+    @IBOutlet weak var monthsViewHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var categoriesTableView: UITableView!
+    @IBOutlet weak var monthsTableView: UITableView!
     
     
     var categories = ["Food", "Fuel", "Rent"]
     var months = ["July 2016", "June 2016"]
     
-    enum dataType {
-        case category
-        case month
-        case moreCategory
-        case moreMonth
-    }
-    
-    var tableViewData = [[String : dataType]]()
+
     
     var expanded = false
     
@@ -44,7 +39,9 @@ class ExpensesSearchViewController: UIViewController, UITableViewDelegate, UITab
         // Do any additional setup after loading the view.
         categoriesTableView.dataSource = self
         categoriesTableView.delegate = self
-         prepareDataForTableViews()
+        monthsTableView.dataSource = self
+        monthsTableView.delegate = self
+
         
     }
 
@@ -57,23 +54,7 @@ class ExpensesSearchViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     
-    func prepareDataForTableViews() {
-        tableViewData.removeAll()
-        for category in categories {
-            tableViewData.append([category : .category])
-        }
-        
-        tableViewData.append(["+ More": .moreCategory])
-        
-        for month in categories {
-            tableViewData.append([month : .month])
-        }
-        
-        tableViewData.append(["+ More": .moreMonth])
-        
-        categoriesTableView.reloadData()
-    }
-    
+
     
     
     // MARK: - TableVIew
@@ -84,8 +65,16 @@ class ExpensesSearchViewController: UIViewController, UITableViewDelegate, UITab
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
+        if tableView.tag == 11 {
+            return categories.count + 1
+        }
         
-        return tableViewData.count
+        if tableView.tag == 22 {
+            return months.count + 1
+        }
+        
+        
+        return 0
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -95,14 +84,30 @@ class ExpensesSearchViewController: UIViewController, UITableViewDelegate, UITab
         searchCategoryCell.selectionStyle = .None
         searchCategoryCell.textLabel!.font = RobotoFont.mediumWithSize(10)
         
-        
-        
-        if let item = tableViewData[indexPath.row] as [String : dataType]? {
-            for i in item {
-                searchCategoryCell.textLabel!.text = i.0
+        if tableView.tag == 11 {
+            if indexPath.row == categories.count {
+                searchCategoryCell.textLabel?.text = "Show More"
+                searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
+            } else {
+                let category = categories[indexPath.row]
+                searchCategoryCell.textLabel?.text = category
+                
             }
-            
+            return searchCategoryCell
         }
+        
+        if tableView.tag == 22 {
+            if indexPath.row == months.count {
+                searchCategoryCell.textLabel?.text = "Show More"
+                searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
+            } else {
+                let month = months[indexPath.row]
+                searchCategoryCell.textLabel?.text = month
+                
+            }
+            return searchCategoryCell
+        }
+        
         
         return searchCategoryCell
     }
