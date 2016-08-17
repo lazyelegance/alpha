@@ -89,10 +89,19 @@ struct Expense {
         categoryNames.removeAll()
         
         if results.count > 0 {
-            
             for result in results {
-                categoryNames.append(result.key as! String)
+                if let resultKey = result.key as? String {
+                    if resultKey == "categories" {
+                        if let valueDictionary = result.value as? NSDictionary {
+                            for value in valueDictionary {
+                                categoryNames.append(value.key as! String)
+                            }
+                            
+                        }
+                    }
+                }
             }
+
             
             return categoryNames
         }
@@ -100,6 +109,41 @@ struct Expense {
         
         return ["noCategory"]
     }
+    
+    static func monthsFromResults(results: NSDictionary) -> [String] {
+        
+        var months = [String]()
+        months.removeAll()
+        
+        if results.count > 0 {
+            for result in results {
+                if let resultKey = result.key as? String {
+                    if resultKey == "totals" {
+                        if let valueDictionary = result.value as? NSDictionary {
+                            for value in valueDictionary {
+                                if let valueKey = value.key as? String {
+                                    if valueKey.hasPrefix("m_") {
+                                        let month = valueKey.stringByReplacingOccurrencesOfString("m_", withString: "").stringByReplacingOccurrencesOfString("_", withString: " ")
+                                        months.append(month)
+                                    }
+                                    
+                                }
+                                
+                            }
+                            
+                        }
+                    }
+                }
+            }
+            
+            
+            return months
+        }
+        
+        
+        return ["noCategory"]
+    }
+
     
     static func expensesFromResults(results: NSDictionary, ref: FIRDatabaseReference) -> [Expense] {
         var expenses = [Expense]()

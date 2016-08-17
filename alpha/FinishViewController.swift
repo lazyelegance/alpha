@@ -207,7 +207,7 @@ class FinishViewController: UIViewController {
         let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
         
         let formatter_mon = NSDateFormatter()
-        formatter_mon.dateFormat = "MM_yyyy"
+        formatter_mon.dateFormat = "MMMM_yyyy"
         let currmon = "m_" + formatter_mon.stringFromDate(currDate)
 
         let formatter_week = NSDateFormatter()
