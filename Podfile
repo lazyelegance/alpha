@@ -13,7 +13,7 @@ target 'alpha' do
   pod 'Firebase/Auth'
   pod 'GoogleSignIn'
   pod 'Charts'
-  pod 'HMSegmentedControl'
+  
   # Pods for alpha
 
   target 'alphaTests' do

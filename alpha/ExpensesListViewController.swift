@@ -210,6 +210,41 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         
         tableView.reloadData()
     }
+    
+    func filterExpensesByCategory(category: String) {
+        switch expenseType {
+        case .user:
+            filteredExpenses = expenses.filter({ (expense) -> Bool in
+                return (expense.category == category)
+            })
+            toggleSearchOptions()
+            showFilteredResults = true
+            
+            tableView.reloadData()
+        default:
+            break //for now
+        }
+    }
+    
+    func filterExpensesByMonth(month: String) {
+        switch expenseType {
+        case .user:
+            filteredExpenses = expenses.filter({ (expense) -> Bool in
+                if let expenseMonth = expense.month as String? {
+                    let expenseMonthStripped = expenseMonth.stringByReplacingOccurrencesOfString("m_", withString: "").stringByReplacingOccurrencesOfString("_", withString: " ")
+                    return (month == expenseMonthStripped)
+                } else {
+                    return false
+                }
+            })
+            toggleSearchOptions()
+            showFilteredResults = true
+            
+            tableView.reloadData()
+        default:
+            break //for now
+        }
+    }
 
  
 
@@ -540,14 +575,18 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         if tableView.tag == 11 {
             self.searchBar.textField.resignFirstResponder()
             let cellsCount = tableView.numberOfRowsInSection(0)
-            if indexPath.row == cellsCount - 1 {
+            if cellsCount >= 4 && indexPath.row == cellsCount - 1 {
                 toggleCategoryView()
+            } else {
+                self.filterExpensesByCategory(categories[indexPath.row])
             }
         } else if tableView.tag == 22 {
             self.searchBar.textField.resignFirstResponder()
             let cellsCount = tableView.numberOfRowsInSection(0)
-            if indexPath.row == cellsCount - 1 {
+            if cellsCount >= 4 && indexPath.row == cellsCount - 1 {
                 toggleMonthsView()
+            } else {
+                self.filterExpensesByMonth(months[indexPath.row])
             }
         }
     }
