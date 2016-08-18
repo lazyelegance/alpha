@@ -756,6 +756,9 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     
     func textFieldDidBeginEditing(textField: UITextField) {
         
+        textField.text = nil
+        searchBarBackButton.alpha = 0
+        
         if !searchExpanded {
             toggleSearchOptions()
         }

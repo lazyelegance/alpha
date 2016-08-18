@@ -199,9 +199,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 
             }
             
-            print("yvals == \(yVals)")
-            print("xvals == \(xVals)")
-            
             let dataSet = PieChartDataSet(yVals: yVals, label: "")
             
             dataSet.sliceSpace = 2.0
@@ -249,9 +246,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         headerView.alpha = 0
         userGroupsView.alpha = 0
         
-//        userExpensesView.backgroundColor = self.view.backgroundColor
-        
-        
         if user.userId != "1" {
             
             spentHeaderLabel.text = "You have spent"
@@ -260,9 +254,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
             self.messageLabel.text = "Welcome."
             self.nameLabel.text = self.user.name
-//            if let photoURLString = self.user.photoURL as String? {
-//                self.profileImageView.imageURL = NSURL(string: photoURLString)
-//            }
             headerView.alpha = 1
         }
         
@@ -272,138 +263,81 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     }
     
-    private func prepareMenu() {
-        btn1.addTarget(self, action: #selector(ViewController.handleFlatMenu), forControlEvents: .TouchUpInside)
-        btn1.setTitleColor(MaterialColor.blue.accent1, forState: .Normal)
-        btn1.titleLabel?.font = RobotoFont.regularWithSize(12)
-        btn1.backgroundColor = MaterialColor.white
-        btn1.pulseColor = MaterialColor.white
-        
-        btn1.setTitle("Menu".uppercaseString, forState: .Normal)
-        
-        
-        //btn1.setImage(MaterialIcon.menu, forState: .Normal)
-        
-        view.addSubview(btn1)
-        
-        
-        btn2.setTitleColor(MaterialColor.white, forState: .Normal)
-        btn2.titleLabel?.font = RobotoFont.boldWithSize(12)
-        //btn2.borderColor = MaterialColor.white
-        btn2.pulseColor = MaterialColor.blue.accent3
-        //btn2.borderWidth = 1
-//        btn2.setTitle("Add Expense".uppercaseString, forState: .Normal)
-//        btn2.addTarget(self, action: #selector(self.toAddExpenseCycle), forControlEvents: .TouchUpInside)
-        view.addSubview(btn2)
-        
-        
-        btn3.setTitleColor(MaterialColor.white, forState: .Normal)
-        btn3.titleLabel?.font = RobotoFont.boldWithSize(12)
-        //        btn3.borderColor = MaterialColor.blueGrey.lighten1
-        btn3.pulseColor = MaterialColor.blue.accent3
-        //        btn3.borderWidth = 1
-        btn3.setTitle("See Expenses".uppercaseString, forState: .Normal)
-//        btn3.addTarget(self, action: #selector(self.toListExpenses), forControlEvents: .TouchUpInside)
-        view.addSubview(btn3)
-        
-        let btn4: FlatButton = FlatButton()
-        btn4.setTitleColor(MaterialColor.blue.accent3, forState: .Normal)
-        btn4.borderColor = MaterialColor.blue.accent3
-        btn4.pulseColor = MaterialColor.blue.accent3
-        btn4.borderWidth = 1
-        btn4.setTitle("Item", forState: .Normal)
-        btn4.addTarget(self, action: #selector(self.toUserGroups), forControlEvents: .TouchUpInside)
-        view.addSubview(btn4)
-        
-        // Initialize the menu and setup the configuration options.
-        
-        flatMenu = Menu(origin: CGPointMake(view.bounds.width/2 - 60, view.bounds.height - height - spacing))
-        flatMenu.direction = .Up
-        flatMenu.spacing = 8
-        flatMenu.itemSize = CGSizeMake(120, height)
-        flatMenu.views = [btn1, btn2, btn3, btn4]
-    }
     
     // MARK: - Query Firebase
     
-    private func prepareExpenseData() {
-        if let currentUser = FIRAuth.auth()?.currentUser {
-
-            
-            if let userRef = alphaRef.child("users/\(currentUser.uid)") as FIRDatabaseReference? {
-                
-                userRef.observeEventType(.Value, withBlock: { (snapshot) in
-                    if snapshot.exists() {
-                        self.user = User.userFromFirebase(snapshot.value! as! NSDictionary)
-                        self.prepareUIElements()
-                        
-                        self.userGroups.removeAll()
-                        for groupId in self.user.groups {
-                            if let groupRef = self.alphaRef.child("groups/\(groupId)") as FIRDatabaseReference? {
-                                groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
-                                    self.userGroups.append(Group.groupFromFirebase(groupId, results: groupSnapshot.value! as! NSDictionary))
-                                    self.groupsTableView.reloadData()
-                                    self.userGroupsView.alpha = 1
-                                })
-                            }
-                        }
-                        
-                        
-                        
-                        if let userId = self.user.userId as String? {
-                            if let expensesRef = self.alphaRef.child("expenses/\(userId)") as FIRDatabaseReference? {
-                                
-                                self.totals.removeAll()
-                                expensesRef.child("totals").observeEventType(.Value, withBlock: { (totalssnapshot) in
-                                    if totalssnapshot.exists() {
-                                        self.totals = Expense.totalsFromResults(totalssnapshot.value! as! NSDictionary)
-                                        self.updateSpentField(self)
-                                    } else {
-                                        self.spentHeaderLabel.text = "You have not added any expenses yet. Click below to start"
-                                        self.addNewExpenseUserBtn.setTitle("ADD YOUR FIRST EXPENSE", forState: .Normal)
-                                        self.addNewExpenseUserBtn.alpha = 1
-//                                        self.userExpensesView.backgroundColor = MaterialColor.white
-                                    }
-                                })
-                                
-                                expensesRef.child("categories").observeEventType(.Value, withBlock: { (categoriessnapshot) in
-                                    if categoriessnapshot.exists() {
-                                        //print(categoriessnapshot.value!)
-                                        self.expenseCategories = Expense.categoriesFromResults(categoriessnapshot.value! as! NSDictionary)
-                                        self.updateGraphData()
-                                    } else {
-                                        
-                                    }
-                                })
-                                
-                                
-                                
-                            }
-                        }
-                        
-                        
-                        if let groupId = self.user.defaultGroupId as String? {
-                            
-                            
-                            if let groupRef = self.alphaRef.child("groups/\(groupId)") as FIRDatabaseReference? {
-                                groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
-                                    self.group = Group.groupFromFirebase(self.user.defaultGroupId, results: groupSnapshot.value! as! NSDictionary)
-                                    for member in self.group.members {
-                                        if let memberRef = self.alphaRef.child("users/\(member)") as FIRDatabaseReference? {
-                                            memberRef.observeEventType(.Value, withBlock: { (memberSnapshot) in
-                                                self.groupMembers.append(User.userFromFirebase(memberSnapshot.value! as! NSDictionary))
-                                            })
-                                        }
-                                    }
-                                })
-                            }
-                        }
-                    }
+    private func prepareUserGroupsData(groups: [String]) {
+        self.userGroups.removeAll()
+        for groupId in groups {
+            if let groupRef = self.alphaRef.child("groups/\(groupId)") as FIRDatabaseReference? {
+                groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
+                    self.userGroups.append(Group.groupFromFirebase(groupId, results: groupSnapshot.value! as! NSDictionary))
+                    self.groupsTableView.reloadData()
+                    self.userGroupsView.alpha = 1
                 })
             }
         }
     }
     
+    private func prepareExpenseTotals(expensesRef: FIRDatabaseReference) {
+        self.totals.removeAll()
+        expensesRef.child("totals").observeEventType(.Value, withBlock: { (totalssnapshot) in
+            if totalssnapshot.exists() {
+                self.totals = Expense.totalsFromResults(totalssnapshot.value! as! NSDictionary)
+                self.updateSpentField(self)
+            } else {
+                self.spentHeaderLabel.text = "You have not added any expenses yet. Click below to start"
+                self.addNewExpenseUserBtn.setTitle("ADD YOUR FIRST EXPENSE", forState: .Normal)
+                self.addNewExpenseUserBtn.alpha = 1
+            }
+        })
+    }
+    
+    private func prepareExpenseCategories(expensesRef: FIRDatabaseReference) {
+        expensesRef.child("categories").observeEventType(.Value, withBlock: { (categoriessnapshot) in
+            if categoriessnapshot.exists() {
+                self.expenseCategories = Expense.categoriesFromResults(categoriessnapshot.value! as! NSDictionary)
+                self.updateGraphData()
+            } else {
+                
+            }
+        })
+    }
+    
+    
+    private func prepareExpenseData() {
+        if let currentUser = FIRAuth.auth()?.currentUser {
+            
+            print("here")
+            
+            if let userRef = alphaRef.child("users/\(currentUser.uid)") as FIRDatabaseReference? {
+                userRef.observeEventType(.Value, withBlock: { (snapshot) in
+                    if snapshot.exists() {
+                        self.user = User.userFromFirebase(snapshot.value! as! NSDictionary)
+                        print(self.user)
+                        self.prepareUIElements()
+                        
+                        self.prepareUserGroupsData(self.user.groups)
+                        
+                        if let userId = self.user.userId as String? {
+                            if let expensesRef = self.alphaRef.child("expenses/\(userId)") as FIRDatabaseReference? {
+                                self.prepareExpenseTotals(expensesRef)
+                                self.prepareExpenseCategories(expensesRef)
+                            }
+                        }
+                    } else {
+                        print("there")
+                        self.showOnboardingScreen()
+                    }
+                })
+            } else {
+                print("there")
+                showOnboardingScreen()
+            }
+        }
+    }
+    
+    // MARK: - Navigate
     
     private func showLoginScreen() {
         if let loginViewController = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as? LoginViewController {
@@ -413,7 +347,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    
+    private func showOnboardingScreen() {
+        print("nooom")
+    }
     
     
     
