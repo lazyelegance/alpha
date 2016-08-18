@@ -34,18 +34,18 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet weak var headerView: MaterialView!
     @IBOutlet weak var categoryView: MaterialView!
     @IBOutlet weak var monthsView: MaterialView!
-    
+
     @IBOutlet weak var headerViewHeight: NSLayoutConstraint!
     @IBOutlet weak var categoryViewHeight: NSLayoutConstraint!
-    
     @IBOutlet weak var monthsViewHeight: NSLayoutConstraint!
     
     @IBOutlet weak var categoriesTableView: UITableView!
     @IBOutlet weak var monthsTableView: UITableView!
-    
+
     
     var showFilteredResults = false
     var searchExpanded = false
+    var searchShouldExpand = false
     var categoryViewExpanded = false
     var monthsViewExpanded = false
     var showMoreCategoriesText = "Show More"
@@ -219,7 +219,8 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             })
             toggleSearchOptions()
             showFilteredResults = true
-            
+            searchBar.textField.text = category
+            searchBarBackButton.alpha = 1
             tableView.reloadData()
         default:
             break //for now
@@ -239,7 +240,8 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             })
             toggleSearchOptions()
             showFilteredResults = true
-            
+            searchBar.textField.text = month
+            searchBarBackButton.alpha = 1
             tableView.reloadData()
         default:
             break //for now
@@ -592,53 +594,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     }
     
 
-    func toggleCategoryView()  {
-        if !self.categoryViewExpanded {
-            self.categoryViewHeight.constant = 180
-            self.showMoreCategoriesText = "Show Less"
-        } else {
-            self.categoryViewHeight.constant = 120
-            self.showMoreCategoriesText = "Show More"
-        }
-        self.categoryViewExpanded = !self.categoryViewExpanded
-        
-        if self.monthsViewExpanded {
-            self.monthsViewHeight.constant = 120
-            self.showMoreMonthsText = "Show More"
-            self.monthsViewExpanded = !self.monthsViewExpanded
-        }
-        
-        UIView.animateWithDuration(0.5, animations: {
-            self.view.layoutIfNeeded()
-        })
-        
-        categoriesTableView.reloadData()
-        monthsTableView.reloadData()
-        
-    }
     
-    func toggleMonthsView() {
-        if !self.monthsViewExpanded {
-            self.monthsViewHeight.constant = 180
-            self.showMoreMonthsText = "Show Less"
-            
-        } else {
-            self.monthsViewHeight.constant = 120
-            self.showMoreMonthsText = "Show More"
-        }
-        self.monthsViewExpanded = !self.monthsViewExpanded
-        
-        if self.categoryViewExpanded {
-            self.categoryViewHeight.constant = 120
-            self.showMoreCategoriesText = "Show More"
-            self.categoryViewExpanded = !self.categoryViewExpanded
-        }
-        UIView.animateWithDuration(0.5, animations: {
-            self.view.layoutIfNeeded()
-        })
-        categoriesTableView.reloadData()
-        monthsTableView.reloadData()
-    }
     
     // MARK: - DELETE EXPENSE
     
@@ -706,6 +662,59 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         })
     }
     
+    func deleteGroupExpense(groupExpense: GroupExpense) {
+        print("deleting group expense")
+    }
+    
+    // MARK: - TOGGLE
+    
+    func toggleCategoryView()  {
+        if !self.categoryViewExpanded {
+            self.categoryViewHeight.constant = 180
+            self.showMoreCategoriesText = "Show Less"
+        } else {
+            self.categoryViewHeight.constant = 120
+            self.showMoreCategoriesText = "Show More"
+        }
+        self.categoryViewExpanded = !self.categoryViewExpanded
+        
+        if self.monthsViewExpanded {
+            self.monthsViewHeight.constant = 120
+            self.showMoreMonthsText = "Show More"
+            self.monthsViewExpanded = !self.monthsViewExpanded
+        }
+        
+        UIView.animateWithDuration(0.5, animations: {
+            self.view.layoutIfNeeded()
+        })
+        
+        categoriesTableView.reloadData()
+        monthsTableView.reloadData()
+        
+    }
+    
+    func toggleMonthsView() {
+        if !self.monthsViewExpanded {
+            self.monthsViewHeight.constant = 180
+            self.showMoreMonthsText = "Show Less"
+            
+        } else {
+            self.monthsViewHeight.constant = 120
+            self.showMoreMonthsText = "Show More"
+        }
+        self.monthsViewExpanded = !self.monthsViewExpanded
+        
+        if self.categoryViewExpanded {
+            self.categoryViewHeight.constant = 120
+            self.showMoreCategoriesText = "Show More"
+            self.categoryViewExpanded = !self.categoryViewExpanded
+        }
+        UIView.animateWithDuration(0.5, animations: {
+            self.view.layoutIfNeeded()
+        })
+        categoriesTableView.reloadData()
+        monthsTableView.reloadData()
+    }
     
     func toggleSearchOptions() {
         if !self.searchExpanded {
@@ -728,9 +737,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     
     
     
-    func deleteGroupExpense(groupExpense: GroupExpense) {
-        print("deleting group expense")
-    }
+    
     
     
     
@@ -753,10 +760,11 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     
     
     func textFieldDidBeginEditing(textField: UITextField) {
-        print("begin..")
         
-        print(textField.text)
-        toggleSearchOptions()
+        if !searchExpanded {
+            toggleSearchOptions()
+        }
+        
         
     }
     
