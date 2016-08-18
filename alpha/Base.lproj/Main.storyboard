@@ -869,22 +869,8 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f5T-Ht-y3E" customClass="MaterialView">
                                         <rect key="frame" x="10" y="10" width="580" height="74"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C17-Sl-y85">
-                                                <rect key="frame" x="526" y="22" width="46" height="30"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="46" id="fsl-5n-x8y"/>
-                                                </constraints>
-                                                <state key="normal" title="Search"/>
-                                                <connections>
-                                                    <action selector="searchButtonClicked:" destination="SAY-Rm-bcs" eventType="touchUpInside" id="pZF-4p-3e0"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="C17-Sl-y85" secondAttribute="trailing" constant="8" id="FqB-bt-yxO"/>
-                                            <constraint firstItem="C17-Sl-y85" firstAttribute="centerY" secondItem="f5T-Ht-y3E" secondAttribute="centerY" id="N4A-de-AAo"/>
                                             <constraint firstAttribute="height" constant="74" id="q7u-lK-dQr"/>
                                         </constraints>
                                         <userDefinedRuntimeAttributes>
@@ -1256,7 +1242,6 @@
                         <outlet property="monthsTableView" destination="68s-Og-lLj" id="PK2-e6-aN4"/>
                         <outlet property="monthsView" destination="FGT-qu-BOp" id="FRe-Of-AHM"/>
                         <outlet property="monthsViewHeight" destination="ZIF-SE-sE7" id="9r5-Mq-f0K"/>
-                        <outlet property="searchButton" destination="C17-Sl-y85" id="HvA-Ux-YAc"/>
                         <outlet property="searchDisplayController" destination="yfr-0F-rsS" id="Pwz-ni-JTt"/>
                         <outlet property="tableView" destination="dTb-jt-OKm" id="uM2-nE-0hh"/>
                     </connections>
@@ -1272,46 +1257,6 @@
                 </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="1725" y="813"/>
-        </scene>
-        <!--Expenses Search View Controller-->
-        <scene sceneID="E1l-7J-Vhq">
-            <objects>
-                <viewController storyboardIdentifier="expensesSearchViewController" id="4Ds-Ad-arV" customClass="ExpensesSearchViewController" customModule="alpha" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="sga-bl-vZj"/>
-                        <viewControllerLayoutGuide type="bottom" id="jAi-D5-clr"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Bt6-T2-K3R">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aFB-lK-35r" customClass="MaterialView">
-                                <rect key="frame" x="10" y="28" width="580" height="40"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="5AD-ph-9PW"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="2"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" red="0.15476265549659729" green="0.7204241156578064" blue="0.69345968961715698" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="aFB-lK-35r" firstAttribute="top" secondItem="sga-bl-vZj" secondAttribute="bottom" constant="8" id="MxE-fl-5II"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="aFB-lK-35r" secondAttribute="trailing" constant="-10" id="d3s-xG-cY0"/>
-                            <constraint firstItem="aFB-lK-35r" firstAttribute="leading" secondItem="Bt6-T2-K3R" secondAttribute="leadingMargin" constant="-10" id="tQD-Qs-msk"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="headerView" destination="aFB-lK-35r" id="WSm-lG-Yv2"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rQL-5d-Iio" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2350" y="813"/>
         </scene>
         <!--Group Main View Controller-->
         <scene sceneID="mGf-I8-0Ze">

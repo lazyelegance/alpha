@@ -52,10 +52,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     var showMoreMonthsText = "Show More"
     
     private var searchBar: SearchBar!
-    
 
-    
-    @IBOutlet weak var searchButton: UIButton!
     
     @IBAction func searchButtonClicked(sender: AnyObject) {
         toggleSearchOptions()
@@ -721,11 +718,9 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             
             self.categoryViewHeight.constant = 120
             self.monthsViewHeight.constant = 120
-            searchButton.setTitle("Close", forState: .Normal)
         } else {
             categoryViewHeight.constant = 0
             monthsViewHeight.constant = 0
-            searchButton.setTitle("Search", forState: .Normal)
         }
         
         UIView.animateWithDuration(0.5, animations: {
