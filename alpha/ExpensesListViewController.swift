@@ -125,11 +125,11 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         searchBarBackButton.tintColor = MaterialColor.blueGrey.darken4
         searchBarBackButton.setImage(image, forState: .Normal)
         searchBarBackButton.setImage(image, forState: .Highlighted)
-        //searchBarBackButton.setTitle("CLEAR", forState: .Normal)
+        
         
         searchBarBackButton.alpha = 0
         searchBarBackButton.addTarget(self, action: #selector(self.handleBackButton), forControlEvents: .TouchUpInside)
-        // More button.
+        
         image = MaterialIcon.cm.moreHorizontal
         let moreButton: IconButton = IconButton()
         moreButton.tintColor = MaterialColor.blueGrey.darken4

@@ -58,8 +58,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rocket" translatesAutoresizingMaskIntoConstraints="NO" id="9ZX-jW-5bt">
+                                <rect key="frame" x="270" y="270" width="60" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="P5m-dM-hZb"/>
+                                    <constraint firstAttribute="width" secondItem="9ZX-jW-5bt" secondAttribute="height" multiplier="1:1" id="ZzI-ix-gx0"/>
+                                </constraints>
+                            </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" indicatorStyle="white" translatesAutoresizingMaskIntoConstraints="NO" id="Y0u-77-yYX">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="620"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zb1-uQ-sRr" customClass="MaterialView">
                                         <rect key="frame" x="20" y="22" width="560" height="80"/>
@@ -132,7 +139,7 @@
                                             </mask>
                                         </variation>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gr6-Me-esi" customClass="MaterialView">
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gr6-Me-esi" customClass="MaterialView">
                                         <rect key="frame" x="10" y="101" width="580" height="260"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sTl-w5-KNN" customClass="FlatButton" customModule="Material">
@@ -203,18 +210,22 @@
                                                 <color key="backgroundColor" red="0.99019607840000001" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="wxb-C8-eoR" secondAttribute="height" multiplier="1:1" id="4HO-pK-3Q4"/>
+                                                    <constraint firstAttribute="height" constant="150" id="d7L-2g-Z4v"/>
                                                     <constraint firstAttribute="height" constant="150" id="hAU-TQ-OsV"/>
                                                 </constraints>
                                                 <variation key="default">
                                                     <mask key="constraints">
                                                         <exclude reference="4HO-pK-3Q4"/>
+                                                        <exclude reference="hAU-TQ-OsV"/>
                                                     </mask>
                                                 </variation>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
+                                            <constraint firstAttribute="height" constant="260" id="6Xm-DB-Qrn"/>
                                             <constraint firstItem="wxb-C8-eoR" firstAttribute="centerX" secondItem="Gr6-Me-esi" secondAttribute="centerX" id="B3L-qh-cDa"/>
+                                            <constraint firstItem="wxb-C8-eoR" firstAttribute="centerY" secondItem="Gr6-Me-esi" secondAttribute="centerY" id="ETN-T4-HYZ"/>
                                             <constraint firstItem="Wdl-vw-epN" firstAttribute="leading" secondItem="Gr6-Me-esi" secondAttribute="leading" constant="8" id="EaE-EB-4UO"/>
                                             <constraint firstItem="sTl-w5-KNN" firstAttribute="trailing" secondItem="8dz-4q-NPb" secondAttribute="trailing" id="LGp-Yt-EFE"/>
                                             <constraint firstItem="uaQ-oC-VmI" firstAttribute="top" secondItem="Gr6-Me-esi" secondAttribute="top" constant="10" id="SIs-Pg-arO"/>
@@ -242,8 +253,13 @@
                                                 <real key="value" value="1"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="ETN-T4-HYZ"/>
+                                            </mask>
+                                        </variation>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ysd-KG-Rto" customClass="MaterialView">
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ysd-KG-Rto" customClass="MaterialView">
                                         <rect key="frame" x="10" y="362" width="580" height="113"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your Groups" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lg3-og-E4Q">
@@ -315,7 +331,8 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="Zb1-uQ-sRr" firstAttribute="top" secondItem="Y0u-77-yYX" secondAttribute="top" constant="20" id="9xB-tl-gHY"/>
-                                    <constraint firstItem="Gr6-Me-esi" firstAttribute="top" secondItem="Zb1-uQ-sRr" secondAttribute="bottom" constant="1" id="DXm-Pe-k29"/>
+                                    <constraint firstItem="Gr6-Me-esi" firstAttribute="top" secondItem="Zb1-uQ-sRr" secondAttribute="bottom" constant="2" id="DXm-Pe-k29"/>
+                                    <constraint firstItem="Gr6-Me-esi" firstAttribute="centerY" secondItem="Y0u-77-yYX" secondAttribute="centerY" id="FZk-WW-Yux"/>
                                     <constraint firstAttribute="trailing" secondItem="ysd-KG-Rto" secondAttribute="trailing" constant="10" id="NTN-it-aJu"/>
                                     <constraint firstItem="Gr6-Me-esi" firstAttribute="leading" secondItem="Y0u-77-yYX" secondAttribute="leading" constant="10" id="Rc7-9G-apH"/>
                                     <constraint firstAttribute="trailing" secondItem="Zb1-uQ-sRr" secondAttribute="trailing" constant="10" id="TCq-0F-zoB"/>
@@ -324,18 +341,35 @@
                                     <constraint firstItem="ysd-KG-Rto" firstAttribute="leading" secondItem="Y0u-77-yYX" secondAttribute="leading" constant="10" id="gUe-yt-16x"/>
                                     <constraint firstAttribute="trailing" secondItem="Gr6-Me-esi" secondAttribute="trailing" constant="10" id="h0B-h6-NIc"/>
                                     <constraint firstItem="Zb1-uQ-sRr" firstAttribute="centerX" secondItem="Y0u-77-yYX" secondAttribute="centerX" id="phF-8Y-mvg"/>
+                                    <constraint firstItem="Gr6-Me-esi" firstAttribute="centerY" secondItem="Y0u-77-yYX" secondAttribute="centerY" id="tsL-xy-yNZ"/>
                                     <constraint firstItem="Zb1-uQ-sRr" firstAttribute="leading" secondItem="Y0u-77-yYX" secondAttribute="leading" constant="10" id="uIC-T3-yhM"/>
                                 </constraints>
                                 <inset key="scrollIndicatorInsets" minX="0.0" minY="0.0" maxX="3" maxY="0.0"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="9xB-tl-gHY"/>
+                                        <exclude reference="FZk-WW-Yux"/>
+                                    </mask>
+                                </variation>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" red="0.68166852678571432" green="0.87765791974748875" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Y0u-77-yYX" secondAttribute="bottom" id="Ceq-7E-Ne0"/>
+                            <constraint firstItem="9ZX-jW-5bt" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="EZI-Si-CHa"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Y0u-77-yYX" secondAttribute="trailing" constant="-20" id="H08-iD-OZf"/>
                             <constraint firstItem="Y0u-77-yYX" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="P7p-kv-w3Z"/>
+                            <constraint firstItem="Y0u-77-yYX" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="10" id="Tag-F8-h4t"/>
+                            <constraint firstItem="9ZX-jW-5bt" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="VvB-MC-ruY"/>
                             <constraint firstItem="Y0u-77-yYX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="qFD-G7-uHX"/>
+                            <constraint firstItem="Y0u-77-yYX" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="uhE-oL-IVn"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="P7p-kv-w3Z"/>
+                                <exclude reference="Ceq-7E-Ne0"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="x27-PJ-44d"/>
                     <connections>

@@ -9,13 +9,14 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import FirebaseDatabase
 import Material
 
 
 
-class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate{
+class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate {
     
-    
+    var alphaRef = FIRDatabaseReference()
     
 
     override func viewDidLoad() {
@@ -69,6 +70,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
                 print(error.localizedDescription)
                 return
             } else {
+                self.updateUserDBRecord(user!)
                 self.navigationController?.popToRootViewControllerAnimated(true)
             }
         }
@@ -81,6 +83,11 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
     }
     
     
+    func updateUserDBRecord(user: FIRUser) {
+        
+        alphaRef.child("users").updateChildValues([user.uid : ["userId": user.uid ,"name": user.displayName!, "email": user.email!, "photoURL" : user.photoURL!.absoluteString]])
+        
+    }
     
 
     /*

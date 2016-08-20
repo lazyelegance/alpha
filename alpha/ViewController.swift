@@ -242,7 +242,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         showAllExpensesUserBtn.alpha = 0
         addNewExpenseUserBtn.alpha = 0
         
-        
+        userExpensesView.alpha = 0
         headerView.alpha = 0
         userGroupsView.alpha = 0
         
@@ -285,15 +285,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             if totalssnapshot.exists() {
                 self.totals = Expense.totalsFromResults(totalssnapshot.value! as! NSDictionary)
                 self.updateSpentField(self)
+                self.userExpensesView.alpha = 1
             } else {
-                self.spentHeaderLabel.text = "You have not added any expenses yet. Click below to start"
-                self.addNewExpenseUserBtn.setTitle("ADD YOUR FIRST EXPENSE", forState: .Normal)
-                self.addNewExpenseUserBtn.alpha = 1
+                self.showOnboardingScreen()
             }
         })
     }
     
     private func prepareExpenseCategories(expensesRef: FIRDatabaseReference) {
+        self.expenseCategories.removeAll()
         expensesRef.child("categories").observeEventType(.Value, withBlock: { (categoriessnapshot) in
             if categoriessnapshot.exists() {
                 self.expenseCategories = Expense.categoriesFromResults(categoriessnapshot.value! as! NSDictionary)
@@ -331,7 +331,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     }
                 })
             } else {
-                print("there")
+                print("there2")
                 showOnboardingScreen()
             }
         }
@@ -341,6 +341,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     private func showLoginScreen() {
         if let loginViewController = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as? LoginViewController {
+            loginViewController.alphaRef = self.alphaRef
             self.navigationController?.pushViewController(loginViewController, animated: true)
         } else {
             print("cannot instantiate login")
@@ -349,6 +350,24 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     private func showOnboardingScreen() {
         print("nooom")
+        
+        if let username = FIRAuth.auth()?.currentUser?.displayName {
+            self.messageLabel.text = "Welcome."
+            self.nameLabel.text = username
+            headerView.alpha = 1
+            
+            self.segmentButton.alpha = 0
+            self.showAllExpensesUserBtn.alpha = 0
+            self.mainBalance.alpha = 0
+            
+            self.userExpensesView.alpha = 1
+            self.spentHeaderLabel.text = "You have not added any expenses yet. Click below to start"
+            self.addNewExpenseUserBtn.setTitle("ADD YOUR FIRST EXPENSE", forState: .Normal)
+            self.addNewExpenseUserBtn.alpha = 1
+
+        }
+        
+        
     }
     
     
@@ -433,22 +452,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             if self.totals["total"] != nil {
                 self.totalSpent = self.totals["total"] as Float!
             }
-            
             if self.totals[currmon] != nil {
                 self.thisMonthSpent = self.totals[currmon] as Float!
             }
-            
             if self.totals[currweek] != nil {
                 self.thisWeekSpent = self.totals[currweek] as Float!
             }
-            
             if sender.tag != nil && sender.tag == 110 {
                 self.segmentButtonState = self.segmentButtonState.nextState()
             }
-            
-
         }
-        
         
         
         self.segmentButton.setTitle(self.segmentButtonState.titleString(), forState: .Normal)
@@ -466,7 +479,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.addNewExpenseUserBtn.alpha = 1
         self.segmentButton.alpha = 1
         self.mainBalance.alpha = 1
-        
         
         self.updateGraphData()
 
@@ -516,39 +528,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
     }
-    
-
-//    func toListExpenses() {
-//        if let userId = self.user.userId as String? {
-//            if let expensesListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListViewController") as? ExpensesListViewController {
-//                expensesListViewController.expenseType = .user
-//                expensesListViewController.expensesRef = self.alphaRef.child("expenses/\(userId)")
-//                self.navigationController?.pushViewController(expensesListViewController, animated: true)
-//            }
-//        }
-//        
-//    }
-//    
-//    func toAddExpenseCycle() {
-//        if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
-//            addExpenseVC.currentStep = AddExpenseStep.description
-//            addExpenseVC.expenseType = ExpenseType.user
-//            
-//            
-//            var newExpense = Expense()
-//            
-//            if let userId = self.user.userId as String? {
-//                newExpense.firebaseDBRef = alphaRef.child("expenses/\(userId)")
-//            }
-//            
-//            addExpenseVC.newExpense = newExpense
-//            self.navigationController?.pushViewController(addExpenseVC, animated: true)
-//        }
-//    }
-    
-    
-    
-
     
     // MARK: - TableView
     
