@@ -76,6 +76,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var userGroups = [Group]()
     var groupExpenses = [GroupExpense]()
 
+    @IBOutlet weak var settingButton: FlatButton!
     
     
     @IBOutlet weak var headerView: MaterialView!
@@ -368,6 +369,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
         
+    }
+    
+    
+    @IBAction func showSettingsScreen(sender: AnyObject) {
+        if let userSettingsViewController = self.storyboard?.instantiateViewControllerWithIdentifier("userSettingsViewController") as? UserSettingsViewController {
+            
+            self.navigationController?.pushViewController(userSettingsViewController, animated: true)
+        }
     }
     
     

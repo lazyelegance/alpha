@@ -21,6 +21,7 @@
 		63547D931D39F4F300A00434 /* AsyncImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63547D921D39F4F300A00434 /* AsyncImageView.m */; };
 		6366107A1D47B7B500D13CC3 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636610791D47B7B500D13CC3 /* CategoryViewController.swift */; };
 		63A04CD31D4E130D00657C0E /* ExpenseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A04CD21D4E130D00657C0E /* ExpenseType.swift */; };
+		63B372AE1D6835690070DCF7 /* UserSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B372AD1D6835690070DCF7 /* UserSettingsViewController.swift */; };
 		63B71C481D3E3BA500087A8E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B71C471D3E3BA500087A8E /* User.swift */; };
 		63B71C4A1D3E6FB200087A8E /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B71C491D3E6FB200087A8E /* Group.swift */; };
 		63BCAECF1D5B17ED00093C3F /* GroupExpenseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BCAECE1D5B17ED00093C3F /* GroupExpenseCell.swift */; };
@@ -82,6 +83,7 @@
 		63547D921D39F4F300A00434 /* AsyncImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImageView.m; sourceTree = "<group>"; };
 		636610791D47B7B500D13CC3 /* CategoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		63A04CD21D4E130D00657C0E /* ExpenseType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseType.swift; sourceTree = "<group>"; };
+		63B372AD1D6835690070DCF7 /* UserSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSettingsViewController.swift; sourceTree = "<group>"; };
 		63B71C471D3E3BA500087A8E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		63B71C491D3E6FB200087A8E /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		63BCAECE1D5B17ED00093C3F /* GroupExpenseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupExpenseCell.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 			children = (
 				63CBEBC91D38BACD0002DB65 /* AppDelegate.swift */,
 				63CBEBCB1D38BACD0002DB65 /* ViewController.swift */,
+				63B372AD1D6835690070DCF7 /* UserSettingsViewController.swift */,
 				632CDE051D46221800B3AB79 /* Expense.swift */,
 				63CD56FB1D4C84C30007966B /* ExpenseCell.swift */,
 				63BCAECE1D5B17ED00093C3F /* GroupExpenseCell.swift */,
@@ -524,6 +527,7 @@
 				63C7A6201D4C01060030A788 /* GroupExpenseTotals.swift in Sources */,
 				63C122EA1D4C78D500F7AD91 /* ExpensesListViewController.swift in Sources */,
 				63547D8F1D39DAE800A00434 /* LoginViewController.swift in Sources */,
+				63B372AE1D6835690070DCF7 /* UserSettingsViewController.swift in Sources */,
 				635061C21D60A112007BE050 /* ExpenseSearchBar.swift in Sources */,
 				63CD56FC1D4C84C30007966B /* ExpenseCell.swift in Sources */,
 				633BC3171D3B7A8E0015BAAA /* FinishViewController.swift in Sources */,
