@@ -16,13 +16,28 @@ class UserSettingsViewController: UIViewController {
 
     @IBOutlet weak var profileImage: AsyncImageView!
     
+    @IBAction func backToHome(sender: AnyObject) {
+        navigationController?.popViewControllerAnimated(true)
+    }
     
     @IBAction func logOutAction(sender: AnyObject) {
         try! FIRAuth.auth()!.signOut()
         navigationController?.popToRootViewControllerAnimated(true)
     }
     
+    @IBOutlet weak var monthlyLimitLabel: UILabel!
     
+    @IBAction func increamentMontlyLimit(sender: AnyObject) {
+        monthlyLimit = monthlyLimit + 50
+        monthlyLimitLabel.text = String(monthlyLimit)
+    }
+    
+    @IBAction func decrementMonthlyLimit(sender: AnyObject) {
+        monthlyLimit = monthlyLimit - 50
+        monthlyLimitLabel.text = String(monthlyLimit)
+    }
+    
+    var monthlyLimit = 2000
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,6 +54,8 @@ class UserSettingsViewController: UIViewController {
     
     private func prepareView() {
         view.backgroundColor = MaterialColor.lightBlue.base
+        monthlyLimitLabel.text = String(monthlyLimit)
+        
     }
     
     
