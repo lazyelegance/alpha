@@ -12,6 +12,12 @@ import FirebaseAuth
 
 
 class UserSettingsViewController: UIViewController {
+    
+    
+    
+    @IBOutlet weak var groupOptionsView: MaterialView!
+    
+    
     @IBOutlet weak var userName: UILabel!
 
     @IBOutlet weak var profileImage: AsyncImageView!
@@ -22,6 +28,7 @@ class UserSettingsViewController: UIViewController {
     
     @IBAction func logOutAction(sender: AnyObject) {
         try! FIRAuth.auth()!.signOut()
+        GIDSignIn.sharedInstance().signOut()
         navigationController?.popToRootViewControllerAnimated(true)
     }
     
@@ -55,6 +62,8 @@ class UserSettingsViewController: UIViewController {
     private func prepareView() {
         view.backgroundColor = MaterialColor.lightBlue.base
         monthlyLimitLabel.text = String(monthlyLimit)
+        
+        
         
     }
     

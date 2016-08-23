@@ -33,6 +33,23 @@ struct Group {
     }
     
     
+    static func membersFromResults(results: NSDictionary)  -> [String : String]
+    {
+        var member = [String: String]()
+        if results.count > 0 {
+            for result in results {
+                if let valueDict = result.value as? NSDictionary {
+                    if let memberDict = valueDict["members"] as? NSDictionary {
+                        for element in memberDict {
+                            member[element.key as! String] = result.key as? String
+                        }
+                    }
+                }
+            }
+        }
+        return member
+    }
+    
     
     static func groupFromFirebase(groupId: String, results: NSDictionary) -> Group {
         var group = Group()

@@ -255,6 +255,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
             self.messageLabel.text = "Welcome."
             self.nameLabel.text = self.user.name
+            
+            if user.photoURL != "" {
+                profileImageView.imageURL = NSURL(string: user.photoURL)
+            }
             headerView.alpha = 1
         }
         
@@ -272,9 +276,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         for groupId in groups {
             if let groupRef = self.alphaRef.child("groups/\(groupId)") as FIRDatabaseReference? {
                 groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
-                    self.userGroups.append(Group.groupFromFirebase(groupId, results: groupSnapshot.value! as! NSDictionary))
-                    self.groupsTableView.reloadData()
-                    self.userGroupsView.alpha = 1
+                    if groupSnapshot.exists() {
+                        self.userGroups.append(Group.groupFromFirebase(groupId, results: groupSnapshot.value! as! NSDictionary))
+                        self.groupsTableView.reloadData()
+                        self.userGroupsView.alpha = 1
+                    } else {
+                        //
+                    }
                 })
             }
         }
@@ -308,16 +316,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     private func prepareExpenseData() {
         if let currentUser = FIRAuth.auth()?.currentUser {
-            
-            print("here")
+
             
             if let userRef = alphaRef.child("users/\(currentUser.uid)") as FIRDatabaseReference? {
                 userRef.observeEventType(.Value, withBlock: { (snapshot) in
                     if snapshot.exists() {
                         self.user = User.userFromFirebase(snapshot.value! as! NSDictionary)
-                        print(self.user)
+
                         self.prepareUIElements()
                         
+                        print(self.user.groups)
                         self.prepareUserGroupsData(self.user.groups)
                         
                         if let userId = self.user.userId as String? {
@@ -327,12 +335,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             }
                         }
                     } else {
-                        print("there")
                         self.showOnboardingScreen()
                     }
                 })
             } else {
-                print("there2")
                 showOnboardingScreen()
             }
         }
@@ -350,7 +356,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     private func showOnboardingScreen() {
-        print("nooom")
+
         
         if let username = FIRAuth.auth()?.currentUser?.displayName {
             self.messageLabel.text = "Welcome."
@@ -517,7 +523,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             if let userId = self.user.userId as String? {
                 newExpense.firebaseDBRef = alphaRef.child("expenses/\(userId)")
             }
-            print(newExpense)
             
             addExpenseVC.newExpense = newExpense
             
