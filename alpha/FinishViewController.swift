@@ -21,12 +21,15 @@ class FinishViewController: UIViewController {
     var newGroupExpense = GroupExpense()
     var expenseType: ExpenseType = .user
 
+    @IBOutlet weak var headerView: MaterialView!
     @IBOutlet weak var backButton: FabButton!
     @IBOutlet weak var saveButton: RaisedButton!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var paritylabel: UILabel!
     
+    @IBOutlet weak var restartButton: FlatButton!
+    @IBOutlet weak var categoryLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,18 +44,21 @@ class FinishViewController: UIViewController {
     }
     
     private func prepareView() {
-        view.backgroundColor = AddExpenseStep.finish.toColor()
+        view.backgroundColor = MaterialColor.blue.lighten1
+        headerView.backgroundColor = MaterialColor.blue.lighten2
     }
     private func prepareLabels() {
         switch expenseType {
         case .user:
             descriptionLabel.text = newExpense.description
-            titleLabel.text = "You are about to add expense of $\(newExpense.billAmount)"
-            paritylabel.text = newExpense.category
+            titleLabel.text = "$\(newExpense.billAmount)"
+            paritylabel.alpha = 0
+            categoryLabel.text = newExpense.category.uppercaseString
         case .group:
             descriptionLabel.text = newGroupExpense.description
-            titleLabel.text = "You are about to add expense of $\(newGroupExpense.billAmount)"
+            titleLabel.text = "$\(newGroupExpense.billAmount)"
             paritylabel.text = parityText
+            categoryLabel.text = newGroupExpense.category.uppercaseString
         }
         
     }
@@ -71,14 +77,20 @@ class FinishViewController: UIViewController {
         }
         
         saveButton.setTitleColor(MaterialColor.white, forState: .Normal)
+        
+        restartButton.setTitleColor(MaterialColor.white, forState: .Normal)
+        restartButton.setTitle("START OVER", forState: .Normal)
     }
     
-    
+    // MARK: - Navigation
     
     func backOneStep() {
         navigationController?.popViewControllerAnimated(true)
     }
     
+    @IBAction func cancelAddingExpense(sender: AnyObject) {
+        goBacktoMainViewController()
+    }
     
     func goBacktoMainViewController() {
         
@@ -95,16 +107,15 @@ class FinishViewController: UIViewController {
         
     }
     
-    
-    func restartAddExpense() {
-        //
+    @IBAction func restartAddExpense(sender: AnyObject) {
         if ((self.navigationController?.viewControllers[expenseType.firstStep()].isKindOfClass(AddExpenseController)) == true) {
             self.navigationController?.popToViewController((self.navigationController?.viewControllers[expenseType.firstStep()])!, animated: true)
         } else {
             self.navigationController?.popToRootViewControllerAnimated(true)
         }
-
     }
+    
+// MARK: - SAVE
     
     func saveGroupExpense() {
         
@@ -196,7 +207,7 @@ class FinishViewController: UIViewController {
         let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
         
         let formatter_mon = NSDateFormatter()
-        formatter_mon.dateFormat = "MM_yyyy"
+        formatter_mon.dateFormat = "MMMM_yyyy"
         let currmon = "m_" + formatter_mon.stringFromDate(currDate)
 
         let formatter_week = NSDateFormatter()
@@ -208,7 +219,7 @@ class FinishViewController: UIViewController {
             
             let key = userExpensesRef.childByAutoId().key
             
-            userExpensesRef.updateChildValues([key : ["description": newExpense.description, "billAmount": newExpense.billAmount, "category" : newExpense.category, "dateAdded" : "\(currDate)"]]) { (error, ref) in
+            userExpensesRef.updateChildValues([key : ["description": newExpense.description, "billAmount": newExpense.billAmount, "category" : newExpense.category, "dateAdded" : "\(currDate)", "month" : currmon, "week": currweek ]]) { (error, ref) in
                 if error != nil {
                     print(error?.localizedDescription)
                     return
@@ -253,6 +264,47 @@ class FinishViewController: UIViewController {
                     userExpensesRef.child("totals/total").setValue(newTotalSpent)
                     userExpensesRef.child("totals/\(currweek)").setValue(newTotalSpent)
                     userExpensesRef.child("totals/\(currmon)").setValue(newTotalSpent)
+                }
+                
+                
+            })
+            let category = self.newExpense.category
+            let categoryRef = userExpensesRef.child("categories/\(category)")
+            
+            categoryRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                if snapshot.exists() {
+                    if let categoryDetail = Expense.categoryFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
+                        
+                        if let currentTotalSpent = categoryDetail["total"] as Float? {
+                            let newTotalSpent = currentTotalSpent + self.newExpense.billAmount
+                            categoryRef.child("total").setValue(newTotalSpent)
+                        }
+                        
+                        if categoryDetail[currmon] != nil {
+                            if let currentMonSpent = categoryDetail[currmon] as Float? {
+                                let newMonSpent = currentMonSpent + self.newExpense.billAmount
+                                categoryRef.child("\(currmon)").setValue(newMonSpent)
+                            }
+                        } else {
+                            categoryRef.child("\(currmon)").setValue(self.newExpense.billAmount)
+                        }
+                        
+                        if categoryDetail[currweek] != nil {
+                            if let currentMonSpent = categoryDetail[currweek] as Float? {
+                                let newMonSpent = currentMonSpent + self.newExpense.billAmount
+                                categoryRef.child("\(currweek)").setValue(newMonSpent)
+                            }
+                        } else {
+                            categoryRef.child("\(currweek)").setValue(self.newExpense.billAmount)
+                        }
+                        
+                    }
+                } else {
+                    let newTotalSpent = self.newExpense.billAmount
+                    
+                    categoryRef.child("total").setValue(newTotalSpent)
+                    categoryRef.child("\(currweek)").setValue(newTotalSpent)
+                    categoryRef.child("\(currmon)").setValue(newTotalSpent)
                 }
                 
                 

@@ -9,13 +9,14 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import FirebaseDatabase
 import Material
 
 
 
-class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate{
+class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate {
     
-    
+    var alphaRef = FIRDatabaseReference()
     
 
     override func viewDidLoad() {
@@ -64,11 +65,13 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
         print(user.profile.email)
         print(user.profile.imageURLWithDimension(400))
         
-        FIRAuth.auth()?.signInWithCredential(credential) { (user, error) in
+        FIRAuth.auth()?.signInWithCredential(credential) { (firUser, error) in
             if let error = error {
                 print(error.localizedDescription)
                 return
             } else {
+                //firUser?.photoURL = user.profile.imageURLWithDimension(400)
+                self.updateUserDBRecord(firUser!)
                 self.navigationController?.popToRootViewControllerAnimated(true)
             }
         }
@@ -81,6 +84,40 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
     }
     
     
+    func updateUserDBRecord(user: FIRUser) {
+        print(user.photoURL)
+        print("\(user.photoURL)")
+        
+        alphaRef.child("users/\(user.uid)").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+            if snapshot.exists() {
+                print(snapshot)
+            } else {
+                self.alphaRef.child("users").updateChildValues([user.uid : ["userId": user.uid ,"name": user.displayName!, "email": user.email!]])
+                if user.photoURL != nil {
+                    self.alphaRef.child("users/\(user.uid)/photoURL").setValue("\(user.photoURL!)")
+                }
+            }
+        })
+        
+        
+        alphaRef.child("groups").queryOrderedByChild("members").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+            if snapshot.exists() {
+                
+                var groups = [String : Bool]()
+                groups.removeAll()
+                if let groupMembers = Group.membersFromResults(snapshot.value! as! NSDictionary) as [String: String]?  {
+                    for groupMember in groupMembers {
+                        if user.uid == groupMember.0 {
+                            groups[groupMember.1    ] = true
+                        }
+                    }
+                }
+                self.alphaRef.child("users/\(user.uid)").updateChildValues(["groups" : groups])
+            } else {
+                print("... no snap")
+            }
+        })
+    }
     
 
     /*

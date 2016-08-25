@@ -11,6 +11,10 @@ import Firebase
 import FirebaseAuth
 import FirebaseDatabase
 import Material
+import Charts
+
+
+
 
 
 enum SegementButtonState {
@@ -42,7 +46,7 @@ enum SegementButtonState {
     
 }
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ChartViewDelegate {
     
     private var fabMenu: Menu!
     private var flatMenu: Menu!
@@ -62,16 +66,28 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var thisWeekSpent: Float = 0.0
     var totals = [String : Float]()
     
+    var expenseCategories = [String: [String: Float]]()
+    var expenseCategoriesTotal = [String: Float]()
+    var expenseCategoriesThisMonth = [String: Float]()
+    var expenseCategoriesThisWeek = [String: Float]()
+    var yVals = [BarChartDataEntry]()
+    var xVals = [String]()
+    
     var userGroups = [Group]()
     var groupExpenses = [GroupExpense]()
 
-    @IBOutlet weak var groupsTableView: UITableView!
+    @IBOutlet weak var alphaLogo: AsyncImageView!
+    @IBOutlet weak var settingButton: FlatButton!
+    
     
     @IBOutlet weak var headerView: MaterialView!
 
     @IBOutlet weak var userExpensesView: MaterialView!
-    
     @IBOutlet weak var userGroupsView: MaterialView!
+    
+    
+    @IBOutlet weak var userChartView: PieChartView!
+    @IBOutlet weak var groupsTableView: UITableView!
     
     
     
@@ -99,20 +115,25 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
 
         self.navigationController?.navigationBar.hidden = true
-        prepareView()
-        prepareUIElements()
+        
         //prepareMenu()
         alphaRef = FIRDatabase.database().reference()
-        
-        prepareExpenseData()
-        
-        
-
 
     }
 
     
-    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        
+        if (FIRAuth.auth()?.currentUser) != nil {
+            prepareView()
+            prepareUIElements()
+            prepareExpenseData()
+            prepareChartView()
+        } else {
+            showLoginScreen()
+        }
+    }
     
     
     override func didReceiveMemoryWarning() {
@@ -124,11 +145,90 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // MARK: - Prepare View
     
     private func prepareView() {
-        view.backgroundColor = MaterialColor.indigo.accent3
+        view.backgroundColor = MaterialColor.indigo.base
+
+        
+        headerView.backgroundColor = MaterialColor.white
+        userExpensesView.backgroundColor = MaterialColor.white
+        userGroupsView.backgroundColor = MaterialColor.white
     }
     
+    // MARK: - ChartView
+    func chartValueSelected(chartView: ChartViewBase, entry: ChartDataEntry, dataSetIndex: Int, highlight: ChartHighlight) {
+        print(entry)
+        print(dataSetIndex)
+        print(highlight)
+    }
     
+    private func prepareChartView() {
+        
+        userChartView.backgroundColor = userExpensesView.backgroundColor
+        
+        //userChartView.setExtraOffsets(left: 5, top: 5, right: 5, bottom: 5)
+        userChartView.delegate = self
+        userChartView.highlightValues(nil)
+        //        chartView.holeRadiusPercent = 0.1
+        //        chartView.transparentCircleRadiusPercent = 1
+        
+        
+        userChartView.descriptionText = ""
+        userChartView.drawHoleEnabled = false
+        userChartView.usePercentValuesEnabled = true
+        userChartView.drawSlicesUnderHoleEnabled = true
+        userChartView.legend.position = .RightOfChartCenter
+        
+        userChartView.legend.form = .Square
+        userChartView.drawSliceTextEnabled = false
+        userChartView.alpha = 0
+    }
     
+    private func prepareChartViewData(chartData: [String: Float]) {
+        if chartData.count > 0 {
+            
+            xVals.removeAll()
+            yVals.removeAll()
+            
+            var i = 0
+            
+            for expense in chartData {
+                
+                if expense.1 > 0 {
+                    let entry = BarChartDataEntry(value: Double(expense.1), xIndex: i)
+                    yVals.append(entry)
+                    i = i + 1
+                    xVals.append(expense.0)
+                }
+                
+            }
+            
+            let dataSet = PieChartDataSet(yVals: yVals, label: "")
+            
+            dataSet.sliceSpace = 2.0
+            
+            let colors = [MaterialColor.red.darken1,MaterialColor.blue.darken1,MaterialColor.green.darken1,MaterialColor.orange.darken1,MaterialColor.amber.darken1,MaterialColor.indigo.darken1,MaterialColor.purple.darken1,MaterialColor.yellow.darken1]
+            
+            
+            dataSet.colors = colors.sort({_, _ in arc4random() % 2 == 0})
+            
+            //dataSet.colors = ChartColorTemplates.liberty()
+            let data = PieChartData(xVals: xVals, dataSets: [dataSet])
+            
+            let pFormatter = NSNumberFormatter()
+            pFormatter.numberStyle = .PercentStyle
+            pFormatter.maximumFractionDigits = 1
+            pFormatter.percentSymbol = " %"
+            pFormatter.multiplier = 1
+            data.setValueFormatter(pFormatter)
+            data.setValueFont(UIFont.systemFontOfSize(10))
+            data.setValueTextColor(MaterialColor.white)
+            
+            userChartView.alpha = 1
+            userChartView.data = data
+            userChartView.animate(yAxisDuration: 0.5, easingOption: ChartEasingOption.EaseOutCirc)
+            
+
+        }
+    }
     
     
     private func prepareUIElements() {
@@ -144,12 +244,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         showAllExpensesUserBtn.alpha = 0
         addNewExpenseUserBtn.alpha = 0
         
-        
+        userExpensesView.alpha = 0
         headerView.alpha = 0
         userGroupsView.alpha = 0
-        
-        userExpensesView.backgroundColor = self.view.backgroundColor
-        
         
         if user.userId != "1" {
             
@@ -159,9 +256,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
             self.messageLabel.text = "Welcome."
             self.nameLabel.text = self.user.name
-//            if let photoURLString = self.user.photoURL as String? {
-//                self.profileImageView.imageURL = NSURL(string: photoURLString)
-//            }
+            
+            if user.photoURL != "" {
+                profileImageView.imageURL = NSURL(string: user.photoURL)
+            }
             headerView.alpha = 1
         }
         
@@ -171,140 +269,123 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     }
     
-    private func prepareMenu() {
-        btn1.addTarget(self, action: #selector(ViewController.handleFlatMenu), forControlEvents: .TouchUpInside)
-        btn1.setTitleColor(MaterialColor.blue.accent1, forState: .Normal)
-        btn1.titleLabel?.font = RobotoFont.regularWithSize(12)
-        btn1.backgroundColor = MaterialColor.white
-        btn1.pulseColor = MaterialColor.white
-        
-        btn1.setTitle("Menu".uppercaseString, forState: .Normal)
-        
-        
-        //btn1.setImage(MaterialIcon.menu, forState: .Normal)
-        
-        view.addSubview(btn1)
-        
-        
-        btn2.setTitleColor(MaterialColor.white, forState: .Normal)
-        btn2.titleLabel?.font = RobotoFont.boldWithSize(12)
-        //btn2.borderColor = MaterialColor.white
-        btn2.pulseColor = MaterialColor.blue.accent3
-        //btn2.borderWidth = 1
-        btn2.setTitle("Add Expense".uppercaseString, forState: .Normal)
-        btn2.addTarget(self, action: #selector(self.toAddExpenseCycle), forControlEvents: .TouchUpInside)
-        view.addSubview(btn2)
-        
-        
-        btn3.setTitleColor(MaterialColor.white, forState: .Normal)
-        btn3.titleLabel?.font = RobotoFont.boldWithSize(12)
-        //        btn3.borderColor = MaterialColor.blueGrey.lighten1
-        btn3.pulseColor = MaterialColor.blue.accent3
-        //        btn3.borderWidth = 1
-        btn3.setTitle("See Expenses".uppercaseString, forState: .Normal)
-        btn3.addTarget(self, action: #selector(self.toListExpenses), forControlEvents: .TouchUpInside)
-        view.addSubview(btn3)
-        
-        let btn4: FlatButton = FlatButton()
-        btn4.setTitleColor(MaterialColor.blue.accent3, forState: .Normal)
-        btn4.borderColor = MaterialColor.blue.accent3
-        btn4.pulseColor = MaterialColor.blue.accent3
-        btn4.borderWidth = 1
-        btn4.setTitle("Item", forState: .Normal)
-        btn4.addTarget(self, action: #selector(self.toUserGroups), forControlEvents: .TouchUpInside)
-        view.addSubview(btn4)
-        
-        // Initialize the menu and setup the configuration options.
-        
-        flatMenu = Menu(origin: CGPointMake(view.bounds.width/2 - 60, view.bounds.height - height - spacing))
-        flatMenu.direction = .Up
-        flatMenu.spacing = 8
-        flatMenu.itemSize = CGSizeMake(120, height)
-        flatMenu.views = [btn1, btn2, btn3, btn4]
-    }
     
     // MARK: - Query Firebase
     
-    private func prepareExpenseData() {
-        if let currentUser = FIRAuth.auth()?.currentUser {
-
-            
-            if let userRef = alphaRef.child("users/\(currentUser.uid)") as FIRDatabaseReference? {
-                
-                userRef.observeEventType(.Value, withBlock: { (snapshot) in
-                    
-                    self.user = User.userFromFirebase(snapshot.value! as! NSDictionary)
-                    self.prepareUIElements()
-                    
-                    self.userGroups.removeAll()
-                    for groupId in self.user.groups {
-                        if let groupRef = self.alphaRef.child("groups/\(groupId)") as FIRDatabaseReference? {
-                            groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
-                                self.userGroups.append(Group.groupFromFirebase(groupId, results: groupSnapshot.value! as! NSDictionary))
-                                self.groupsTableView.reloadData()
-                                self.userGroupsView.alpha = 1
-                            })
-                        }
-                    }
-                    
-                    
-                    
-                    if let userId = self.user.userId as String? {
-                        if let expensesRef = self.alphaRef.child("expenses/\(userId)") as FIRDatabaseReference? {
-                            
-                            self.totals.removeAll()
-                            expensesRef.child("totals").observeEventType(.Value, withBlock: { (totalssnapshot) in
-                                if totalssnapshot.exists() {
-                                    self.totals = Expense.totalsFromResults(totalssnapshot.value! as! NSDictionary)
-                                    self.updateSpentField(self)
-                                } else {
-                                    self.spentHeaderLabel.text = "You have not added any expenses yet. Click below to start"
-                                    self.addNewExpenseUserBtn.setTitle("ADD YOUR FIRST EXPENSE", forState: .Normal)
-                                    self.addNewExpenseUserBtn.alpha = 1
-                                    self.userExpensesView.backgroundColor = MaterialColor.white
-                                }
-                                
-
-                                
-                            })
-                            
-                            
-                            
-                        }
-                    }
-                    
-                    
-                    if let groupId = self.user.defaultGroupId as String? {
-                        
-                        
-                        if let groupRef = self.alphaRef.child("groups/\(groupId)") as FIRDatabaseReference? {
-                            groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
-                                self.group = Group.groupFromFirebase(self.user.defaultGroupId, results: groupSnapshot.value! as! NSDictionary)
-                                for member in self.group.members {
-                                    if let memberRef = self.alphaRef.child("users/\(member)") as FIRDatabaseReference? {
-                                        memberRef.observeEventType(.Value, withBlock: { (memberSnapshot) in
-                                            self.groupMembers.append(User.userFromFirebase(memberSnapshot.value! as! NSDictionary))
-                                        })
-                                    }
-                                }
-                            })
-                        }
+    private func prepareUserGroupsData(groups: [String]) {
+        self.userGroups.removeAll()
+        for groupId in groups {
+            if let groupRef = self.alphaRef.child("groups/\(groupId)") as FIRDatabaseReference? {
+                groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
+                    if groupSnapshot.exists() {
+                        self.userGroups.append(Group.groupFromFirebase(groupId, results: groupSnapshot.value! as! NSDictionary))
+                        self.groupsTableView.reloadData()
+                        self.userGroupsView.alpha = 1
+                    } else {
+                        //
                     }
                 })
             }
         }
     }
     
+    private func prepareExpenseTotals(expensesRef: FIRDatabaseReference) {
+        self.totals.removeAll()
+        expensesRef.child("totals").observeEventType(.Value, withBlock: { (totalssnapshot) in
+            if totalssnapshot.exists() {
+                self.totals = Expense.totalsFromResults(totalssnapshot.value! as! NSDictionary)
+                self.updateSpentField(self)
+                self.userExpensesView.alpha = 1
+                self.alphaLogo.alpha = 0
+            } else {
+                self.showOnboardingScreen()
+            }
+        })
+    }
+    
+    private func prepareExpenseCategories(expensesRef: FIRDatabaseReference) {
+        self.expenseCategories.removeAll()
+        expensesRef.child("categories").observeEventType(.Value, withBlock: { (categoriessnapshot) in
+            if categoriessnapshot.exists() {
+                self.expenseCategories = Expense.categoriesFromResults(categoriessnapshot.value! as! NSDictionary)
+                self.updateGraphData()
+            } else {
+                
+            }
+        })
+    }
+    
+    
+    private func prepareExpenseData() {
+        if let currentUser = FIRAuth.auth()?.currentUser {
+
+            
+            if let userRef = alphaRef.child("users/\(currentUser.uid)") as FIRDatabaseReference? {
+                userRef.observeEventType(.Value, withBlock: { (snapshot) in
+                    if snapshot.exists() {
+                        self.user = User.userFromFirebase(snapshot.value! as! NSDictionary)
+
+                        self.prepareUIElements()
+                        
+                        print(self.user.groups)
+                        self.prepareUserGroupsData(self.user.groups)
+                        
+                        if let userId = self.user.userId as String? {
+                            if let expensesRef = self.alphaRef.child("expenses/\(userId)") as FIRDatabaseReference? {
+                                self.prepareExpenseTotals(expensesRef)
+                                self.prepareExpenseCategories(expensesRef)
+                            }
+                        }
+                    } else {
+                        self.showOnboardingScreen()
+                    }
+                })
+            } else {
+                showOnboardingScreen()
+            }
+        }
+    }
+    
+    // MARK: - Navigate
     
     private func showLoginScreen() {
         if let loginViewController = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as? LoginViewController {
+            loginViewController.alphaRef = self.alphaRef
             self.navigationController?.pushViewController(loginViewController, animated: true)
         } else {
             print("cannot instantiate login")
         }
     }
     
+    private func showOnboardingScreen() {
+
+        
+        if let username = FIRAuth.auth()?.currentUser?.displayName {
+            self.messageLabel.text = "Welcome."
+            self.nameLabel.text = username
+            headerView.alpha = 1
+            
+            self.segmentButton.alpha = 0
+            self.showAllExpensesUserBtn.alpha = 0
+            self.mainBalance.alpha = 0
+            
+            self.userExpensesView.alpha = 1
+            self.spentHeaderLabel.text = "You have not added any expenses yet. Click below to start"
+            self.addNewExpenseUserBtn.setTitle("ADD YOUR FIRST EXPENSE", forState: .Normal)
+            self.addNewExpenseUserBtn.alpha = 1
+
+        }
+        
+        
+    }
     
+    
+    @IBAction func showSettingsScreen(sender: AnyObject) {
+        if let userSettingsViewController = self.storyboard?.instantiateViewControllerWithIdentifier("userSettingsViewController") as? UserSettingsViewController {
+            
+            self.navigationController?.pushViewController(userSettingsViewController, animated: true)
+        }
+    }
     
     
     
@@ -322,14 +403,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     
-    func updateSpentField(sender: AnyObject) {
-        
+    func calculateDateValues() -> (String, String) {
         let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
         
         let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
         
         let formatter_mon = NSDateFormatter()
-        formatter_mon.dateFormat = "MM_yyyy"
+        formatter_mon.dateFormat = "MMMM_yyyy"
         let currmon = "m_" + formatter_mon.stringFromDate(currDate)
         
         
@@ -337,26 +417,69 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let formatter_week = NSDateFormatter()
         formatter_week.dateFormat = "w_yyyy"
         let currweek = "w_" + formatter_week.stringFromDate(currDate)
-        print(currDate)
-        print(currmon)
-        print(currweek)
+        
+        return (currmon, currweek)
+    }
+    
+    func updateGraphData() {
+        
+        let (currmon, currweek) = self.calculateDateValues()
+        
+        
+        if self.expenseCategories.count > 0 {
+            for expenseCategrory in self.expenseCategories {
+                if let expenseCategoryDetail = expenseCategrory.1 as [String: Float]? {
+                    
+                    if let thisExpTotal = expenseCategoryDetail["total"] as Float? {
+                        self.expenseCategoriesTotal[expenseCategrory.0] = thisExpTotal
+                    } else {
+                        self.expenseCategoriesTotal[expenseCategrory.0] = 0.0
+                    }
+                    if let thisExpTotal = expenseCategoryDetail[currmon] as Float? {
+                        self.expenseCategoriesThisMonth[expenseCategrory.0] = thisExpTotal
+                    } else {
+                        self.expenseCategoriesThisMonth[expenseCategrory.0] = 0.0
+                    }
+                    if let thisExpTotal = expenseCategoryDetail[currweek] as Float? {
+                        self.expenseCategoriesThisWeek[expenseCategrory.0] = thisExpTotal
+                    } else {
+                        self.expenseCategoriesThisWeek[expenseCategrory.0] = 0.0
+                    }
+                }
+            }
+        }
 
-        
-        if self.totals["total"] != nil {
-            self.totalSpent = self.totals["total"] as Float!
+        switch self.segmentButtonState {
+        case .total:
+            prepareChartViewData(self.expenseCategoriesTotal)
+        case .thisMonth:
+            prepareChartViewData(self.expenseCategoriesThisMonth)
+        case .thisWeek:
+            prepareChartViewData(self.expenseCategoriesThisWeek)
         }
         
-        if self.totals[currmon] != nil {
-            self.thisMonthSpent = self.totals[currmon] as Float!
+        
+    }
+    
+    func updateSpentField(sender: AnyObject) {
+        
+        let (currmon, currweek) = self.calculateDateValues()
+        
+        if self.totals.count > 0 {
+            if self.totals["total"] != nil {
+                self.totalSpent = self.totals["total"] as Float!
+            }
+            if self.totals[currmon] != nil {
+                self.thisMonthSpent = self.totals[currmon] as Float!
+            }
+            if self.totals[currweek] != nil {
+                self.thisWeekSpent = self.totals[currweek] as Float!
+            }
+            if sender.tag != nil && sender.tag == 110 {
+                self.segmentButtonState = self.segmentButtonState.nextState()
+            }
         }
         
-        if self.totals[currweek] != nil {
-            self.thisWeekSpent = self.totals[currweek] as Float!
-        }
-        
-        if sender.tag != nil && sender.tag == 110 {
-            self.segmentButtonState = self.segmentButtonState.nextState()
-        }
         
         self.segmentButton.setTitle(self.segmentButtonState.titleString(), forState: .Normal)
         switch self.segmentButtonState {
@@ -368,17 +491,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.mainBalance.text = "\(self.thisWeekSpent) $"
         }
         
-        
-        self.userExpensesView.backgroundColor = MaterialColor.white
+
         self.showAllExpensesUserBtn.alpha = 1
         self.addNewExpenseUserBtn.alpha = 1
         self.segmentButton.alpha = 1
         self.mainBalance.alpha = 1
         
-        
-        
-        
-
+        self.updateGraphData()
 
     }
     
@@ -408,6 +527,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
             
             addExpenseVC.newExpense = newExpense
+            
             self.navigationController?.pushViewController(addExpenseVC, animated: true)
         }
     }
@@ -424,39 +544,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
     }
-    
-
-    func toListExpenses() {
-        if let userId = self.user.userId as String? {
-            if let expensesListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListViewController") as? ExpensesListViewController {
-                expensesListViewController.expenseType = .user
-                expensesListViewController.expensesRef = self.alphaRef.child("expenses/\(userId)")
-                self.navigationController?.pushViewController(expensesListViewController, animated: true)
-            }
-        }
-        
-    }
-    
-    func toAddExpenseCycle() {
-        if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
-            addExpenseVC.currentStep = AddExpenseStep.description
-            addExpenseVC.expenseType = ExpenseType.user
-            
-            
-            var newExpense = Expense()
-            
-            if let userId = self.user.userId as String? {
-                newExpense.firebaseDBRef = alphaRef.child("expenses/\(userId)")
-            }
-            
-            addExpenseVC.newExpense = newExpense
-            self.navigationController?.pushViewController(addExpenseVC, animated: true)
-        }
-    }
-    
-    
-    
-
     
     // MARK: - TableView
     

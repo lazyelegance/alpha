@@ -16,10 +16,12 @@ struct Expense {
     var billAmount: Float
     var dateAdded = String()
     var category = String()
+    var month = String()
+    var week = String()
     var firebaseDBRef = FIRDatabaseReference()
     
     init() {
-        self.description = "New User Expense"
+        self.description = "New User Expense --"
         self.billAmount = 0.00
     }
     
@@ -43,6 +45,106 @@ struct Expense {
         return ["total": 0.0]
     }
     
+    static func categoryFromResults(results: NSDictionary) -> [String : Float] {
+        
+        var totals = [String: Float]()
+        totals.removeAll()
+        
+        if results.count > 0 {
+            
+            for result in results {
+                totals[result.key as! String] = (result.value as! Float)
+                
+            }
+            
+            return totals
+        }
+        
+        
+        return ["total": 0.0]
+    }
+    
+    static func categoriesFromResults(results: NSDictionary) -> [String : [String: Float]] {
+        
+        var categories = [String: [String: Float]]()
+        categories.removeAll()
+        
+        if results.count > 0 {
+            
+            for result in results {
+                categories[result.key as! String] = (result.value as! [String: Float])
+                
+            }
+            
+            return categories
+        }
+        
+        
+        return ["noCategory": ["none":0.0]]
+    }
+    
+    static func categoryNamesFromResults(results: NSDictionary) -> [String] {
+        
+        var categoryNames = [String]()
+        categoryNames.removeAll()
+        
+        if results.count > 0 {
+            for result in results {
+                if let resultKey = result.key as? String {
+                    if resultKey == "categories" {
+                        if let valueDictionary = result.value as? NSDictionary {
+                            for value in valueDictionary {
+                                categoryNames.append(value.key as! String)
+                            }
+                            
+                        }
+                    }
+                }
+            }
+
+            
+            return categoryNames
+        }
+        
+        
+        return ["noCategory"]
+    }
+    
+    static func monthsFromResults(results: NSDictionary) -> [String] {
+        
+        var months = [String]()
+        months.removeAll()
+        
+        if results.count > 0 {
+            for result in results {
+                if let resultKey = result.key as? String {
+                    if resultKey == "totals" {
+                        if let valueDictionary = result.value as? NSDictionary {
+                            for value in valueDictionary {
+                                if let valueKey = value.key as? String {
+                                    if valueKey.hasPrefix("m_") {
+                                        let month = valueKey.stringByReplacingOccurrencesOfString("m_", withString: "").stringByReplacingOccurrencesOfString("_", withString: " ")
+                                        months.append(month)
+                                    }
+                                    
+                                }
+                                
+                            }
+                            
+                        }
+                    }
+                }
+            }
+            
+            
+            return months
+        }
+        
+        
+        return ["noCategory"]
+    }
+
+    
     static func expensesFromResults(results: NSDictionary, ref: FIRDatabaseReference) -> [Expense] {
         var expenses = [Expense]()
         expenses.removeAll()
@@ -52,7 +154,7 @@ struct Expense {
         if results.count > 0 {
             for result in results {
                 if let resultKey = result.key as? String {
-                    if resultKey != "totals" {
+                    if resultKey != "totals" && resultKey != "categories" {
                         if let valueDictionary = result.value as? NSDictionary {
                             var expense = Expense()
                             for value in valueDictionary {
@@ -69,8 +171,11 @@ struct Expense {
                                 case "description":
                                     expense.description = value.value as! String
                                 case "dateAdded":
-                                    
                                     expense.dateAdded = value.value as! String
+                                case "month":
+                                    expense.month = value.value as! String
+                                case "week":
+                                    expense.week = value.value as! String
                                 default:
                                     break
                                 }
