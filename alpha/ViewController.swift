@@ -76,6 +76,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var userGroups = [Group]()
     var groupExpenses = [GroupExpense]()
 
+    @IBOutlet weak var alphaLogo: AsyncImageView!
     @IBOutlet weak var settingButton: FlatButton!
     
     
@@ -295,6 +296,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 self.totals = Expense.totalsFromResults(totalssnapshot.value! as! NSDictionary)
                 self.updateSpentField(self)
                 self.userExpensesView.alpha = 1
+                self.alphaLogo.alpha = 0
             } else {
                 self.showOnboardingScreen()
             }
