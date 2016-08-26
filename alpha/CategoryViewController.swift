@@ -55,13 +55,13 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     
     private func prepareItems() {
-        categories.append(Category(text: "Food", detail: ".", image: UIImage(named: "eggs")))
-        categories.append(Category(text: "Rent", detail: "?", image: UIImage(named: "chair")))
-        categories.append(Category(text: "Entertainment", detail: ".", image: UIImage(named: "theatre")))
-        categories.append(Category(text: "Groceries", detail: "?", image: UIImage(named: "store")))
+        categories.append(Category(text: "Food", detail: ".", image: UIImage(named: "food")))
+        categories.append(Category(text: "Rent", detail: "?", image: UIImage(named: "rent")))
+        categories.append(Category(text: "Entertainment", detail: ".", image: UIImage(named: "entertainment")))
+        categories.append(Category(text: "Groceries", detail: "?", image: UIImage(named: "groceries")))
         categories.append(Category(text: "Fuel", detail: "?", image: UIImage(named: "car")))
-        categories.append(Category(text: "Subscriptions", detail: "?", image: UIImage(named: "youtube")))
-        
+        categories.append(Category(text: "Subscriptions", detail: "?", image: UIImage(named: "subscription")))
+        categories.append(Category(text: "Holiday", detail: "?", image: UIImage(named: "holiday")))
         collectionView.reloadData()
         
     }
@@ -79,10 +79,13 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("categoryCell", forIndexPath: indexPath) as! CategoryCell
         cell.backgroundColor = MaterialColor.white
         
+        cell.categoryLabel.textColor = MaterialColor.black
+        
+        
         if indexPath.row == categories.count {
             cell.categoryLabel.text = "+ Add New"
-            cell.categoryImage.image = UIImage(named: "tick")
-            cell.backgroundColor = MaterialColor.blueGrey.lighten5
+            cell.categoryImage.image = UIImage(named: "addnew")
+            cell.categoryLabel.textColor = MaterialColor.blue.darken1
             
             return cell
         }
