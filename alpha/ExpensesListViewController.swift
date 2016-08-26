@@ -116,8 +116,12 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         searchBar = SearchBar()
         
         searchBar.frame.size = CGSizeMake(self.headerView.width , headerViewHeight.constant)
+        searchBar.layer.masksToBounds = true
         
         self.headerView.addSubview(searchBar)
+        
+        
+        headerView.layer.masksToBounds = true
         
         var image: UIImage? = MaterialIcon.cm.clear
         

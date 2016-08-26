@@ -841,6 +841,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bluegreen_bcg" translatesAutoresizingMaskIntoConstraints="NO" id="kGc-3y-Spo" customClass="AsyncImageView">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g2h-SR-bY9" customClass="FlatButton" customModule="Material">
                                 <rect key="frame" x="527" y="161" width="40" height="40"/>
                                 <constraints>
@@ -914,6 +917,10 @@
                             <constraint firstItem="g2h-SR-bY9" firstAttribute="top" secondItem="9Tw-0x-ypB" secondAttribute="bottom" constant="20" id="ApE-w3-DLc"/>
                             <constraint firstItem="9Tw-0x-ypB" firstAttribute="leading" secondItem="NTG-qt-QK1" secondAttribute="leadingMargin" id="GmI-LZ-1gM"/>
                             <constraint firstItem="tsb-qg-g1V" firstAttribute="leading" secondItem="NTG-qt-QK1" secondAttribute="leadingMargin" constant="-10" id="IYC-yC-21m"/>
+                            <constraint firstItem="9uF-X5-Mvr" firstAttribute="top" secondItem="kGc-3y-Spo" secondAttribute="bottom" id="M5m-v7-kzx"/>
+                            <constraint firstItem="kGc-3y-Spo" firstAttribute="top" secondItem="NTG-qt-QK1" secondAttribute="topMargin" id="WIH-AN-m6Y"/>
+                            <constraint firstItem="kGc-3y-Spo" firstAttribute="leading" secondItem="NTG-qt-QK1" secondAttribute="leadingMargin" constant="-20" id="b3g-iy-fkO"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="kGc-3y-Spo" secondAttribute="trailing" constant="-20" id="qMm-Ru-otc"/>
                             <constraint firstItem="g2h-SR-bY9" firstAttribute="trailing" secondItem="9Tw-0x-ypB" secondAttribute="trailing" id="qfD-T7-SGj"/>
                             <constraint firstItem="tsb-qg-g1V" firstAttribute="top" secondItem="Fyu-UI-mNm" secondAttribute="bottom" id="up9-4M-PaQ"/>
                             <constraint firstItem="9Tw-0x-ypB" firstAttribute="trailing" secondItem="NTG-qt-QK1" secondAttribute="trailingMargin" id="vkt-aP-sNv"/>
@@ -1162,6 +1169,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="green_bcg" translatesAutoresizingMaskIntoConstraints="NO" id="BBX-x3-D4a">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Choose a category" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ING-im-fZu">
                                 <rect key="frame" x="20" y="80" width="220" height="40"/>
                                 <constraints>
@@ -1214,11 +1224,15 @@
                         <color key="backgroundColor" red="1" green="0.62932257166034145" blue="0.46603804651672587" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="dUh-tE-5sL" firstAttribute="top" secondItem="ING-im-fZu" secondAttribute="bottom" id="3mH-Xr-5w0"/>
+                            <constraint firstItem="BBX-x3-D4a" firstAttribute="leading" secondItem="27D-Qa-yLW" secondAttribute="leadingMargin" constant="-20" id="9cc-9A-Cy0"/>
                             <constraint firstItem="ING-im-fZu" firstAttribute="top" secondItem="cIw-KA-LFM" secondAttribute="bottom" constant="60" id="HhY-UH-SOc"/>
                             <constraint firstItem="dUh-tE-5sL" firstAttribute="leading" secondItem="27D-Qa-yLW" secondAttribute="leadingMargin" id="HzW-pD-Jt2"/>
                             <constraint firstAttribute="trailingMargin" secondItem="dUh-tE-5sL" secondAttribute="trailing" id="OQc-5r-PQj"/>
                             <constraint firstItem="LgY-X2-O5z" firstAttribute="leading" secondItem="27D-Qa-yLW" secondAttribute="leadingMargin" constant="-10" id="SYP-Bz-tGM"/>
                             <constraint firstItem="LgY-X2-O5z" firstAttribute="top" secondItem="cIw-KA-LFM" secondAttribute="bottom" id="YZh-LL-Hmr"/>
+                            <constraint firstItem="t8D-ux-hZ2" firstAttribute="top" secondItem="BBX-x3-D4a" secondAttribute="bottom" id="aBH-jp-d1z"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="BBX-x3-D4a" secondAttribute="trailing" constant="-20" id="gbC-5G-VtA"/>
+                            <constraint firstItem="BBX-x3-D4a" firstAttribute="top" secondItem="27D-Qa-yLW" secondAttribute="topMargin" id="plX-CU-h4x"/>
                             <constraint firstItem="ING-im-fZu" firstAttribute="leading" secondItem="27D-Qa-yLW" secondAttribute="leadingMargin" id="sCr-4c-bh4"/>
                         </constraints>
                     </view>
@@ -1257,7 +1271,7 @@
                                                 <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="1"/>
+                                                <real key="value" value="5"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </view>
@@ -1301,8 +1315,9 @@
                                         </constraints>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="2"/>
+                                                <real key="value" value="5"/>
                                             </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="masksToBounds" value="YES"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FGT-qu-BOp" customClass="MaterialView">
@@ -1337,8 +1352,9 @@
                                         </constraints>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="2"/>
+                                                <real key="value" value="5"/>
                                             </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="masksToBounds" value="YES"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1lE-Xy-TMl" customClass="MaterialView">
@@ -1649,6 +1665,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="green_bcg" translatesAutoresizingMaskIntoConstraints="NO" id="NBG-HJ-gZh">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Bc-mb-e6P" customClass="MaterialView">
                                 <rect key="frame" x="10" y="50" width="580" height="80"/>
                                 <subviews>
@@ -1734,7 +1753,7 @@
                                                 <rect key="frame" x="0.0" y="28" width="564" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EP5-lG-25n" id="4Xs-E1-xNK">
-                                                    <rect key="frame" x="0.0" y="0.0" width="564" height="43.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="564" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -1887,7 +1906,9 @@
                             <constraint firstItem="ZrF-F8-wbZ" firstAttribute="leading" secondItem="eSs-Er-Lnu" secondAttribute="leading" constant="10" id="CIe-2H-S3R"/>
                             <constraint firstItem="ZrF-F8-wbZ" firstAttribute="top" secondItem="3Bc-mb-e6P" secondAttribute="bottom" constant="1" id="FGn-xD-beC"/>
                             <constraint firstItem="7xH-VX-9MC" firstAttribute="trailing" secondItem="lEU-mM-0aP" secondAttribute="trailing" id="FNE-ku-Xwz"/>
+                            <constraint firstItem="NBG-HJ-gZh" firstAttribute="leading" secondItem="eSs-Er-Lnu" secondAttribute="leadingMargin" constant="-20" id="HE9-V5-xR9"/>
                             <constraint firstItem="3Bc-mb-e6P" firstAttribute="leading" secondItem="eSs-Er-Lnu" secondAttribute="leading" constant="10" id="Ie4-Py-7kQ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="NBG-HJ-gZh" secondAttribute="trailing" constant="-20" id="KDY-rP-201"/>
                             <constraint firstAttribute="trailing" secondItem="ZrF-F8-wbZ" secondAttribute="trailing" constant="10" id="RKK-re-kJM"/>
                             <constraint firstItem="7xH-VX-9MC" firstAttribute="centerX" secondItem="eSs-Er-Lnu" secondAttribute="centerX" id="bTK-0U-uf7"/>
                             <constraint firstItem="3Bc-mb-e6P" firstAttribute="top" secondItem="GaW-RB-hXa" secondAttribute="bottom" constant="30" id="cFd-vd-bGN"/>
@@ -1898,8 +1919,10 @@
                             <constraint firstItem="lEU-mM-0aP" firstAttribute="leading" secondItem="3Bc-mb-e6P" secondAttribute="leading" id="fug-Hs-NTH"/>
                             <constraint firstAttribute="trailing" secondItem="3Bc-mb-e6P" secondAttribute="trailing" constant="10" id="iOW-I4-7ag"/>
                             <constraint firstItem="3Bc-mb-e6P" firstAttribute="trailing" secondItem="eSs-Er-Lnu" secondAttribute="trailingMargin" constant="-10" id="kxb-V2-8Ne"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="NBG-HJ-gZh" secondAttribute="bottom" id="rAC-km-S2u"/>
                             <constraint firstItem="lEU-mM-0aP" firstAttribute="trailing" secondItem="3Bc-mb-e6P" secondAttribute="trailing" id="rf6-8e-hWf"/>
                             <constraint firstItem="lEU-mM-0aP" firstAttribute="trailing" secondItem="eSs-Er-Lnu" secondAttribute="trailingMargin" constant="-10" id="wdF-uV-zcg"/>
+                            <constraint firstItem="NBG-HJ-gZh" firstAttribute="top" secondItem="eSs-Er-Lnu" secondAttribute="topMargin" id="x6X-qG-6HN"/>
                             <constraint firstItem="3Bc-mb-e6P" firstAttribute="leading" secondItem="eSs-Er-Lnu" secondAttribute="leadingMargin" constant="-10" id="xi6-bc-FdX"/>
                             <constraint firstItem="lEU-mM-0aP" firstAttribute="leading" secondItem="eSs-Er-Lnu" secondAttribute="leadingMargin" constant="-10" id="z9e-iP-csV"/>
                         </constraints>
@@ -1947,6 +1970,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="red_bcg" translatesAutoresizingMaskIntoConstraints="NO" id="tya-GA-RXI">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ekp-cV-4OY" customClass="FabButton" customModule="Material">
                                 <rect key="frame" x="0.0" y="20" width="35" height="35"/>
                                 <constraints>
@@ -2150,12 +2176,16 @@
                             <constraint firstItem="qed-pd-Xey" firstAttribute="top" secondItem="MJ6-M8-av6" secondAttribute="bottom" constant="27" id="FdA-0c-2pU"/>
                             <constraint firstItem="qed-pd-Xey" firstAttribute="leading" secondItem="x5v-Su-lfh" secondAttribute="leading" id="GPw-Xa-mei"/>
                             <constraint firstItem="ekp-cV-4OY" firstAttribute="leading" secondItem="Cmi-Pr-AQM" secondAttribute="leading" id="GS5-Dn-3BG"/>
+                            <constraint firstItem="tya-GA-RXI" firstAttribute="top" secondItem="Cmi-Pr-AQM" secondAttribute="topMargin" id="Ja0-ae-K9F"/>
                             <constraint firstItem="qed-pd-Xey" firstAttribute="leading" secondItem="Cmi-Pr-AQM" secondAttribute="leadingMargin" id="LbK-aK-fg7"/>
                             <constraint firstItem="ekp-cV-4OY" firstAttribute="top" secondItem="MJ6-M8-av6" secondAttribute="bottom" id="RZ4-tJ-Hag"/>
                             <constraint firstItem="qed-pd-Xey" firstAttribute="top" secondItem="ekp-cV-4OY" secondAttribute="bottom" constant="5" id="SnO-8l-o1o"/>
+                            <constraint firstItem="tya-GA-RXI" firstAttribute="leading" secondItem="Cmi-Pr-AQM" secondAttribute="leadingMargin" constant="-20" id="Unn-Wm-ymb"/>
                             <constraint firstItem="qed-pd-Xey" firstAttribute="top" secondItem="x5v-Su-lfh" secondAttribute="bottom" constant="10" id="c0a-eQ-RPy"/>
                             <constraint firstItem="W2b-Wi-ETf" firstAttribute="leading" secondItem="qed-pd-Xey" secondAttribute="leading" id="cG9-7c-jQy"/>
                             <constraint firstItem="W2b-Wi-ETf" firstAttribute="top" secondItem="qed-pd-Xey" secondAttribute="bottom" constant="10" id="chp-nF-haj"/>
+                            <constraint firstItem="3XN-Sc-jng" firstAttribute="top" secondItem="tya-GA-RXI" secondAttribute="bottom" id="kEy-Z1-9A2"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="tya-GA-RXI" secondAttribute="trailing" constant="-20" id="mJ4-C9-Acu"/>
                             <constraint firstItem="qed-pd-Xey" firstAttribute="top" secondItem="ekp-cV-4OY" secondAttribute="bottom" constant="29" id="ncO-uX-UkF"/>
                         </constraints>
                         <variation key="default">
@@ -2203,7 +2233,10 @@
     </scenes>
     <resources>
         <image name="UFO" width="256" height="232"/>
+        <image name="bluegreen_bcg" width="375" height="667"/>
+        <image name="green_bcg" width="375" height="667"/>
         <image name="login_bcg" width="375" height="667"/>
         <image name="main_bcg" width="375" height="667"/>
+        <image name="red_bcg" width="375" height="667"/>
     </resources>
 </document>
