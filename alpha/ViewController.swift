@@ -296,7 +296,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 self.totals = Expense.totalsFromResults(totalssnapshot.value! as! NSDictionary)
                 self.updateSpentField(self)
                 self.userExpensesView.alpha = 1
-                self.alphaLogo.alpha = 0
+                
             } else {
                 self.showOnboardingScreen()
             }
