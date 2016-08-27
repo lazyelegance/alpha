@@ -56,6 +56,25 @@ struct GroupExpense {
         return ["total": 0.0]
     }
     
+    static func categoryFromResults(results: NSDictionary) -> [String : Float] {
+        
+        var totals = [String: Float]()
+        totals.removeAll()
+        
+        if results.count > 0 {
+            
+            for result in results {
+                totals[result.key as! String] = (result.value as! Float)
+                
+            }
+            
+            return totals
+        }
+        
+        
+        return ["total": 0.0]
+    }
+    
     static func expenseFromResults(expenseId: String, results: NSDictionary) -> GroupExpense {
         var expense = GroupExpense()
         
@@ -98,7 +117,7 @@ struct GroupExpense {
         if results.count > 0 {
             for result in results {
                 if let resultKey = result.key as? String {
-                    if resultKey != "totals" {
+                    if resultKey != "totals" && resultKey != "categories" {
                         if let valueDictionary = result.value as? NSDictionary {
                             var expense = GroupExpense()
                             for value in valueDictionary {

@@ -76,24 +76,24 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
     // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("categoryCell", forIndexPath: indexPath) as! CategoryCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("categoryCell", forIndexPath: indexPath) as! AlphaCollectionCell
         cell.backgroundColor = MaterialColor.white
         
-        cell.categoryLabel.textColor = MaterialColor.black
+        cell.nameLabel.textColor = MaterialColor.black
         
         
         if indexPath.row == categories.count {
-            cell.categoryLabel.text = "+ Add New"
-            cell.categoryImage.image = UIImage(named: "addnew")
-            cell.categoryLabel.textColor = MaterialColor.blue.darken1
+            cell.nameLabel.text = "+ Add New"
+            cell.imageView.image = UIImage(named: "addnew")
+            cell.nameLabel.textColor = MaterialColor.blue.darken1
             
             return cell
         }
         
         let category = categories[indexPath.row]
         
-        cell.categoryImage.image = category.image
-        cell.categoryLabel.text = category.text
+        cell.imageView.image = category.image
+        cell.nameLabel.text = category.text
         
         return cell
         
@@ -132,7 +132,7 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
                     
                 case .group:
                     if let parityViewController = self.storyboard?.instantiateViewControllerWithIdentifier("parityViewController") as? ParityViewController {
-                        newExpense.category = category
+                        newGroupExpense.category = category
                         parityViewController.newGroupExpense = newGroupExpense
                         //                    ParityViewController.expenseType = .group //Defaulting to group for now
                         self.navigationController?.pushViewController(parityViewController, animated: true)

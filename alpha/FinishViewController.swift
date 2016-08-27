@@ -119,10 +119,10 @@ class FinishViewController: UIViewController {
     
     func saveGroupExpense() {
         
+        let (currDate, currmon, currweek) = calculateDateValues()
+        
         if self.expenseType == .group {
-            let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
             
-            let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
             
             let firebaseUserRef = newGroupExpense.firebaseDBRef.child("users")
             let firebaseGroupRef = newGroupExpense.firebaseDBRef.child("groups").child(newGroupExpense.groupId)
@@ -138,21 +138,36 @@ class FinishViewController: UIViewController {
                 }
             }
             
-            
-            
             grpExpTotalsRef.observeSingleEventOfType(.Value, withBlock: { (grptotals) in
                 if grptotals.exists() {
                     if let totals = GroupExpense.totalsFromResults(grptotals.value! as! NSDictionary) as [String: AnyObject]? {
-                        
-                        if let currentTotalSpent = totals["totalSpent"] as? Float {
-                            let newTotalSpent = currentTotalSpent + self.newExpense.billAmount
-                            grpExpTotalsRef.child("totalSpent").setValue(newTotalSpent)
-                        } else {
-                            grpExpTotalsRef.child("total").setValue(self.newExpense.billAmount)
+                        print(totals)
+                        if let currentTotalSpent = totals["total"] as? Float {
+                            let newTotalSpent = currentTotalSpent + self.newGroupExpense.billAmount
+                            grpExpTotalsRef.child("total").setValue(newTotalSpent)
                         }
+                        
+                        if totals[currmon] != nil {
+                            if let currentMonSpent = totals[currmon] as? Float {
+                                let newMonSpent = currentMonSpent + self.newGroupExpense.billAmount
+                                grpExpTotalsRef.child(currmon).setValue(newMonSpent)
+                            }
+                        } else {
+                            grpExpTotalsRef.child(currmon).setValue(self.newGroupExpense.billAmount)
+                        }
+                        
+                        if totals[currweek] != nil {
+                            if let currentMonSpent = totals[currweek] as? Float {
+                                let newMonSpent = currentMonSpent + self.newGroupExpense.billAmount
+                                grpExpTotalsRef.child(currweek).setValue(newMonSpent)
+                            }
+                        } else {
+                            grpExpTotalsRef.child(currweek).setValue(self.newGroupExpense.billAmount)
+                        }
+                        
                         if let spentDictionery = totals["spent"] as? [String: Float] {
                             if let currentUserSpent = spentDictionery[self.newGroupExpense.addedBy] as Float? {
-                                let newTotalSpent = currentUserSpent + self.newExpense.billAmount
+                                let newTotalSpent = currentUserSpent + self.newGroupExpense.billAmount
                                 grpExpTotalsRef.child("spent/\(self.newGroupExpense.addedBy)").setValue(newTotalSpent)
                             } else {
                                 grpExpTotalsRef.child("spent/\(self.newGroupExpense.addedBy)").setValue(self.newGroupExpense.billAmount)
@@ -167,8 +182,54 @@ class FinishViewController: UIViewController {
                 } else {
                     grpExpTotalsRef.child("owing").setValue(self.newGroupExpense.owing)
                     grpExpTotalsRef.child("spent/\(self.newGroupExpense.addedBy)").setValue(self.newGroupExpense.billAmount)
-                    grpExpTotalsRef.child("total").setValue(self.newExpense.billAmount)
+                    grpExpTotalsRef.child("total").setValue(self.newGroupExpense.billAmount)
+                    grpExpTotalsRef.child(currmon).setValue(self.newGroupExpense.billAmount)
+                    grpExpTotalsRef.child(currweek).setValue(self.newGroupExpense.billAmount)
+                    
                 }
+            })
+            
+            
+            let category = self.newGroupExpense.category
+            let categoryRef = groupExpensesRef.child("categories/\(category)")
+            
+            categoryRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                if snapshot.exists() {
+                    if let categoryDetail = GroupExpense.categoryFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
+                        
+                        if let currentTotalSpent = categoryDetail["total"] as Float? {
+                            let newTotalSpent = currentTotalSpent + self.newGroupExpense.billAmount
+                            categoryRef.child("total").setValue(newTotalSpent)
+                        }
+                        
+                        if categoryDetail[currmon] != nil {
+                            if let currentMonSpent = categoryDetail[currmon] as Float? {
+                                let newMonSpent = currentMonSpent + self.newGroupExpense.billAmount
+                                categoryRef.child("\(currmon)").setValue(newMonSpent)
+                            }
+                        } else {
+                            categoryRef.child("\(currmon)").setValue(self.newGroupExpense.billAmount)
+                        }
+                        
+                        if categoryDetail[currweek] != nil {
+                            if let currentMonSpent = categoryDetail[currweek] as Float? {
+                                let newMonSpent = currentMonSpent + self.newGroupExpense.billAmount
+                                categoryRef.child("\(currweek)").setValue(newMonSpent)
+                            }
+                        } else {
+                            categoryRef.child("\(currweek)").setValue(self.newGroupExpense.billAmount)
+                        }
+                        
+                    }
+                } else {
+                    let newTotalSpent = self.newExpense.billAmount
+                    
+                    categoryRef.child("total").setValue(newTotalSpent)
+                    categoryRef.child("\(currweek)").setValue(newTotalSpent)
+                    categoryRef.child("\(currmon)").setValue(newTotalSpent)
+                }
+                
+                
             })
             
             firebaseGroupRef.child("lastExpense").setValue(key) { (error, ref) in
@@ -181,9 +242,10 @@ class FinishViewController: UIViewController {
             
             for member in newGroupExpense.groupMembers {
                 let currentUserRef = firebaseUserRef.child(member.userId)
-                let currentUserOwing = newGroupExpense.owing[member.name]
+                print(currentUserRef)
+                let currentUserOwing = newGroupExpense.owing[member.userId]
                 
-                currentUserRef.child("amountOwing").setValue(currentUserOwing, withCompletionBlock: { (error, ref) in
+                currentUserRef.child("amountOwing").updateChildValues([newGroupExpense.groupId : currentUserOwing!], withCompletionBlock: { (error, ref) in
                     if error != nil {
                         print(error?.localizedDescription)
                     } else {
@@ -202,17 +264,7 @@ class FinishViewController: UIViewController {
     func saveExpense() {
         
 
-        let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
-        
-        let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
-        
-        let formatter_mon = NSDateFormatter()
-        formatter_mon.dateFormat = "MMMM_yyyy"
-        let currmon = "m_" + formatter_mon.stringFromDate(currDate)
-
-        let formatter_week = NSDateFormatter()
-        formatter_week.dateFormat = "w_yyyy"
-        let currweek = "w_" + formatter_week.stringFromDate(currDate)
+        let (currDate, currmon, currweek) = calculateDateValues()
         
         if self.expenseType == .user {
             let userExpensesRef = newExpense.firebaseDBRef

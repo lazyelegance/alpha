@@ -327,7 +327,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
                         self.prepareUIElements()
                         
-                        print(self.user.groups)
                         self.prepareUserGroupsData(self.user.groups)
                         
                         if let userId = self.user.userId as String? {
@@ -402,28 +401,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    
-    func calculateDateValues() -> (String, String) {
-        let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
-        
-        let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
-        
-        let formatter_mon = NSDateFormatter()
-        formatter_mon.dateFormat = "MMMM_yyyy"
-        let currmon = "m_" + formatter_mon.stringFromDate(currDate)
-        
-        
-        
-        let formatter_week = NSDateFormatter()
-        formatter_week.dateFormat = "w_yyyy"
-        let currweek = "w_" + formatter_week.stringFromDate(currDate)
-        
-        return (currmon, currweek)
-    }
+
     
     func updateGraphData() {
         
-        let (currmon, currweek) = self.calculateDateValues()
+        let (_, currmon, currweek) = calculateDateValues()
         
         
         if self.expenseCategories.count > 0 {
@@ -463,7 +445,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func updateSpentField(sender: AnyObject) {
         
-        let (currmon, currweek) = self.calculateDateValues()
+        let (_, currmon, currweek) = calculateDateValues()
         
         if self.totals.count > 0 {
             if self.totals["total"] != nil {

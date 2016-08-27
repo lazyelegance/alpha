@@ -10,9 +10,10 @@ import UIKit
 import Material
 import FirebaseDatabase
 
-class GroupMainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class GroupMainViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
 
+    @IBOutlet weak var collectionView: UICollectionView!
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -91,10 +92,9 @@ class GroupMainViewController: UIViewController, UITableViewDelegate, UITableVie
     private func prepareGroupMembersView() {
         
         if groupMembers.count > 0 {
-            groupMembersPlaceholder.alpha = 0
-            tableView.reloadData()
-            tableView.alpha = 1
-            tableView.separatorStyle = .None
+            
+            collectionView.reloadData()
+            collectionView.alpha = 1
             
         }
     }
@@ -169,51 +169,53 @@ class GroupMainViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
 
-
+    // MARK: - CollectionView
     
-
-    // MARK: - TableView
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groupMembers.count;
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return groupMembers.count
     }
     
-    /// Returns the number of sections.
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    /// Prepares the cells within the tableView.
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell: MaterialTableViewCell = MaterialTableViewCell(style: .Subtitle, reuseIdentifier: "memberCell")
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("memberCell", forIndexPath: indexPath) as! AlphaCollectionCell
+        cell.backgroundColor = MaterialColor.white
+        
+        cell.nameLabel.textColor = MaterialColor.black
+        
         
         let groupMember = groupMembers[indexPath.row]
-        cell.selectionStyle = .None
-        cell.textLabel!.text = groupMember.name
-        cell.textLabel!.font = RobotoFont.regular
         
-        cell.detailTextLabel?.text = groupMember.title
-        cell.detailTextLabel!.font = RobotoFont.regular
-        cell.detailTextLabel!.textColor = MaterialColor.grey.darken1
-        cell.imageView?.image = UIImage(named: "default_user")
-        cell.imageView!.imageURL = NSURL(string: groupMember.photoURL)
-        cell.imageView?.layer.masksToBounds = true
+        cell.imageView.image = UIImage(named: "default_user")
+
         
-        cell.imageView!.layer.cornerRadius = 5
-        cell.imageView!.layer.borderColor = MaterialColor.white.CGColor
-        cell.imageView?.layer.borderWidth = 5
+        if let photoURL = groupMember.photoURL as String? {
+            if photoURL != "" {
+                cell.imageView.imageURL = NSURL(string: photoURL)
+            } 
+        }
+        
+        
+        cell.nameLabel.text = groupMember.name
         
         return cell
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 50
+    func collectionView(collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                               sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        return CGSizeMake(100, 100)
+        
+    }
+
+    func collectionView(collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                               minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+        return 10.0
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        //to do 
-        //to profile view
-
+    func collectionView(collectionView: UICollectionView, layout
+        collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+        return 10.0
     }
     
     // MARK: - Buttons
@@ -236,7 +238,14 @@ class GroupMainViewController: UIViewController, UITableViewDelegate, UITableVie
             owing.removeAll()
             
             for member in groupMembers {
-                owing[member.userId] = member.amountOwing
+                print(member.amountOwing[self.groupId])
+                if member.amountOwing[self.groupId] != nil {
+                    owing[member.userId] = member.amountOwing[self.groupId]
+                } else {
+                    owing[member.userId] = 0.0
+                }
+                
+                
             }
             
             var newGroupExpense = GroupExpense()

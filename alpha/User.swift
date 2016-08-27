@@ -15,7 +15,7 @@ struct User {
     var userId: String
     var name: String
     var email = String()
-    var amountOwing = Float()
+    var amountOwing = [String: Float]()
     var defaultGroupId = String()
     var defaultGroupName = String()
     var title = String()
@@ -44,7 +44,7 @@ struct User {
                     for value in valueDictionary {
                         switch value.key as! String {
                         case "amountOwing":
-                            user.amountOwing = value.value as! Float
+                            user.amountOwing = value.value as! [String: Float]
                         case "name":
                             user.name = value.value as! String
                         case "defaultGroup":
@@ -84,7 +84,7 @@ struct User {
                 case "userId":
                     user.userId = value.value as! String
                 case "amountOwing":
-                    user.amountOwing = value.value as! Float
+                    user.amountOwing = value.value as! [String: Float]
                 case "name":
                     user.name = value.value as! String
                 case "defaultGroup":
