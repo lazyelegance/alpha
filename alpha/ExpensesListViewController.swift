@@ -664,7 +664,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func deleteGroupExpense(groupExpense: GroupExpense) {
-        print("deleting group expense")
+        //
     }
     
     // MARK: - TOGGLE

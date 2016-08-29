@@ -17,34 +17,7 @@ import Charts
 
 
 
-enum SegementButtonState {
-    case total
-    case thisMonth
-    case thisWeek
-    
-    func titleString() -> String {
-        switch self {
-        case .total:
-            return "Total".uppercaseString
-        case .thisMonth:
-            return "This Month".uppercaseString
-        case .thisWeek:
-            return "This Week".uppercaseString
-        }
-    }
-    
-    func nextState() -> SegementButtonState {
-        switch self {
-        case .total:
-            return .thisMonth
-        case .thisMonth:
-            return .thisWeek
-        case .thisWeek:
-            return .total
-        }
-    }
-    
-}
+
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ChartViewDelegate {
     
@@ -109,7 +82,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     var alphaRef = FIRDatabaseReference.init()
     
-    var segmentButtonState = SegementButtonState.total
+    var segmentButtonState = SegmentButtonState.total
     
     override func viewDidLoad() {
         super.viewDidLoad()

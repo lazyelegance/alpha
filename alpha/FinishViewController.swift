@@ -222,7 +222,7 @@ class FinishViewController: UIViewController {
                         
                     }
                 } else {
-                    let newTotalSpent = self.newExpense.billAmount
+                    let newTotalSpent = self.newGroupExpense.billAmount
                     
                     categoryRef.child("total").setValue(newTotalSpent)
                     categoryRef.child("\(currweek)").setValue(newTotalSpent)

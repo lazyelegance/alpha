@@ -27,3 +27,33 @@ public func calculateDateValues() -> (NSDate, String, String) {
     
     return (currDate, currmon, currweek)
 }
+
+
+public enum SegmentButtonState {
+    case total
+    case thisMonth
+    case thisWeek
+    
+    func titleString() -> String {
+        switch self {
+        case .total:
+            return "Total".uppercaseString
+        case .thisMonth:
+            return "This Month".uppercaseString
+        case .thisWeek:
+            return "This Week".uppercaseString
+        }
+    }
+    
+    func nextState() -> SegmentButtonState {
+        switch self {
+        case .total:
+            return .thisMonth
+        case .thisMonth:
+            return .thisWeek
+        case .thisWeek:
+            return .total
+        }
+    }
+    
+}
