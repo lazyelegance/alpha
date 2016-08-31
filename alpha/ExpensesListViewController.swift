@@ -664,7 +664,67 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func deleteGroupExpense(groupExpense: GroupExpense) {
-        //
+        expensesRef.child(groupExpense.expenseId).removeValueWithCompletionBlock { (error, ref) in
+            if error != nil {
+                print(error?.localizedDescription)
+            }
+        }
+        
+        expensesRef.child("totals").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+            if snapshot.exists() {
+                if let totals = Expense.totalsFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
+                    
+                    if let currentTotalSpent = totals["total"] as Float? {
+                        let newTotalSpent = currentTotalSpent - groupExpense.billAmount
+                        self.expensesRef.child("totals/total").setValue(newTotalSpent)
+                    }
+                    
+                    if totals[groupExpense.month] != nil {
+                        if let currentMonSpent = totals[expense.month] as Float? {
+                            let newMonSpent = currentMonSpent - groupExpense.billAmount
+                            self.expensesRef.child("totals/\(groupExpense.month)").setValue(newMonSpent)
+                        }
+                    }
+                    
+                    if totals[expense.week] != nil {
+                        if let currentMonSpent = totals[groupExpense.week] as Float? {
+                            let newMonSpent = currentMonSpent - groupExpense.billAmount
+                            self.expensesRef.child("totals/\(groupExpense.week)").setValue(newMonSpent)
+                        }
+                    }
+                    
+                }
+            }
+        })
+        
+        expensesRef.child("categories/\(groupExpense.category)").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+            if snapshot.exists() {
+                print(snapshot)
+                print("categories/\(expense.category)/\(expense.month)")
+                if let totals = Expense.categoryFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
+                    
+                    if let currentTotalSpent = totals["total"] as Float? {
+                        let newTotalSpent = currentTotalSpent - expense.billAmount
+                        self.expensesRef.child("categories/\(expense.category)/total").setValue(newTotalSpent)
+                    }
+                    
+                    if totals[expense.month] != nil {
+                        if let currentMonSpent = totals[expense.month] as Float? {
+                            let newMonSpent = currentMonSpent - expense.billAmount
+                            self.expensesRef.child("categories/\(expense.category)/\(expense.month)").setValue(newMonSpent)
+                        }
+                    }
+                    
+                    if totals[expense.week] != nil {
+                        if let currentMonSpent = totals[expense.week] as Float? {
+                            let newMonSpent = currentMonSpent - expense.billAmount
+                            self.expensesRef.child("categories/\(expense.category)/\(expense.week)").setValue(newMonSpent)
+                        }
+                    }
+                    
+                }
+            }
+        })
     }
     
     // MARK: - TOGGLE
