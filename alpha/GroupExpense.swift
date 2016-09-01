@@ -28,6 +28,8 @@ struct GroupExpense {
     var groupMembers = [User]()
     var category = String()
     var owing = [String: Float]()
+    var month = String()
+    var week = String()
     var firebaseDBRef = FIRDatabaseReference()
     
     
@@ -166,6 +168,10 @@ struct GroupExpense {
                                     expense.spent = value.value as! [String: Int]
                                 case "owing":
                                     expense.owing = value.value as! [String: Float]
+                                case "month":
+                                    expense.month = value.value as! String
+                                case "week":
+                                    expense.week = value.value as! String
                                 default:
                                     break
                                 }

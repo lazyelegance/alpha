@@ -680,13 +680,13 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                     }
                     
                     if totals[groupExpense.month] != nil {
-                        if let currentMonSpent = totals[expense.month] as Float? {
+                        if let currentMonSpent = totals[groupExpense.month] as Float? {
                             let newMonSpent = currentMonSpent - groupExpense.billAmount
                             self.expensesRef.child("totals/\(groupExpense.month)").setValue(newMonSpent)
                         }
                     }
                     
-                    if totals[expense.week] != nil {
+                    if totals[groupExpense.week] != nil {
                         if let currentMonSpent = totals[groupExpense.week] as Float? {
                             let newMonSpent = currentMonSpent - groupExpense.billAmount
                             self.expensesRef.child("totals/\(groupExpense.week)").setValue(newMonSpent)
@@ -699,26 +699,24 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         
         expensesRef.child("categories/\(groupExpense.category)").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
             if snapshot.exists() {
-                print(snapshot)
-                print("categories/\(expense.category)/\(expense.month)")
                 if let totals = Expense.categoryFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
                     
                     if let currentTotalSpent = totals["total"] as Float? {
-                        let newTotalSpent = currentTotalSpent - expense.billAmount
-                        self.expensesRef.child("categories/\(expense.category)/total").setValue(newTotalSpent)
+                        let newTotalSpent = currentTotalSpent - groupExpense.billAmount
+                        self.expensesRef.child("categories/\(groupExpense.category)/total").setValue(newTotalSpent)
                     }
                     
-                    if totals[expense.month] != nil {
-                        if let currentMonSpent = totals[expense.month] as Float? {
-                            let newMonSpent = currentMonSpent - expense.billAmount
-                            self.expensesRef.child("categories/\(expense.category)/\(expense.month)").setValue(newMonSpent)
+                    if totals[groupExpense.month] != nil {
+                        if let currentMonSpent = totals[groupExpense.month] as Float? {
+                            let newMonSpent = currentMonSpent - groupExpense.billAmount
+                            self.expensesRef.child("categories/\(groupExpense.category)/\(groupExpense.month)").setValue(newMonSpent)
                         }
                     }
                     
-                    if totals[expense.week] != nil {
-                        if let currentMonSpent = totals[expense.week] as Float? {
-                            let newMonSpent = currentMonSpent - expense.billAmount
-                            self.expensesRef.child("categories/\(expense.category)/\(expense.week)").setValue(newMonSpent)
+                    if totals[groupExpense.week] != nil {
+                        if let currentMonSpent = totals[groupExpense.week] as Float? {
+                            let newMonSpent = currentMonSpent - groupExpense.billAmount
+                            self.expensesRef.child("categories/\(groupExpense.category)/\(groupExpense.week)").setValue(newMonSpent)
                         }
                     }
                     
