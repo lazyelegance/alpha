@@ -195,7 +195,7 @@ class FinishViewController: UIViewController {
             
             categoryRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                 if snapshot.exists() {
-                    if let categoryDetail = GroupExpense.categoryFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
+                    if let categoryDetail = GroupExpense.categoryFromResults(snapshot.value! as! NSDictionary) as? [String: Float] {
                         
                         if let currentTotalSpent = categoryDetail["total"] as Float? {
                             let newTotalSpent = currentTotalSpent + self.newGroupExpense.billAmount

@@ -39,6 +39,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var thisWeekSpent: Float = 0.0
     var totals = [String : Float]()
     
+    var categories = [Category]()
+    
     var expenseCategories = [String: [String: Float]]()
     var expenseCategoriesTotal = [String: Float]()
     var expenseCategoriesThisMonth = [String: Float]()
@@ -280,6 +282,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.expenseCategories.removeAll()
         expensesRef.child("categories").observeEventType(.Value, withBlock: { (categoriessnapshot) in
             if categoriessnapshot.exists() {
+                self.categories = Category.categoriesFromResults(categoriessnapshot.value! as! NSDictionary)
+                print(self.categories)
                 self.expenseCategories = Expense.categoriesFromResults(categoriessnapshot.value! as! NSDictionary)
                 self.updateGraphData()
             } else {

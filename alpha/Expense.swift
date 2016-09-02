@@ -83,9 +83,9 @@ struct Expense {
         return ["noCategory": ["none":0.0]]
     }
     
-    static func categoryNamesFromResults(results: NSDictionary) -> [String] {
+    static func categoryNamesFromResults(results: NSDictionary) -> [String: Int] {
         
-        var categoryNames = [String]()
+        var categoryNames = [String: Int]()
         categoryNames.removeAll()
         
         if results.count > 0 {
@@ -94,9 +94,14 @@ struct Expense {
                     if resultKey == "categories" {
                         if let valueDictionary = result.value as? NSDictionary {
                             for value in valueDictionary {
-                                categoryNames.append(value.key as! String)
+                                if let categoryDictionary = value.value as? NSDictionary {
+                                    for catValue in categoryDictionary {
+                                        if catValue.key as! String == "counter" {
+                                            categoryNames[value.key as! String] = (catValue.value as! Int)
+                                        }
+                                    }
+                                }
                             }
-                            
                         }
                     }
                 }
@@ -107,7 +112,7 @@ struct Expense {
         }
         
         
-        return ["noCategory"]
+        return ["noCategory": 0]
     }
     
     static func monthsFromResults(results: NSDictionary) -> [String] {
