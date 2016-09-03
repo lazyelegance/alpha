@@ -10,7 +10,7 @@ import Foundation
 
 struct Category {
     var name: String
-    var image = UIImage()
+    var imageName = String()
     var counter = Int()
     var total = Float()
     var thisMonth = Float()
@@ -23,6 +23,7 @@ struct Category {
         self.name = "New Category"
         self.counter = 0
         self.total = 0
+        self.imageName = "cone"
     }
     
 
@@ -45,8 +46,8 @@ struct Category {
                             category.total = (value.1 as! Float)
                         } else if value.0 == "counter" {
                             category.counter = (value.1 as! Int)
-                        } else if value.0 == "image" {
-                            category.image = UIImage(named: value.1 as! String)!
+                        } else if value.0 == "imageName" {
+                            category.imageName = value.1 as! String
                         } else if value.0.hasPrefix("m_") {
                             let month = value.0.stringByReplacingOccurrencesOfString("m_", withString: "").stringByReplacingOccurrencesOfString("_", withString: " ")
                             category.months[month] = (value.1 as! Float)

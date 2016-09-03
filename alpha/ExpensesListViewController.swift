@@ -60,7 +60,8 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     
     var categoryCounts = [String: Int]()
     
-    var categories = ["Food", "Fuel", "Rent"]
+    var categories = [Category]()
+    
     var categoriesDisplayed = [String]()
     var months = ["July 2016", "June 2016"]
     
@@ -166,16 +167,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                 if expSnapshot.exists() {
                     self.expenses = Expense.expensesFromResults(expSnapshot.value! as! NSDictionary, ref: expSnapshot.ref)
                     self.tableView.reloadData()
-                    self.categoryCounts = Expense.categoryNamesFromResults(expSnapshot.value! as! NSDictionary)
-                    
-                    if self.categoryCounts.count > 0 {
-                        self.categories.removeAll()
-                        for category in self.categoryCounts {
-                            self.categories.append(category.0)
-                        }
-                    }
-                    
-                    self.categoriesTableView.reloadData()
+                    //TO UPDATE
                     self.months = Expense.monthsFromResults(expSnapshot.value! as! NSDictionary)
                     self.monthsTableView.reloadData()
                 }
@@ -371,7 +363,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                                 searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
                             } else {
                                 let category = categories[indexPath.row]
-                                searchCategoryCell.textLabel?.text = category
+                                searchCategoryCell.textLabel?.text = category.name
                                 
                             }
                             return searchCategoryCell
@@ -381,7 +373,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                                 searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
                             } else {
                                 let category = categories[indexPath.row]
-                                searchCategoryCell.textLabel?.text = category
+                                searchCategoryCell.textLabel?.text = category.name
                                 
                             }
                             return searchCategoryCell
@@ -393,7 +385,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                                 searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
                             } else {
                                 let category = categories[indexPath.row]
-                                searchCategoryCell.textLabel?.text = category
+                                searchCategoryCell.textLabel?.text = category.name
                                 
                             }
                             return searchCategoryCell
@@ -403,7 +395,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                                 searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
                             } else {
                                 let category = categories[indexPath.row]
-                                searchCategoryCell.textLabel?.text = category
+                                searchCategoryCell.textLabel?.text = category.name
                                 
                             }
                             return searchCategoryCell
@@ -411,7 +403,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                     }
                 } else {
                     let category = categories[indexPath.row]
-                    searchCategoryCell.textLabel?.text = category
+                    searchCategoryCell.textLabel?.text = category.name
                     return searchCategoryCell
                 }
 
@@ -590,7 +582,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             if cellsCount >= 4 && indexPath.row == cellsCount - 1 {
                 toggleCategoryView()
             } else {
-                self.filterExpensesByCategory(categories[indexPath.row])
+                self.filterExpensesByCategory(categories[indexPath.row].name)
             }
         } else if tableView.tag == 22 {
             self.searchBar.textField.resignFirstResponder()

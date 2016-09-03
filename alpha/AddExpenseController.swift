@@ -13,6 +13,9 @@ class AddExpenseController: UIViewController, TextFieldDelegate {
     
     var newExpense = Expense()
     var newGroupExpense = GroupExpense()
+    var categories = [Category]()
+    
+    
     var currentStep = AddExpenseStep.description
     var expenseType: ExpenseType = .user
     var currAmountOwing = "0.00"
@@ -117,7 +120,8 @@ class AddExpenseController: UIViewController, TextFieldDelegate {
                 if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
                     
                     addExpenseVC.currentStep = .billAmount
-                    addExpenseVC.expenseType = self.expenseType
+                    addExpenseVC.expenseType = expenseType
+                    addExpenseVC.categories = categories
                     switch expenseType {
                     case .user:
                         newExpense.description = expenseTextField.text!
@@ -132,7 +136,8 @@ class AddExpenseController: UIViewController, TextFieldDelegate {
                 if let categoryViewController = self.storyboard?.instantiateViewControllerWithIdentifier("categoryViewController") as? CategoryViewController {
                     
                     categoryViewController.currentStep = .category
-                    categoryViewController.expenseType = self.expenseType
+                    categoryViewController.expenseType = expenseType
+                    categoryViewController.categories = categories
                     switch expenseType {
                     case .user:
                         newExpense.billAmount = (expenseTextField.text! as NSString).floatValue

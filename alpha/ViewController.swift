@@ -279,15 +279,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     private func prepareExpenseCategories(expensesRef: FIRDatabaseReference) {
-        self.expenseCategories.removeAll()
         expensesRef.child("categories").observeEventType(.Value, withBlock: { (categoriessnapshot) in
             if categoriessnapshot.exists() {
                 self.categories = Category.categoriesFromResults(categoriessnapshot.value! as! NSDictionary)
-                print(self.categories)
-                self.expenseCategories = Expense.categoriesFromResults(categoriessnapshot.value! as! NSDictionary)
                 self.updateGraphData()
             } else {
-                
+                // TO DO
             }
         })
     }
@@ -381,33 +378,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     
     func updateGraphData() {
-        
-        let (_, currmon, currweek) = calculateDateValues()
-        
-        
-        if self.expenseCategories.count > 0 {
-            for expenseCategrory in self.expenseCategories {
-                if let expenseCategoryDetail = expenseCategrory.1 as [String: Float]? {
-                    
-                    if let thisExpTotal = expenseCategoryDetail["total"] as Float? {
-                        self.expenseCategoriesTotal[expenseCategrory.0] = thisExpTotal
-                    } else {
-                        self.expenseCategoriesTotal[expenseCategrory.0] = 0.0
-                    }
-                    if let thisExpTotal = expenseCategoryDetail[currmon] as Float? {
-                        self.expenseCategoriesThisMonth[expenseCategrory.0] = thisExpTotal
-                    } else {
-                        self.expenseCategoriesThisMonth[expenseCategrory.0] = 0.0
-                    }
-                    if let thisExpTotal = expenseCategoryDetail[currweek] as Float? {
-                        self.expenseCategoriesThisWeek[expenseCategrory.0] = thisExpTotal
-                    } else {
-                        self.expenseCategoriesThisWeek[expenseCategrory.0] = 0.0
-                    }
-                }
+        if self.categories.count > 0 {
+            for category in categories {
+                self.expenseCategoriesTotal[category.name] = category.total
+                self.expenseCategoriesThisMonth[category.name] = category.thisMonth
+                self.expenseCategoriesThisWeek[category.name] = category.thisWeek
             }
         }
-
+        
         switch self.segmentButtonState {
         case .total:
             prepareChartViewData(self.expenseCategoriesTotal)
@@ -416,7 +394,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         case .thisWeek:
             prepareChartViewData(self.expenseCategoriesThisWeek)
         }
-        
+
         
     }
     
@@ -486,6 +464,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
             
             addExpenseVC.newExpense = newExpense
+            addExpenseVC.categories = categories
             
             self.navigationController?.pushViewController(addExpenseVC, animated: true)
         }

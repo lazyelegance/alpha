@@ -52,26 +52,7 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     private func prepareItems() {
         
-//        
-//        
-//        
-//        categories.append(Category(text: "Food", detail: ".", image: UIImage(named: "food")))
-//        categories.append(Category(text: "Rent", detail: "?", image: UIImage(named: "rent")))
-//        categories.append(Category(text: "Entertainment", detail: ".", image: UIImage(named: "entertainment")))
-//        categories.append(Category(text: "Groceries", detail: "?", image: UIImage(named: "groceries")))
-//        categories.append(Category(text: "Fuel", detail: "?", image: UIImage(named: "car")))
-//        categories.append(Category(text: "Subscriptions", detail: "?", image: UIImage(named: "subscription")))
-//        categories.append(Category(text: "Holiday", detail: "?", image: UIImage(named: "holiday")))
-//        
-        
-        if expenseType == .user {
-            newExpense.firebaseDBRef.child("categories").observeEventType(.Value, withBlock: { (categories) in
-                if categories.exists() {
-                    
-                }
-            })
-        }
-        
+                
         collectionView.reloadData()
         
     }
@@ -102,7 +83,7 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
         
         let category = categories[indexPath.row]
         
-        cell.imageView.image = category.image
+        cell.imageView.image = UIImage(named: category.imageName)
         cell.nameLabel.text = category.name
         
         return cell
