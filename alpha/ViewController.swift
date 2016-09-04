@@ -301,7 +301,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
                         self.prepareUIElements()
                         
-                        self.prepareUserGroupsData(self.user.groups)
+//                        self.prepareUserGroupsData(self.user.groups) ---------------> Turn Off Groups?
                         
                         if let userId = self.user.userId as String? {
                             if let expensesRef = self.alphaRef.child("expenses/\(userId)") as FIRDatabaseReference? {
