@@ -9,11 +9,7 @@
 import UIKit
 import Material
 
-private struct Category {
-    var text: String
-    var detail: String
-    var image: UIImage?
-}
+
 
 class CategoryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
@@ -22,7 +18,7 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
     
 
     
-    private var categories: Array<Category> = Array<Category>()
+    var categories = [Category]()
     
     
     
@@ -55,13 +51,8 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     
     private func prepareItems() {
-        categories.append(Category(text: "Food", detail: ".", image: UIImage(named: "food")))
-        categories.append(Category(text: "Rent", detail: "?", image: UIImage(named: "rent")))
-        categories.append(Category(text: "Entertainment", detail: ".", image: UIImage(named: "entertainment")))
-        categories.append(Category(text: "Groceries", detail: "?", image: UIImage(named: "groceries")))
-        categories.append(Category(text: "Fuel", detail: "?", image: UIImage(named: "car")))
-        categories.append(Category(text: "Subscriptions", detail: "?", image: UIImage(named: "subscription")))
-        categories.append(Category(text: "Holiday", detail: "?", image: UIImage(named: "holiday")))
+        
+                
         collectionView.reloadData()
         
     }
@@ -92,8 +83,8 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
         
         let category = categories[indexPath.row]
         
-        cell.imageView.image = category.image
-        cell.nameLabel.text = category.text
+        cell.imageView.image = UIImage(named: category.imageName)
+        cell.nameLabel.text = category.name
         
         return cell
         
@@ -121,7 +112,7 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row != categories.count {
-            if let category = (categories[indexPath.row]).text as String? {
+            if let category = (categories[indexPath.row]).name as String? {
                 switch expenseType {
                 case .user:
                     if let finishVC = self.storyboard?.instantiateViewControllerWithIdentifier("finishViewController") as? FinishViewController {

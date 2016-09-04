@@ -58,8 +58,10 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         toggleSearchOptions()
     }
     
+    var categoryCounts = [String: Int]()
     
-    var categories = ["Food", "Fuel", "Rent"]
+    var categories = [Category]()
+    
     var categoriesDisplayed = [String]()
     var months = ["July 2016", "June 2016"]
     
@@ -165,8 +167,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                 if expSnapshot.exists() {
                     self.expenses = Expense.expensesFromResults(expSnapshot.value! as! NSDictionary, ref: expSnapshot.ref)
                     self.tableView.reloadData()
-                    self.categories = Expense.categoryNamesFromResults(expSnapshot.value! as! NSDictionary)
-                    self.categoriesTableView.reloadData()
+                    //TO UPDATE
                     self.months = Expense.monthsFromResults(expSnapshot.value! as! NSDictionary)
                     self.monthsTableView.reloadData()
                 }
@@ -362,7 +363,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                                 searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
                             } else {
                                 let category = categories[indexPath.row]
-                                searchCategoryCell.textLabel?.text = category
+                                searchCategoryCell.textLabel?.text = category.name
                                 
                             }
                             return searchCategoryCell
@@ -372,7 +373,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                                 searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
                             } else {
                                 let category = categories[indexPath.row]
-                                searchCategoryCell.textLabel?.text = category
+                                searchCategoryCell.textLabel?.text = category.name
                                 
                             }
                             return searchCategoryCell
@@ -384,7 +385,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                                 searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
                             } else {
                                 let category = categories[indexPath.row]
-                                searchCategoryCell.textLabel?.text = category
+                                searchCategoryCell.textLabel?.text = category.name
                                 
                             }
                             return searchCategoryCell
@@ -394,7 +395,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                                 searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
                             } else {
                                 let category = categories[indexPath.row]
-                                searchCategoryCell.textLabel?.text = category
+                                searchCategoryCell.textLabel?.text = category.name
                                 
                             }
                             return searchCategoryCell
@@ -402,7 +403,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                     }
                 } else {
                     let category = categories[indexPath.row]
-                    searchCategoryCell.textLabel?.text = category
+                    searchCategoryCell.textLabel?.text = category.name
                     return searchCategoryCell
                 }
 
@@ -581,7 +582,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             if cellsCount >= 4 && indexPath.row == cellsCount - 1 {
                 toggleCategoryView()
             } else {
-                self.filterExpensesByCategory(categories[indexPath.row])
+                self.filterExpensesByCategory(categories[indexPath.row].name)
             }
         } else if tableView.tag == 22 {
             self.searchBar.textField.resignFirstResponder()
@@ -664,68 +665,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func deleteGroupExpense(groupExpense: GroupExpense) {
-        print("deleting")
-        groupExpensesRef.child(groupExpense.expenseId).removeValueWithCompletionBlock { (error, ref) in
-            if error != nil {
-                print(error?.localizedDescription)
-            } else {
-                print("removed")
-            }
-        }
-        
-        groupExpensesRef.child("totals").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-            if snapshot.exists() {
-                if let totals = GroupExpense.totalsFromResults(snapshot.value! as! NSDictionary) as [String : AnyObject]? {
-                    
-                    if let currentTotalSpent = totals["total"] as? Float {
-                        let newTotalSpent = currentTotalSpent - groupExpense.billAmount
-                        self.expensesRef.child("totals/total").setValue(newTotalSpent)
-                    }
-                    
-                    if totals[groupExpense.month] != nil {
-                        if let currentMonSpent = totals[groupExpense.month] as? Float {
-                            let newMonSpent = currentMonSpent - groupExpense.billAmount
-                            self.expensesRef.child("totals/\(groupExpense.month)").setValue(newMonSpent)
-                        }
-                    }
-                    
-                    if totals[groupExpense.week] != nil {
-                        if let currentMonSpent = totals[groupExpense.week] as? Float {
-                            let newMonSpent = currentMonSpent - groupExpense.billAmount
-                            self.expensesRef.child("totals/\(groupExpense.week)").setValue(newMonSpent)
-                        }
-                    }
-                    
-                }
-            }
-        })
-        
-        groupExpensesRef.child("categories/\(groupExpense.category)").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-            if snapshot.exists() {
-                if let totals = GroupExpense.categoryFromResults(snapshot.value! as! NSDictionary) as [String : AnyObject]? {
-                    
-                    if let currentTotalSpent = totals["total"] as? Float {
-                        let newTotalSpent = currentTotalSpent - groupExpense.billAmount
-                        self.expensesRef.child("categories/\(groupExpense.category)/total").setValue(newTotalSpent)
-                    }
-                    
-                    if totals[groupExpense.month] != nil {
-                        if let currentMonSpent = totals[groupExpense.month] as? Float {
-                            let newMonSpent = currentMonSpent - groupExpense.billAmount
-                            self.expensesRef.child("categories/\(groupExpense.category)/\(groupExpense.month)").setValue(newMonSpent)
-                        }
-                    }
-                    
-                    if totals[groupExpense.week] != nil {
-                        if let currentMonSpent = totals[groupExpense.week] as? Float {
-                            let newMonSpent = currentMonSpent - groupExpense.billAmount
-                            self.expensesRef.child("categories/\(groupExpense.category)/\(groupExpense.week)").setValue(newMonSpent)
-                        }
-                    }
-                    
-                }
-            }
-        })
+        // TODO
     }
     
     // MARK: - TOGGLE
