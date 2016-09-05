@@ -45,7 +45,7 @@ class FinishViewController: UIViewController {
     
     private func prepareView() {
         view.backgroundColor = MaterialColor.blue.lighten1
-        headerView.backgroundColor = MaterialColor.blue.lighten2
+//        headerView.backgroundColor = MaterialColor.blue.lighten2
     }
     private func prepareLabels() {
         switch expenseType {

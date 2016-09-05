@@ -7,11 +7,15 @@
 //
 
 import UIKit
+import Material
 
 class AlphaCollectionCell: UICollectionViewCell {
     
     @IBOutlet weak var imageView: AsyncImageView!
     
     @IBOutlet weak var nameLabel: UILabel!
+    
+    @IBOutlet weak var categoryButton: FlatButton!
+    
     
 }

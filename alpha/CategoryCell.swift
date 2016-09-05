@@ -9,10 +9,12 @@
 import UIKit
 import Material
 
-class CategoryCell: MaterialCollectionViewCell {
+class CategoryCell: MaterialTableViewCell {
     
     @IBOutlet weak var categoryImage: AsyncImageView!
     
     @IBOutlet weak var categoryLabel: UILabel!
+    
+    @IBOutlet weak var categoryButton: FlatButton!
     
 }
