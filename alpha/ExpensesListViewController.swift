@@ -638,26 +638,46 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             if snapshot.exists() {
                 print(snapshot)
                 print("categories/\(expense.category)/\(expense.month)")
-                if let totals = Expense.categoryFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
+                if let totals = Expense.categoryFromResults(snapshot.value! as! NSDictionary) as [String: AnyObject]? {
                     
-                    if let currentTotalSpent = totals["total"] as Float? {
+                    if let currentTotalSpent = totals["total"] as? Float {
                         let newTotalSpent = currentTotalSpent - expense.billAmount
                         self.expensesRef.child("categories/\(expense.category)/total").setValue(newTotalSpent)
                     }
                     
                     if totals[expense.month] != nil {
-                        if let currentMonSpent = totals[expense.month] as Float? {
+                        if let currentMonSpent = totals[expense.month] as? Float {
                             let newMonSpent = currentMonSpent - expense.billAmount
                             self.expensesRef.child("categories/\(expense.category)/\(expense.month)").setValue(newMonSpent)
                         }
                     }
                     
                     if totals[expense.week] != nil {
-                        if let currentMonSpent = totals[expense.week] as Float? {
+                        if let currentMonSpent = totals[expense.week] as? Float {
                             let newMonSpent = currentMonSpent - expense.billAmount
                             self.expensesRef.child("categories/\(expense.category)/\(expense.week)").setValue(newMonSpent)
                         }
                     }
+                    
+                    if totals["counter"] != nil {
+                        if let currentCounter = totals["counter"] as? Int {
+                            self.expensesRef.child("categories/\(expense.category)/counter").setValue(currentCounter - 1)
+                        }
+                    }
+                    
+                    if totals["counter_\(expense.month)"] != nil {
+                        if let currentCounter = totals["counter_\(expense.month)"] as? Int {
+                            self.expensesRef.child("categories/\(expense.category)/counter_\(expense.month)").setValue(currentCounter - 1)
+                        }
+                    }
+                    
+                    if totals["counter_\(expense.week)"] != nil {
+                        if let currentCounter = totals["counter_\(expense.week)"] as? Int {
+                            self.expensesRef.child("categories/\(expense.category)/counter_\(expense.week)").setValue(currentCounter - 1)
+                        }
+                    }
+                    
+                    
                     
                 }
             }

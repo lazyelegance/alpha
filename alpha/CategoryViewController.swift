@@ -81,6 +81,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
             return cell
         }
         let category = categories[indexPath.row]
+        print(category)
         cell.categoryLabel.text = category.name.uppercaseString
         return cell
         

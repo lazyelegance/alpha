@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 struct Category {
     var name: String
     var imageName = String()
@@ -16,8 +17,14 @@ struct Category {
     var thisMonth = Float()
     var thisWeek = Float()
     
+    var thisMonthCounter = Int()
+    var thisWeekCounter = Int()
+    
     var months = [String: Float]()
     var weeks = [String: Float]()
+    
+    var monthsCounter = [String: Int]()
+    var weeksCounter = [String: Int]()
     
     init() {
         self.name = "New Category"
@@ -66,6 +73,24 @@ struct Category {
                                 category.thisWeek = (value.1 as! Float)
                             } else {
                                 category.thisWeek = 0.0
+                            }
+                        } else if value.0.hasPrefix("counter_m_") {
+                            let month = value.0.stringByReplacingOccurrencesOfString("counter_m_", withString: "").stringByReplacingOccurrencesOfString("_", withString: " ")
+                            category.monthsCounter[month] = (value.1 as! Int)
+                            
+                            if value.0 == "counter_\(currMonth)" {
+                                category.thisMonthCounter = (value.1 as! Int)
+                            } else {
+                                category.thisMonthCounter = 0
+                            }
+                        } else if value.0.hasPrefix("counter_w_") {
+                            let week = value.0.stringByReplacingOccurrencesOfString("counter_w_", withString: "").stringByReplacingOccurrencesOfString("_", withString: " ")
+                            category.weeksCounter[week] = (value.1 as! Int)
+                            
+                            if value.0 == "counter_\(currWeek)" {
+                                category.thisWeekCounter = (value.1 as! Int)
+                            } else {
+                                category.thisWeekCounter = 0
                             }
                         }
                     }

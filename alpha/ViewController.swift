@@ -379,10 +379,29 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func updateGraphData() {
         if self.categories.count > 0 {
+            
+            switch self.segmentButtonState {
+            case .total:
+                categories.sortInPlace({ (a, b) -> Bool in return (a.counter > b.counter) })
+            case .thisMonth:
+                categories.sortInPlace({ (a, b) -> Bool in return (a.thisMonthCounter > b.thisMonthCounter) })
+            case .thisWeek:
+                categories.sortInPlace({ (a, b) -> Bool in return (a.thisWeekCounter > b.thisWeekCounter) })
+            }
+            
+            
+            print(categories)
+            var i = 0
+            
             for category in categories {
                 self.expenseCategoriesTotal[category.name] = category.total
                 self.expenseCategoriesThisMonth[category.name] = category.thisMonth
                 self.expenseCategoriesThisWeek[category.name] = category.thisWeek
+                
+                i = i + 1
+                if i > 2 {
+                    break
+                }
             }
         }
         

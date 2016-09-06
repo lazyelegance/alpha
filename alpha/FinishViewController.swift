@@ -325,15 +325,24 @@ class FinishViewController: UIViewController {
             
             categoryRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                 if snapshot.exists() {
-                    if let categoryDetail = Expense.categoryFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
+                    if let categoryDetail = Expense.categoryFromResults(snapshot.value! as! NSDictionary) as [String: AnyObject]? {
                         
-                        if let currentTotalSpent = categoryDetail["total"] as Float? {
+                        if let currentTotalSpent = categoryDetail["total"] as? Float {
                             let newTotalSpent = currentTotalSpent + self.newExpense.billAmount
                             categoryRef.child("total").setValue(newTotalSpent)
                         }
                         
+                        if categoryDetail["counter"] != nil {
+                            if let currentCounter = categoryDetail["counter"] as? Int {
+                                categoryRef.child("counter").setValue(currentCounter + 1)
+                            }
+                        } else {
+                            categoryRef.child("counter").setValue(1)
+                        }
+                        
+                        
                         if categoryDetail[currmon] != nil {
-                            if let currentMonSpent = categoryDetail[currmon] as Float? {
+                            if let currentMonSpent = categoryDetail[currmon] as? Float {
                                 let newMonSpent = currentMonSpent + self.newExpense.billAmount
                                 categoryRef.child("\(currmon)").setValue(newMonSpent)
                             }
@@ -341,14 +350,32 @@ class FinishViewController: UIViewController {
                             categoryRef.child("\(currmon)").setValue(self.newExpense.billAmount)
                         }
                         
+                        if categoryDetail["counter_\(currmon)"] != nil {
+                            if let currentCounter = categoryDetail["counter_\(currmon)"] as? Int {
+                                categoryRef.child("counter_\(currmon)").setValue(currentCounter + 1)
+                            }
+                        } else {
+                            categoryRef.child("counter_\(currmon)").setValue(1)
+                        }
+                        
                         if categoryDetail[currweek] != nil {
-                            if let currentMonSpent = categoryDetail[currweek] as Float? {
+                            if let currentMonSpent = categoryDetail[currweek] as? Float {
                                 let newMonSpent = currentMonSpent + self.newExpense.billAmount
                                 categoryRef.child("\(currweek)").setValue(newMonSpent)
                             }
                         } else {
                             categoryRef.child("\(currweek)").setValue(self.newExpense.billAmount)
                         }
+                        
+                        if categoryDetail["counter_\(currweek)"] != nil {
+                            if let currentCounter = categoryDetail["counter_\(currweek)"] as? Int {
+                                categoryRef.child("counter_\(currweek)").setValue(currentCounter + 1)
+                            }
+                        } else {
+                            categoryRef.child("counter_\(currweek)").setValue(1)
+                        }
+                        
+                        
                         
                     }
                 } else {
@@ -357,6 +384,9 @@ class FinishViewController: UIViewController {
                     categoryRef.child("total").setValue(newTotalSpent)
                     categoryRef.child("\(currweek)").setValue(newTotalSpent)
                     categoryRef.child("\(currmon)").setValue(newTotalSpent)
+                    categoryRef.child("counter").setValue(1)
+                    categoryRef.child("counter_\(currmon)").setValue(1)
+                    categoryRef.child("counter_\(currweek)").setValue(1)
                 }
                 
                 
