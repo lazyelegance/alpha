@@ -9,11 +9,14 @@
 import UIKit
 import Material
 import FirebaseAuth
+import FirebaseDatabase
 
 
 class UserSettingsViewController: UIViewController {
     
     
+    var user = User()
+    var expensesRef = FIRDatabaseReference()
     
     @IBOutlet weak var groupOptionsView: MaterialView!
     
@@ -35,20 +38,19 @@ class UserSettingsViewController: UIViewController {
     @IBOutlet weak var monthlyLimitLabel: UILabel!
     
     @IBAction func increamentMontlyLimit(sender: AnyObject) {
-        monthlyLimit = monthlyLimit + 50
-        monthlyLimitLabel.text = String(monthlyLimit)
+        self.expensesRef.child("monthlyLimit").setValue(self.monthlyLimit + 50)
     }
     
     @IBAction func decrementMonthlyLimit(sender: AnyObject) {
-        monthlyLimit = monthlyLimit - 50
-        monthlyLimitLabel.text = String(monthlyLimit)
+        self.expensesRef.child("monthlyLimit").setValue(self.monthlyLimit - 50)
     }
     
-    var monthlyLimit = 2000
+    var monthlyLimit = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         
         prepareView()
+        prepareMonthlyLimit()
 
         // Do any additional setup after loading the view.
     }
@@ -62,11 +64,23 @@ class UserSettingsViewController: UIViewController {
     private func prepareView() {
         view.backgroundColor = MaterialColor.lightBlue.base
         monthlyLimitLabel.text = String(monthlyLimit)
-        
-        
+        userName.text = user.name
+        if user.photoURL != "" {
+            profileImage.imageURL = NSURL(string: user.photoURL)
+        }
         
     }
     
+    func prepareMonthlyLimit() {
+        self.expensesRef.child("monthlyLimit").observeEventType(.Value, withBlock: { (snapshot) in
+            if snapshot.exists() {
+                self.monthlyLimit = snapshot.value! as! Int
+                self.monthlyLimitLabel.text = String(self.monthlyLimit)
+            } else {
+
+            }
+        })
+    }
     
     
     /*

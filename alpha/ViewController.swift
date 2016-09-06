@@ -355,7 +355,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     @IBAction func showSettingsScreen(sender: AnyObject) {
         if let userSettingsViewController = self.storyboard?.instantiateViewControllerWithIdentifier("userSettingsViewController") as? UserSettingsViewController {
-            
+            userSettingsViewController.user = user
+            userSettingsViewController.expensesRef = alphaRef.child("expenses/\(user.userId)")
             self.navigationController?.pushViewController(userSettingsViewController, animated: true)
         }
     }
