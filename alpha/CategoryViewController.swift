@@ -21,7 +21,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     
     var categories = [Category]()
     
-    
+    var defaultCategories = [Category]()
     
     var newExpense = Expense()
     var newGroupExpense = GroupExpense()
@@ -58,7 +58,24 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
 
     
     private func prepareItems() {
+        defaultCategories.removeAll()
+        defaultCategories.append(Category(name: "FOOD"))
+        defaultCategories.append(Category(name: "ENTERTAINMENT"))
+        defaultCategories.append(Category(name: "RENT"))
+        defaultCategories.append(Category(name: "SUBSCRIPTIONS"))
+        defaultCategories.append(Category(name: "GROCERIES"))
+        defaultCategories.append(Category(name: "UTILITIES"))
         
+        for defaultCategory in defaultCategories {
+           if categories.contains({ (category) -> Bool in category.name == defaultCategory.name }) {
+            print(defaultCategory)
+            
+           } else {
+            categories.append(defaultCategory)
+            }
+        }
+        
+        categories.sortInPlace { (a, b) -> Bool in a.counter > b.counter }
                 
         tableView.reloadData()
         

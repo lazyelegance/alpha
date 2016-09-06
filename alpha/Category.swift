@@ -33,6 +33,10 @@ struct Category {
         self.imageName = "cone"
     }
     
+    init(name: String) {
+        self.name = name
+    }
+    
 
     
     static func categoriesFromResults(results: NSDictionary) -> [Category] {
