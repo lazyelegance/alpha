@@ -7,8 +7,10 @@
 //
 
 import Foundation
+import Material
 
 
+let categoryFont = RobotoFont.mediumWithSize(10)
 
 public func calculateDateValues() -> (NSDate, String, String) {
     let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
@@ -26,6 +28,29 @@ public func calculateDateValues() -> (NSDate, String, String) {
     let currweek = "w_" + formatter_week.stringFromDate(currDate)
     
     return (currDate, currmon, currweek)
+}
+
+public func calculateDateValuesMore() -> (NSDate, String, String, String, String) {
+    let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
+    
+    let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
+    
+    let formatter = NSDateFormatter()
+    formatter.dateFormat = "MMMM"
+    let mon = formatter.stringFromDate(currDate)
+    
+    formatter.dateFormat = "w"
+    let week = formatter.stringFromDate(currDate)
+    
+    formatter.dateFormat = "d"
+    let day = formatter.stringFromDate(currDate)
+    
+    formatter.dateFormat = "yyyy"
+    let year = formatter.stringFromDate(currDate)
+    
+    
+    
+    return (currDate, day, mon, year, week)
 }
 
 

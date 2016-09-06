@@ -264,14 +264,18 @@ class FinishViewController: UIViewController {
     func saveExpense() {
         
 
-        let (currDate, currmon, currweek) = calculateDateValues()
+        let (currDate, day, mon, year, week) = calculateDateValuesMore()
+        
+        let currmon = "m_" + mon + "_" + year
+        let currweek = "w_" + week + "_" + year
+        
         
         if self.expenseType == .user {
             let userExpensesRef = newExpense.firebaseDBRef
             
             let key = userExpensesRef.childByAutoId().key
             
-            userExpensesRef.updateChildValues([key : ["description": newExpense.description, "billAmount": newExpense.billAmount, "category" : newExpense.category, "dateAdded" : "\(currDate)", "month" : currmon, "week": currweek ]]) { (error, ref) in
+            userExpensesRef.updateChildValues([key : ["description": newExpense.description, "billAmount": newExpense.billAmount, "category" : newExpense.category, "dateAdded" : "\(currDate)", "month" : mon, "week": week, "year" : year, "day": day ]]) { (error, ref) in
                 if error != nil {
                     print(error?.localizedDescription)
                     return

@@ -32,7 +32,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     let addNewText = "+ Add New"
-    let categoryFont = RobotoFont.mediumWithSize(10)
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()

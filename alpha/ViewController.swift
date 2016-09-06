@@ -130,9 +130,35 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     // MARK: - ChartView
     func chartValueSelected(chartView: ChartViewBase, entry: ChartDataEntry, dataSetIndex: Int, highlight: ChartHighlight) {
-        print(entry)
-        print(dataSetIndex)
-        print(highlight)
+        
+        
+        var chartdata = [String]()
+        chartdata.removeAll()
+        switch self.segmentButtonState {
+        case .total:
+            for expense in self.expenseCategoriesTotal {
+                chartdata.append(expense.0)
+            }
+        case .thisMonth:
+            for expense in self.expenseCategoriesThisMonth {
+                chartdata.append(expense.0)
+            }
+        case .thisWeek:
+            for expense in self.expenseCategoriesThisWeek {
+                chartdata.append(expense.0)
+            }
+        }
+        
+        if let userId = self.user.userId as String? {
+            if let expensesListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListViewController") as? ExpensesListViewController {
+                expensesListViewController.expenseType = .user
+                expensesListViewController.expensesRef = self.alphaRef.child("expenses/\(userId)")
+                expensesListViewController.userName = self.user.name
+                expensesListViewController.showFilteredResults = true
+                expensesListViewController.selectedCategory = chartdata[entry.xIndex]
+                self.navigationController?.pushViewController(expensesListViewController, animated: true)
+            }
+        }
     }
     
     private func prepareChartView() {
@@ -391,7 +417,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
             
             
-            print(categories)
             var i = 0
             
             for category in categories {
@@ -497,6 +522,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 expensesListViewController.expenseType = .user
                 expensesListViewController.expensesRef = self.alphaRef.child("expenses/\(userId)")
                 expensesListViewController.userName = self.user.name
+                expensesListViewController.categories = categories
                 self.navigationController?.pushViewController(expensesListViewController, animated: true)
             }
         }

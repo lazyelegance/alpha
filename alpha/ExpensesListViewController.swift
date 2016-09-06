@@ -11,7 +11,7 @@ import Material
 import FirebaseDatabase
 import FirebaseAuth
 
-class ExpensesListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UIScrollViewDelegate {
+class ExpensesListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
     
     var expenseType = ExpenseType.user
     
@@ -29,6 +29,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
 
     
     
+    @IBOutlet weak var sCCollectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var headerView: MaterialView!
@@ -39,10 +40,9 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet weak var categoryViewHeight: NSLayoutConstraint!
     @IBOutlet weak var monthsViewHeight: NSLayoutConstraint!
     
-    @IBOutlet weak var categoriesTableView: UITableView!
-    @IBOutlet weak var monthsTableView: UITableView!
 
-    
+
+    var selectedCategory = String()
     var showFilteredResults = false
     var searchExpanded = false
     var searchShouldExpand = false
@@ -75,9 +75,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         preparetableview()
         getExpenses()
         prepareHeaderView()
-        prepareSearchOptions()
 
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
@@ -101,14 +99,23 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
         
+        sCCollectionView.backgroundColor = MaterialColor.clear
+    }
+    
+    private func preparetableviewdata() {
+        
+        if showFilteredResults {
+            filterExpensesByCategory(selectedCategory)
+        }
+        
+        self.tableView.reloadData()
+        
         
     }
     
-    private func prepareSearchOptions() {
-        if categories.count > 3 {
-            
-        }
-    }
+    
+    
+
     
 
     private func prepareHeaderView() {
@@ -166,10 +173,10 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             expensesRef.observeEventType(.Value, withBlock: { (expSnapshot) in
                 if expSnapshot.exists() {
                     self.expenses = Expense.expensesFromResults(expSnapshot.value! as! NSDictionary, ref: expSnapshot.ref)
-                    self.tableView.reloadData()
+                    self.preparetableviewdata()
                     //TO UPDATE
                     self.months = Expense.monthsFromResults(expSnapshot.value! as! NSDictionary)
-                    self.monthsTableView.reloadData()
+//                    self.monthsTableView.reloadData()
                 }
                 
             })
@@ -219,7 +226,6 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             filteredExpenses = expenses.filter({ (expense) -> Bool in
                 return (expense.category == category)
             })
-            toggleSearchOptions()
             showFilteredResults = true
             searchBar.textField.text = category
             searchBarBackButton.alpha = 1
@@ -268,67 +274,13 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         
         switch expenseType {
         case .user:
-            switch tableView.tag {
-            case 11:
-                if categories.count > 3 {
-                    if categories.count == 4 {
-                        if categoryViewExpanded {
-                            return 5
-                        } else {
-                            return 4
-                        }
-                    } else {
-                        if categoryViewExpanded {
-                            return 6
-                        } else {
-                            return 4
-                        }
-                    }
-                } else {
-                    return categories.count
-                }
-                
-            case 22:
-                if months.count > 3 {
-                    if months.count == 4 {
-                        if monthsViewExpanded {
-                            return 5
-                        } else {
-                            return 4
-                        }
-                    } else {
-                        if monthsViewExpanded {
-                            return 6
-                        } else {
-                            return 4
-                        }
-                    }
-                } else {
-                    return months.count
-                }
-            case 33:
-                if showFilteredResults {
-                    return filteredExpenses.count
-                } else {
-                    return expenses.count
-                }
-                
-            default:
-                return 0
+            if showFilteredResults {
+                return filteredExpenses.count
+            } else {
+                return expenses.count
             }
-            
         case .group:
-            switch tableView.tag {
-            case 11:
-                return categories.count + 1
-            case 22:
-                return months.count
-            case 33:
-                
-                return groupExpenses.count
-            default:
-                return 0
-            }
+            return groupExpenses.count
         }
 
     }
@@ -347,127 +299,6 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         
         switch expenseType {
         case .user:
-            let searchCategoryCell: MaterialTableViewCell = MaterialTableViewCell(style: .Default, reuseIdentifier: "searchCategoryCell")
-            
-            
-            searchCategoryCell.selectionStyle = .None
-            searchCategoryCell.textLabel!.font = RobotoFont.mediumWithSize(10)
-            
-            if tableView.tag == 11 {
-                
-                if categories.count > 3 {
-                    if categories.count == 4 {
-                        if categoryViewExpanded {
-                            if indexPath.row == 4 {
-                                searchCategoryCell.textLabel?.text = showMoreCategoriesText
-                                searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
-                            } else {
-                                let category = categories[indexPath.row]
-                                searchCategoryCell.textLabel?.text = category.name
-                                
-                            }
-                            return searchCategoryCell
-                        } else {
-                            if indexPath.row == 3 {
-                                searchCategoryCell.textLabel?.text = showMoreCategoriesText
-                                searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
-                            } else {
-                                let category = categories[indexPath.row]
-                                searchCategoryCell.textLabel?.text = category.name
-                                
-                            }
-                            return searchCategoryCell
-                        }
-                    } else {
-                        if categoryViewExpanded {
-                            if indexPath.row == 5 {
-                                searchCategoryCell.textLabel?.text = showMoreCategoriesText
-                                searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
-                            } else {
-                                let category = categories[indexPath.row]
-                                searchCategoryCell.textLabel?.text = category.name
-                                
-                            }
-                            return searchCategoryCell
-                        } else {
-                            if indexPath.row == 3 {
-                                searchCategoryCell.textLabel?.text = showMoreCategoriesText
-                                searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
-                            } else {
-                                let category = categories[indexPath.row]
-                                searchCategoryCell.textLabel?.text = category.name
-                                
-                            }
-                            return searchCategoryCell
-                        }
-                    }
-                } else {
-                    let category = categories[indexPath.row]
-                    searchCategoryCell.textLabel?.text = category.name
-                    return searchCategoryCell
-                }
-
-                
-
-                
-            }
-            
-            if tableView.tag == 22 {
-                if months.count > 3 {
-                    if months.count == 4 {
-                        if monthsViewExpanded {
-                            if indexPath.row == 4 {
-                                searchCategoryCell.textLabel?.text = showMoreMonthsText
-                                searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
-                            } else {
-                                let month = months[indexPath.row]
-                                searchCategoryCell.textLabel?.text = month
-                                
-                            }
-                            return searchCategoryCell
-                        } else {
-                            if indexPath.row == 3 {
-                                searchCategoryCell.textLabel?.text = showMoreMonthsText
-                                searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
-                            } else {
-                                let month = months[indexPath.row]
-                                searchCategoryCell.textLabel?.text = month
-                                
-                            }
-                            return searchCategoryCell
-                        }
-                    } else {
-                        if monthsViewExpanded {
-                            if indexPath.row == 5 {
-                                searchCategoryCell.textLabel?.text = showMoreMonthsText
-                                searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
-                            } else {
-                                let month = months[indexPath.row]
-                                searchCategoryCell.textLabel?.text = month
-                                
-                            }
-                            return searchCategoryCell
-                        } else {
-                            if indexPath.row == 3 {
-                                searchCategoryCell.textLabel?.text = showMoreMonthsText
-                                searchCategoryCell.textLabel?.textColor = MaterialColor.indigo.darken1
-                            } else {
-                                let month = months[indexPath.row]
-                                searchCategoryCell.textLabel?.text = month
-                                
-                            }
-                            return searchCategoryCell
-                        }
-                    }
-                } else {
-                    let month = months[indexPath.row]
-                    searchCategoryCell.textLabel?.text = month
-                    return searchCategoryCell
-                }
-            }
-            
-            
-            
             let expenseCell = tableView.dequeueReusableCellWithIdentifier("expenseCell", forIndexPath: indexPath) as! ExpenseCell
             expenseCell.backgroundColor = MaterialColor.amber.lighten1
             if indexPath.row % 2 == 1 {
@@ -510,11 +341,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if tableView.tag == 33 {
-            return 80
-        } else {
-            return 30
-        }
+        return 80
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -575,27 +402,64 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        print("................................")
-        if tableView.tag == 11 {
-            self.searchBar.textField.resignFirstResponder()
-            let cellsCount = tableView.numberOfRowsInSection(0)
-            if cellsCount >= 4 && indexPath.row == cellsCount - 1 {
-                toggleCategoryView()
-            } else {
-                self.filterExpensesByCategory(categories[indexPath.row].name)
-            }
-        } else if tableView.tag == 22 {
-            self.searchBar.textField.resignFirstResponder()
-            let cellsCount = tableView.numberOfRowsInSection(0)
-            if cellsCount >= 4 && indexPath.row == cellsCount - 1 {
-                toggleMonthsView()
-            } else {
-                self.filterExpensesByMonth(months[indexPath.row])
-            }
-        }
+        
     }
     
 
+    // MARK : COLLECTION VIEW
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return categories.count
+        
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("searchCategoryCell", forIndexPath: indexPath) as! AlphaCollectionCell
+        cell.backgroundColor = MaterialColor.clear
+        
+        cell.layer.masksToBounds = true
+        cell.layer.cornerRadius = 2
+        
+        cell.nameLabel.font = categoryFont
+        
+        let category = categories[indexPath.row]
+        print(category)
+        cell.nameLabel.textColor = MaterialColor.black
+        cell.nameLabel.text = category.name.uppercaseString
+        
+        return cell
+        
+    }
+    
+    func collectionView(collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                               sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        let category = categories[indexPath.row]
+        let categorySize = (category.name.uppercaseString as NSString).sizeWithAttributes([NSFontAttributeName: categoryFont])
+        return CGSizeMake(categorySize.width + 20, 30)
+        
+    }
+    
+    func collectionView(collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                               minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+        return 5
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout
+        collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+        return 5
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        if let category = (categories[indexPath.row]).name as String? {
+            filterExpensesByCategory(category)
+        }
+        
+    }
+    
     
     
     // MARK: - DELETE EXPENSE
@@ -710,8 +574,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             self.view.layoutIfNeeded()
         })
         
-        categoriesTableView.reloadData()
-        monthsTableView.reloadData()
+
         
     }
     
@@ -727,21 +590,20 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         self.monthsViewExpanded = !self.monthsViewExpanded
         
         if self.categoryViewExpanded {
-            self.categoryViewHeight.constant = 120
+            self.categoryViewHeight.constant = 40
             self.showMoreCategoriesText = "Show More"
             self.categoryViewExpanded = !self.categoryViewExpanded
         }
         UIView.animateWithDuration(0.5, animations: {
             self.view.layoutIfNeeded()
         })
-        categoriesTableView.reloadData()
-        monthsTableView.reloadData()
+
     }
     
     func toggleSearchOptions() {
         if !self.searchExpanded {
             
-            self.categoryViewHeight.constant = 120
+            self.categoryViewHeight.constant = 40
             self.monthsViewHeight.constant = 120
         } else {
             categoryViewHeight.constant = 0
