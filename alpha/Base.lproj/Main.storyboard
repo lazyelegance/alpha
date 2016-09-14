@@ -1236,7 +1236,7 @@
                                         <rect key="frame" x="0.0" y="28" width="560" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6hr-3k-V64" id="lZN-Kr-rXP">
-                                            <rect key="frame" x="0.0" y="0.0" width="560" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="560" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3e6-eh-pPh">
@@ -2121,7 +2121,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="YOU ARE ABOUT TO ADD" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x5v-Su-lfh">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="YOU ARE ABOUT TO ADD" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x5v-Su-lfh">
                                 <rect key="frame" x="20" y="215" width="114" height="12"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="W8h-Sz-CSo"/>
@@ -2135,7 +2135,7 @@
                                     </mask>
                                 </variation>
                             </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="W2b-Wi-ETf">
+                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="W2b-Wi-ETf">
                                 <rect key="frame" x="456" y="373" width="124" height="23"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UX0-PI-NPH" customClass="FlatButton" customModule="Material">
@@ -2196,7 +2196,7 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qed-pd-Xey" customClass="MaterialView">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qed-pd-Xey" customClass="MaterialView">
                                 <rect key="frame" x="20" y="237" width="560" height="126"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o0O-9B-2yZ">
@@ -2309,18 +2309,22 @@
                             <constraint firstItem="ekp-cV-4OY" firstAttribute="top" secondItem="MJ6-M8-av6" secondAttribute="bottom" id="RZ4-tJ-Hag"/>
                             <constraint firstItem="qed-pd-Xey" firstAttribute="top" secondItem="ekp-cV-4OY" secondAttribute="bottom" constant="5" id="SnO-8l-o1o"/>
                             <constraint firstItem="tya-GA-RXI" firstAttribute="leading" secondItem="Cmi-Pr-AQM" secondAttribute="leadingMargin" constant="-20" id="Unn-Wm-ymb"/>
+                            <constraint firstItem="tya-GA-RXI" firstAttribute="top" secondItem="x5v-Su-lfh" secondAttribute="bottom" constant="-227" id="aa5-rK-hjl"/>
                             <constraint firstItem="qed-pd-Xey" firstAttribute="top" secondItem="x5v-Su-lfh" secondAttribute="bottom" constant="10" id="c0a-eQ-RPy"/>
                             <constraint firstItem="W2b-Wi-ETf" firstAttribute="leading" secondItem="qed-pd-Xey" secondAttribute="leading" id="cG9-7c-jQy"/>
                             <constraint firstItem="qed-pd-Xey" firstAttribute="top" secondItem="x5v-Su-lfh" secondAttribute="bottom" constant="10" id="cTL-9p-NhA"/>
                             <constraint firstItem="W2b-Wi-ETf" firstAttribute="top" secondItem="qed-pd-Xey" secondAttribute="bottom" constant="10" id="chp-nF-haj"/>
                             <constraint firstItem="3XN-Sc-jng" firstAttribute="top" secondItem="tya-GA-RXI" secondAttribute="bottom" id="kEy-Z1-9A2"/>
+                            <constraint firstItem="x5v-Su-lfh" firstAttribute="top" secondItem="ekp-cV-4OY" secondAttribute="bottom" constant="40" id="lAC-BE-AiY"/>
                             <constraint firstAttribute="trailingMargin" secondItem="tya-GA-RXI" secondAttribute="trailing" constant="-20" id="mJ4-C9-Acu"/>
                             <constraint firstItem="qed-pd-Xey" firstAttribute="top" secondItem="ekp-cV-4OY" secondAttribute="bottom" constant="29" id="ncO-uX-UkF"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="aa5-rK-hjl"/>
                                 <exclude reference="BDU-C8-6LQ"/>
                                 <exclude reference="FdA-0c-2pU"/>
+                                <exclude reference="LE4-be-Z5H"/>
                                 <exclude reference="SnO-8l-o1o"/>
                                 <exclude reference="c0a-eQ-RPy"/>
                                 <exclude reference="ncO-uX-UkF"/>
