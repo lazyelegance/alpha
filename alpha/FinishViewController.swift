@@ -31,6 +31,8 @@ class FinishViewController: UIViewController {
     @IBOutlet weak var restartButton: FlatButton!
     @IBOutlet weak var categoryLabel: UILabel!
 
+    @IBOutlet weak var categoryButton: FlatButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         prepareView()
@@ -45,24 +47,31 @@ class FinishViewController: UIViewController {
     
     private func prepareView() {
         view.backgroundColor = MaterialColor.blue.lighten1
-        headerView.backgroundColor = MaterialColor.clear
-        headerView.borderColor = MaterialColor.white
-        headerView.borderWidth = 2
+
+
     }
     private func prepareLabels() {
+        
+        
+        
+        
         switch expenseType {
         case .user:
             descriptionLabel.text = newExpense.description
-            titleLabel.text = "$\(newExpense.billAmount)"
+            titleLabel.text = "\(newExpense.billAmount)"
             paritylabel.alpha = 0
-            categoryLabel.text = newExpense.category.uppercaseString
+//            categoryLabel.text = newExpense.category.uppercaseString
+            categoryButton.setTitle(newExpense.category.uppercaseString, forState: .Normal)
         case .group:
             descriptionLabel.text = newGroupExpense.description
-            titleLabel.text = "$\(newGroupExpense.billAmount)"
+            titleLabel.text = "\(newGroupExpense.billAmount)"
             paritylabel.text = parityText
-            categoryLabel.text = newGroupExpense.category.uppercaseString
+//            categoryLabel.text = newGroupExpense.category.uppercaseString
+            categoryButton.setTitle(newGroupExpense.category.uppercaseString, forState: .Normal)
         }
+        categoryButton.backgroundColor = MaterialColor.clear
         
+        categoryButton.setTitleColor(MaterialColor.blueGrey.base, forState: .Normal)
     }
     private func prepareButtons() {
         saveButton.backgroundColor = view.backgroundColor

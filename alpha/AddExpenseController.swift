@@ -45,7 +45,7 @@ class AddExpenseController: UIViewController, TextFieldDelegate {
     }
     
     private func prepareView() {
-        view.backgroundColor = currentStep.toColor()
+//        view.backgroundColor = currentStep.toColor()
     }
     
     private func prepareTextField() {
@@ -83,23 +83,23 @@ class AddExpenseController: UIViewController, TextFieldDelegate {
         nextButton.alpha = 0
         switch currentStep {
         case .description:
-            nextButton.setTitle("add expense amount 💲".uppercaseString, forState: .Normal)
-            nextButton.backgroundColor = MaterialColor.blue.darken2
+            nextButton.setTitle("add expense amount".uppercaseString, forState: .Normal)
+            
         case .billAmount:
-            nextButton.setTitle("add category ➡️".uppercaseString, forState: .Normal)
-            nextButton.backgroundColor = MaterialColor.blue.darken2
+            nextButton.setTitle("add category".uppercaseString, forState: .Normal)
+            
         case .category:
-            nextButton.setTitle("finish adding expense 👉".uppercaseString, forState: .Normal)
-            nextButton.backgroundColor = MaterialColor.blue.darken2
+            nextButton.setTitle("finish adding expense".uppercaseString, forState: .Normal)
+            
         default:
             break
         }
-        nextButton.setTitleColor(MaterialColor.white, forState: .Normal)
-        nextButton.backgroundColor = view.backgroundColor
+        
+    
+        nextButton.setTitleColor(MaterialColor.blue.darken2, forState: .Normal)
+        nextButton.backgroundColor = MaterialColor.white
+        
         nextButton.addTarget(self, action: #selector(AddExpenseController.toNextInAddExpenseCycle), forControlEvents: .TouchUpInside)
-        
-        
-        
         backButton.setImage(MaterialIcon.arrowBack, forState: .Normal)
         backButton.addTarget(self, action: #selector(AddExpenseController.backOneStep), forControlEvents: .TouchUpInside)
     }
