@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Material
 
 
 
@@ -25,7 +24,7 @@ public enum AddExpenseStep {
             return "Description"
         case .billAmount:
             return "Bill Amount"
-        case parity:
+        case .parity:
             return "Parity"
         case .finish:
             return "Finish"

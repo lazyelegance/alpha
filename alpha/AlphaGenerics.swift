@@ -7,46 +7,45 @@
 //
 
 import Foundation
-import Material
 
 
-let categoryFont = RobotoFont.mediumWithSize(10)
+let categoryFont = UIFont.boldSystemFont(ofSize: 10) 
 
-public func calculateDateValues() -> (NSDate, String, String) {
-    let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
+public func calculateDateValues() -> (Date, String, String) {
+    let timzoneSeconds = NSTimeZone.local.secondsFromGMT()
     
-    let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
+    let currDate = Date().addingTimeInterval(Double(timzoneSeconds))
     
-    let formatter_mon = NSDateFormatter()
+    let formatter_mon = DateFormatter()
     formatter_mon.dateFormat = "MMMM_yyyy"
-    let currmon = "m_" + formatter_mon.stringFromDate(currDate)
+    let currmon = "m_" + formatter_mon.string(from: currDate)
     
     
     
-    let formatter_week = NSDateFormatter()
+    let formatter_week = DateFormatter()
     formatter_week.dateFormat = "w_yyyy"
-    let currweek = "w_" + formatter_week.stringFromDate(currDate)
+    let currweek = "w_" + formatter_week.string(from: currDate)
     
     return (currDate, currmon, currweek)
 }
 
-public func calculateDateValuesMore() -> (NSDate, String, String, String, String) {
-    let timzoneSeconds = NSTimeZone.localTimeZone().secondsFromGMT
+public func calculateDateValuesMore() -> (Date, String, String, String, String) {
+    let timzoneSeconds = NSTimeZone.local.secondsFromGMT()
     
-    let currDate = NSDate().dateByAddingTimeInterval(Double(timzoneSeconds))
+    let currDate = Date().addingTimeInterval(Double(timzoneSeconds))
     
-    let formatter = NSDateFormatter()
+    let formatter = DateFormatter()
     formatter.dateFormat = "MMMM"
-    let mon = formatter.stringFromDate(currDate)
+    let mon = formatter.string(from: currDate)
     
     formatter.dateFormat = "w"
-    let week = formatter.stringFromDate(currDate)
+    let week = formatter.string(from: currDate)
     
     formatter.dateFormat = "d"
-    let day = formatter.stringFromDate(currDate)
+    let day = formatter.string(from: currDate)
     
     formatter.dateFormat = "yyyy"
-    let year = formatter.stringFromDate(currDate)
+    let year = formatter.string(from: currDate)
     
     
     
@@ -62,11 +61,11 @@ public enum SegmentButtonState {
     func titleString() -> String {
         switch self {
         case .total:
-            return "Total".uppercaseString
+            return "Total".uppercased()
         case .thisMonth:
-            return "This Month".uppercaseString
+            return "This Month".uppercased()
         case .thisWeek:
-            return "This Week".uppercaseString
+            return "This Week".uppercased()
         }
     }
     

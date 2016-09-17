@@ -39,7 +39,7 @@ struct GroupExpense {
         self.billAmount = 0.00
     }
     
-    static func totalsFromResults(results: NSDictionary) -> [String : AnyObject] {
+    static func totalsFromResults(_ results: NSDictionary) -> [String : AnyObject] {
         
         var totals = [String: AnyObject]()
         totals.removeAll()
@@ -47,7 +47,7 @@ struct GroupExpense {
         if results.count > 0 {
             print(results)
             for result in results {
-                totals[result.key as! String] = (result.value)
+                totals[result.key as! String] = (result.value as AnyObject?)
                 
             }
             
@@ -55,10 +55,10 @@ struct GroupExpense {
         }
         
         
-        return ["total": 0.0]
+        return ["total": 0.0 as AnyObject]
     }
     
-    static func categoryFromResults(results: NSDictionary) -> [String : AnyObject] {
+    static func categoryFromResults(_ results: NSDictionary) -> [String : AnyObject] {
         
         var totals = [String : AnyObject]()
         totals.removeAll()
@@ -66,7 +66,7 @@ struct GroupExpense {
         if results.count > 0 {
             
             for result in results {
-                totals[result.key as! String] = (result.value)
+                totals[result.key as! String] = (result.value as AnyObject?)
                 
             }
             
@@ -74,10 +74,10 @@ struct GroupExpense {
         }
         
         
-        return ["total": 0.0]
+        return ["total": 0.0 as AnyObject]
     }
     
-    static func categoriesFromResults(results: NSDictionary) -> [String : [String: Float]] {
+    static func categoriesFromResults(_ results: NSDictionary) -> [String : [String: Float]] {
         
         var categories = [String: [String: Float]]()
         categories.removeAll()
@@ -96,7 +96,7 @@ struct GroupExpense {
         return ["noCategory": ["none":0.0]]
     }
     
-    static func expenseFromResults(expenseId: String, results: NSDictionary) -> GroupExpense {
+    static func expenseFromResults(_ expenseId: String, results: NSDictionary) -> GroupExpense {
         var expense = GroupExpense()
         
         if results.count > 0 {
@@ -131,7 +131,7 @@ struct GroupExpense {
     }
     
     
-    static func expensesFromFirebase(results: NSDictionary, firebasereference: FIRDatabaseReference) -> [GroupExpense] {
+    static func expensesFromFirebase(_ results: NSDictionary, firebasereference: FIRDatabaseReference) -> [GroupExpense] {
         var expenses = [GroupExpense]()
         
         expenses.removeAll()

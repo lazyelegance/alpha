@@ -7,9 +7,9 @@
 //
 
 import UIKit
-import Material
 
-class AlphaCollectionCell: MaterialCollectionViewCell {
+
+class AlphaCollectionCell: UICollectionViewCell {
     
     @IBOutlet weak var imageView: AsyncImageView!
     

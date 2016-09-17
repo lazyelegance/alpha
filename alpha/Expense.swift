@@ -29,7 +29,7 @@ struct Expense {
     }
     
     
-    static func totalsFromResults(results: NSDictionary) -> [String : Float] {
+    static func totalsFromResults(_ results: NSDictionary) -> [String : Float] {
         
         var totals = [String: Float]()
         totals.removeAll()
@@ -48,7 +48,7 @@ struct Expense {
         return ["total": 0.0]
     }
     
-    static func categoryFromResults(results: NSDictionary) -> [String : Float] {
+    static func categoryFromResults(_ results: NSDictionary) -> [String : Float] {
         
         var totals = [String: Float]()
         totals.removeAll()
@@ -67,7 +67,7 @@ struct Expense {
         return ["total": 0.0]
     }
     
-    static func categoriesFromResults(results: NSDictionary) -> [String : [String: Float]] {
+    static func categoriesFromResults(_ results: NSDictionary) -> [String : [String: Float]] {
         
         var categories = [String: [String: Float]]()
         categories.removeAll()
@@ -86,7 +86,7 @@ struct Expense {
         return ["noCategory": ["none":0.0]]
     }
     
-    static func categoryNamesFromResults(results: NSDictionary) -> [String: Int] {
+    static func categoryNamesFromResults(_ results: NSDictionary) -> [String: Int] {
         
         var categoryNames = [String: Int]()
         categoryNames.removeAll()
@@ -118,7 +118,7 @@ struct Expense {
         return ["noCategory": 0]
     }
     
-    static func monthsFromResults(results: NSDictionary) -> [String] {
+    static func monthsFromResults(_ results: NSDictionary) -> [String] {
         
         var months = [String]()
         months.removeAll()
@@ -131,7 +131,7 @@ struct Expense {
                             for value in valueDictionary {
                                 if let valueKey = value.key as? String {
                                     if valueKey.hasPrefix("m_") {
-                                        let month = valueKey.stringByReplacingOccurrencesOfString("m_", withString: "").stringByReplacingOccurrencesOfString("_", withString: " ")
+                                        let month = valueKey.replacingOccurrences(of: "m_", with: "").replacingOccurrences(of: "_", with: " ")
                                         months.append(month)
                                     }
                                     
@@ -153,7 +153,7 @@ struct Expense {
     }
 
     
-    static func expensesFromResults(results: NSDictionary, ref: FIRDatabaseReference) -> [Expense] {
+    static func expensesFromResults(_ results: NSDictionary, ref: FIRDatabaseReference) -> [Expense] {
         var expenses = [Expense]()
         expenses.removeAll()
         

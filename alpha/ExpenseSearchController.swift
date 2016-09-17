@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Material
+
 
 protocol ExpenseSearchControllerDelegate {
     func didStartSearching()
@@ -16,7 +16,7 @@ protocol ExpenseSearchControllerDelegate {
     
     func didTapOnCancelButton()
     
-    func didChangeSearchText(searchText: String)
+    func didChangeSearchText(_ searchText: String)
 }
 
 class ExpenseSearchController: UISearchController, UISearchBarDelegate {
@@ -41,7 +41,7 @@ class ExpenseSearchController: UISearchController, UISearchBarDelegate {
         configureSearchBar(searchBarFrame, font: searchBarFont, textColor: searchBarTextColor, bgColor: searchBarTintColor)
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
@@ -49,7 +49,7 @@ class ExpenseSearchController: UISearchController, UISearchBarDelegate {
         super.init(coder: aDecoder)!
     }
     
-    func configureSearchBar(frame: CGRect, font: UIFont, textColor: UIColor, bgColor: UIColor) {
+    func configureSearchBar(_ frame: CGRect, font: UIFont, textColor: UIColor, bgColor: UIColor) {
         expenseSearchBar = ExpenseSearchBar(frame: frame, font: font , textColor: textColor)
         
         expenseSearchBar.barTintColor = bgColor
@@ -59,21 +59,21 @@ class ExpenseSearchController: UISearchController, UISearchBarDelegate {
         expenseSearchBar.delegate = self
     }
     
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         expenseSearchDelete.didStartSearching()
     }
 
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         expenseSearchBar.resignFirstResponder()
         expenseSearchDelete.didTapOnSearchButton()
     }
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         expenseSearchBar.resignFirstResponder()
         expenseSearchDelete.didTapOnCancelButton()
     }
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         expenseSearchDelete.didChangeSearchText(searchText)
     }
     

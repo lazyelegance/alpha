@@ -17,7 +17,7 @@ struct GroupExpenseTotals {
     var totalSpent = Float()
     var groupId = String()
     
-    static func totalsFromResults(groupId: String, results: NSDictionary) -> GroupExpenseTotals {
+    static func totalsFromResults(_ groupId: String, results: NSDictionary) -> GroupExpenseTotals {
         
         var totals = GroupExpenseTotals()
         

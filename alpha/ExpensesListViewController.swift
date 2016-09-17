@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Material
 import FirebaseDatabase
 import FirebaseAuth
 
@@ -51,10 +50,10 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     var showMoreCategoriesText = "Show More"
     var showMoreMonthsText = "Show More"
     
-    private var searchBar: SearchBar!
+    //fileprivate var searchBar: SearchBar!
 
     
-    @IBAction func searchButtonClicked(sender: AnyObject) {
+    @IBAction func searchButtonClicked(_ sender: AnyObject) {
         toggleSearchOptions()
     }
     
@@ -83,7 +82,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         // Dispose of any resources that can be recreated.
     }
     
-    private func prepareview() {
+    fileprivate func prepareview() {
         view.backgroundColor = MaterialColor.amber.base
         if expenseType == .group {
             view.backgroundColor = MaterialColor.teal.base
@@ -92,7 +91,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         monthsViewHeight.constant = 0
     }
     
-    private func preparetableview() {
+    fileprivate func preparetableview() {
         
         
         tableView.backgroundColor = MaterialColor.clear
@@ -102,7 +101,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         sCCollectionView.backgroundColor = MaterialColor.clear
     }
     
-    private func preparetableviewdata() {
+    fileprivate func preparetableviewdata() {
         
         if showFilteredResults {
             filterExpensesByCategory(selectedCategory)
@@ -118,16 +117,16 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
 
     
 
-    private func prepareHeaderView() {
+    fileprivate func prepareHeaderView() {
         
         headerViewHeight.constant = 40
         
-        searchBar = SearchBar()
-        
-        searchBar.frame.size = CGSizeMake(self.headerView.width , headerViewHeight.constant)
-        searchBar.layer.masksToBounds = true
-        
-        self.headerView.addSubview(searchBar)
+//        searchBar = SearchBar()
+//        
+//        searchBar.frame.size = CGSize(width: self.headerView.width , height: headerViewHeight.constant)
+//        searchBar.layer.masksToBounds = true
+//        
+//        self.headerView.addSubview(searchBar)
         
         
         headerView.layer.masksToBounds = true
@@ -135,42 +134,42 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         var image: UIImage? = MaterialIcon.cm.clear
         
         // Back button.
-        searchBarBackButton.tintColor = MaterialColor.blueGrey.darken4
-        searchBarBackButton.setImage(image, forState: .Normal)
-        searchBarBackButton.setImage(image, forState: .Highlighted)
-        
-        
-        searchBarBackButton.alpha = 0
-        searchBarBackButton.addTarget(self, action: #selector(self.handleBackButton), forControlEvents: .TouchUpInside)
-        
-        image = MaterialIcon.cm.moreHorizontal
-        let moreButton: IconButton = IconButton()
-        moreButton.tintColor = MaterialColor.blueGrey.darken4
-        moreButton.setImage(image, forState: .Normal)
-        moreButton.setImage(image, forState: .Highlighted)
-        
-        
-        
-        searchBar.textField.delegate = self
-        searchBar.textField.returnKeyType = .Search
-        searchBar.textField.keyboardAppearance = .Light
-        
-        searchBar.clearButtonAutoHandleEnabled = false
-        searchBar.clearButton.addTarget(self, action: #selector(self.handleClearButton), forControlEvents: .TouchUpInside)
-        
-        
-        searchBar.rightControls = [searchBarBackButton]
+//        searchBarBackButton.tintColor = MaterialColor.blueGrey.darken4
+//        searchBarBackButton.setImage(image, forState: .Normal)
+//        searchBarBackButton.setImage(image, forState: .Highlighted)
+//        
+//        
+//        searchBarBackButton.alpha = 0
+//        searchBarBackButton.addTarget(self, action: #selector(self.handleBackButton), forControlEvents: .TouchUpInside)
+//        
+//        image = MaterialIcon.cm.moreHorizontal
+//        let moreButton: IconButton = IconButton()
+//        moreButton.tintColor = MaterialColor.blueGrey.darken4
+//        moreButton.setImage(image, forState: .Normal)
+//        moreButton.setImage(image, forState: .Highlighted)
+//        
+//        
+//        
+//        searchBar.textField.delegate = self
+//        searchBar.textField.returnKeyType = .Search
+//        searchBar.textField.keyboardAppearance = .Light
+//        
+//        searchBar.clearButtonAutoHandleEnabled = false
+//        searchBar.clearButton.addTarget(self, action: #selector(self.handleClearButton), forControlEvents: .TouchUpInside)
+//        
+//        
+//        searchBar.rightControls = [searchBarBackButton]
 //        searchBar.rightControls = [moreButton]
         
         
     }
     
-    private func getExpenses() {
+    fileprivate func getExpenses() {
         
         self.expenses.removeAll()
         switch self.expenseType {
         case .user:
-            expensesRef.observeEventType(.Value, withBlock: { (expSnapshot) in
+            expensesRef.observe(.value, with: { (expSnapshot) in
                 if expSnapshot.exists() {
                     self.expenses = Expense.expensesFromResults(expSnapshot.value! as! NSDictionary, ref: expSnapshot.ref)
                     self.preparetableviewdata()
@@ -182,7 +181,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             })
         case .group:
             print(groupExpensesRef)
-             groupExpensesRef.observeEventType(.Value, withBlock: { (grpExpSnapshot) in
+             groupExpensesRef.observe(.value, with: { (grpExpSnapshot) in
                 if grpExpSnapshot.exists() {
                     self.groupExpenses = GroupExpense.expensesFromFirebase(grpExpSnapshot.value! as! NSDictionary, firebasereference: grpExpSnapshot.ref)
                     self.tableView.reloadData()
@@ -196,21 +195,21 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     
     // MARK: - Search
     
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
+    func updateSearchResultsForSearchController(_ searchController: UISearchController) {
         filterContentForSearchText(searchController.searchBar.text!)
     }
     
-    func filterContentForSearchText(searchText: String, scope: String = "All") {
+    func filterContentForSearchText(_ searchText: String, scope: String = "All") {
         print(searchText)
         switch expenseType {
         case .user:
             print("user")
             filteredExpenses = expenses.filter { expense in
-                return expense.description.lowercaseString.containsString(searchText.lowercaseString)
+                return expense.description.lowercased().contains(searchText.lowercased())
             }
         case .group:
             fileteredGroupExpenses = groupExpenses.filter { expense in
-                return expense.description.lowercaseString.containsString(searchText.lowercaseString)
+                return expense.description.lowercased().contains(searchText.lowercased())
             }
         }
         
@@ -220,14 +219,14 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         tableView.reloadData()
     }
     
-    func filterExpensesByCategory(category: String) {
+    func filterExpensesByCategory(_ category: String) {
         switch expenseType {
         case .user:
             filteredExpenses = expenses.filter({ (expense) -> Bool in
                 return (expense.category == category)
             })
             showFilteredResults = true
-            searchBar.textField.text = category
+//            searchBar.textField.text = category
             searchBarBackButton.alpha = 1
             tableView.reloadData()
         default:
@@ -235,12 +234,12 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         }
     }
     
-    func filterExpensesByMonth(month: String) {
+    func filterExpensesByMonth(_ month: String) {
         switch expenseType {
         case .user:
             filteredExpenses = expenses.filter({ (expense) -> Bool in
                 if let expenseMonth = expense.month as String? {
-                    let expenseMonthStripped = expenseMonth.stringByReplacingOccurrencesOfString("m_", withString: "").stringByReplacingOccurrencesOfString("_", withString: " ")
+                    let expenseMonthStripped = expenseMonth.replacingOccurrences(of: "m_", with: "").replacingOccurrences(of: "_", with: " ")
                     return (month == expenseMonthStripped)
                 } else {
                     return false
@@ -248,7 +247,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             })
             toggleSearchOptions()
             showFilteredResults = true
-            searchBar.textField.text = month
+//            searchBar.textField.text = month
             searchBarBackButton.alpha = 1
             tableView.reloadData()
         default:
@@ -263,14 +262,14 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     
     
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        self.searchBar.textField.resignFirstResponder()
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        self.searchBar.textField.resignFirstResponder()
     }
     
     
     // MARK: - TableView
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         switch expenseType {
         case .user:
@@ -286,31 +285,31 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     /// Returns the number of sections.
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     /// Prepares the cells within the tableView.
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         
         
-        let cell: MaterialTableViewCell = MaterialTableViewCell(style: .Subtitle, reuseIdentifier: "expenseCell")
+        let cell: MaterialTableViewCell = MaterialTableViewCell(style: .subtitle, reuseIdentifier: "expenseCell")
         
         switch expenseType {
         case .user:
-            let expenseCell = tableView.dequeueReusableCellWithIdentifier("expenseCell", forIndexPath: indexPath) as! ExpenseCell
+            let expenseCell = tableView.dequeueReusableCell(withIdentifier: "expenseCell", for: indexPath) as! ExpenseCell
             expenseCell.backgroundColor = MaterialColor.amber.lighten1
-            if indexPath.row % 2 == 1 {
+            if (indexPath as NSIndexPath).row % 2 == 1 {
                 expenseCell.backgroundColor = MaterialColor.amber.lighten2
             }
             if showFilteredResults {
-                if let expense = filteredExpenses[indexPath.row] as Expense? {
+                if let expense = filteredExpenses[(indexPath as NSIndexPath).row] as Expense? {
                     expenseCell.expense = expense
                     return expenseCell
                 }
             } else {
-                if let expense = expenses[indexPath.row] as Expense? {
+                if let expense = expenses[(indexPath as NSIndexPath).row] as Expense? {
                     expenseCell.expense = expense
                     return expenseCell
                 }
@@ -318,18 +317,18 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             
         case .group:
             
-            let groupExpenseCell = tableView.dequeueReusableCellWithIdentifier("groupExpenseCell", forIndexPath: indexPath) as! GroupExpenseCell
+            let groupExpenseCell = tableView.dequeueReusableCell(withIdentifier: "groupExpenseCell", for: indexPath) as! GroupExpenseCell
             groupExpenseCell.backgroundColor = MaterialColor.teal.lighten1
-            if indexPath.row % 2 == 1 {
+            if (indexPath as NSIndexPath).row % 2 == 1 {
                 groupExpenseCell.backgroundColor = MaterialColor.teal.lighten2
             }
             if showFilteredResults {
-                if let groupExpense = fileteredGroupExpenses[indexPath.row] as GroupExpense? {
+                if let groupExpense = fileteredGroupExpenses[(indexPath as NSIndexPath).row] as GroupExpense? {
                     groupExpenseCell.groupExpense = groupExpense
                     return groupExpenseCell
                 }
             } else {
-                if let groupExpense = groupExpenses[indexPath.row] as GroupExpense? {
+                if let groupExpense = groupExpenses[(indexPath as NSIndexPath).row] as GroupExpense? {
                     groupExpenseCell.groupExpense = groupExpense
                     return groupExpenseCell
                 }
@@ -340,13 +339,13 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         return cell
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if expenseType == .group {
-            if let grpExpCell = tableView.cellForRowAtIndexPath(indexPath) as? GroupExpenseCell {
+            if let grpExpCell = tableView.cellForRow(at: indexPath) as? GroupExpenseCell {
                 if grpExpCell.groupExpense?.addedBy != FIRAuth.auth()?.currentUser?.uid {
                     return false
                 }
@@ -355,28 +354,28 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         return true
     }
     
-    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
-        let edit = UITableViewRowAction(style: .Default, title: "Edit") { (action, index) in
+        let edit = UITableViewRowAction(style: .default, title: "Edit") { (action, index) in
             print("edit")
         }
         
         edit.backgroundColor = MaterialColor.blue.accent3
         
         
-        let delete = UITableViewRowAction(style: .Default, title: "Delete") { (action, index) in
+        let delete = UITableViewRowAction(style: .default, title: "Delete") { (action, index) in
             print("delete")
             switch self.expenseType {
             case .user:
                 
                 if self.showFilteredResults {
-                    if let expense = self.filteredExpenses[index.row] as Expense? {
+                    if let expense = self.filteredExpenses[(index as NSIndexPath).row] as Expense? {
                         self.deleteUserExpense(expense)
-                        self.filteredExpenses.removeAtIndex(index.row)
+                        self.filteredExpenses.remove(at: (index as NSIndexPath).row)
                         self.tableView.reloadData()
                     }
                 } else {
-                    if let expense = self.expenses[index.row] as Expense? {
+                    if let expense = self.expenses[(index as NSIndexPath).row] as Expense? {
                         self.deleteUserExpense(expense)
                     }
                 }
@@ -384,13 +383,13 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
                 
             case .group:
                 if self.showFilteredResults {
-                    if let groupExpense = self.fileteredGroupExpenses[index.row] as GroupExpense? {
+                    if let groupExpense = self.fileteredGroupExpenses[(index as NSIndexPath).row] as GroupExpense? {
                         self.deleteGroupExpense(groupExpense)
-                        self.fileteredGroupExpenses.removeAtIndex(index.row)
+                        self.fileteredGroupExpenses.remove(at: (index as NSIndexPath).row)
                         self.tableView.reloadData()
                     }
                 } else {
-                    if let groupExpense = self.groupExpenses[index.row] as GroupExpense? {
+                    if let groupExpense = self.groupExpenses[(index as NSIndexPath).row] as GroupExpense? {
                         self.deleteGroupExpense(groupExpense)
                     }
                 }
@@ -401,21 +400,21 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     }
     
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
     
 
     // MARK : COLLECTION VIEW
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return categories.count
         
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("searchCategoryCell", forIndexPath: indexPath) as! AlphaCollectionCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "searchCategoryCell", for: indexPath) as! AlphaCollectionCell
         cell.backgroundColor = MaterialColor.clear
         
         cell.layer.masksToBounds = true
@@ -423,38 +422,38 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         
         cell.nameLabel.font = categoryFont
         
-        let category = categories[indexPath.row]
+        let category = categories[(indexPath as NSIndexPath).row]
         print(category)
         cell.nameLabel.textColor = MaterialColor.black
-        cell.nameLabel.text = category.name.uppercaseString
+        cell.nameLabel.text = category.name.uppercased()
         
         return cell
         
     }
     
-    func collectionView(collectionView: UICollectionView,
+    func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
-                               sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let category = categories[indexPath.row]
-        let categorySize = (category.name.uppercaseString as NSString).sizeWithAttributes([NSFontAttributeName: categoryFont])
-        return CGSizeMake(categorySize.width + 20, 30)
+                               sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
+        let category = categories[(indexPath as NSIndexPath).row]
+        let categorySize = (category.name.uppercased() as NSString).size(attributes: [NSFontAttributeName: categoryFont])
+        return CGSize(width: categorySize.width + 20, height: 30)
         
     }
     
-    func collectionView(collectionView: UICollectionView,
+    func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                                minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 5
     }
     
-    func collectionView(collectionView: UICollectionView, layout
+    func collectionView(_ collectionView: UICollectionView, layout
         collectionViewLayout: UICollectionViewLayout,
         minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 5
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if let category = (categories[indexPath.row]).name as String? {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let category = (categories[(indexPath as NSIndexPath).row]).name as String? {
             filterExpensesByCategory(category)
         }
         
@@ -464,14 +463,14 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     
     // MARK: - DELETE EXPENSE
     
-    func deleteUserExpense(expense: Expense) {
-        expensesRef.child(expense.expenseId).removeValueWithCompletionBlock { (error, ref) in
+    func deleteUserExpense(_ expense: Expense) {
+        expensesRef.child(expense.expenseId).removeValue { (error, ref) in
             if error != nil {
                 print(error?.localizedDescription)
             }
         }
 
-        expensesRef.child("totals").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+        expensesRef.child("totals").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
                 if let totals = Expense.totalsFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
 
@@ -498,7 +497,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             }
         })
         
-        expensesRef.child("categories/\(expense.category)").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+        expensesRef.child("categories/\(expense.category)").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
                 print(snapshot)
                 print("categories/\(expense.category)/\(expense.month)")
@@ -548,7 +547,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         })
     }
     
-    func deleteGroupExpense(groupExpense: GroupExpense) {
+    func deleteGroupExpense(_ groupExpense: GroupExpense) {
         // TODO
     }
     
@@ -570,7 +569,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             self.monthsViewExpanded = !self.monthsViewExpanded
         }
         
-        UIView.animateWithDuration(0.5, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             self.view.layoutIfNeeded()
         })
         
@@ -594,7 +593,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             self.showMoreCategoriesText = "Show More"
             self.categoryViewExpanded = !self.categoryViewExpanded
         }
-        UIView.animateWithDuration(0.5, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             self.view.layoutIfNeeded()
         })
 
@@ -610,7 +609,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
             monthsViewHeight.constant = 0
         }
         
-        UIView.animateWithDuration(0.5, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             self.view.layoutIfNeeded()
         })
         self.searchExpanded = !self.searchExpanded
@@ -623,25 +622,25 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
     
     
     
-    func handleClearButton() {
-        searchBarBackButton.alpha = 0
-        self.searchBar.textField.text = nil
-        self.searchBar.textField.resignFirstResponder()
-        self.toggleSearchOptions()
-    }
-    
-    func handleBackButton() {
-        searchBarBackButton.alpha = 0
-        self.searchBar.textField.text = nil
-        self.searchBar.textField.resignFirstResponder()
+//    func handleClearButton() {
+//        searchBarBackButton.alpha = 0
+//        self.searchBar.textField.text = nil
+//        self.searchBar.textField.resignFirstResponder()
 //        self.toggleSearchOptions()
-        showFilteredResults = false
-        tableView.reloadData()
-    }
+//    }
+//    
+//    func handleBackButton() {
+//        searchBarBackButton.alpha = 0
+//        self.searchBar.textField.text = nil
+//        self.searchBar.textField.resignFirstResponder()
+////        self.toggleSearchOptions()
+//        showFilteredResults = false
+//        tableView.reloadData()
+//    }
     
     
     
-    func textFieldDidBeginEditing(textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         
         textField.text = nil
         searchBarBackButton.alpha = 0
@@ -653,16 +652,16 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         
     }
     
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         print("end")
     }
     
     
-    func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         return true
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         //resignFirstResponder()
         print("end")
@@ -670,7 +669,7 @@ class ExpensesListViewController: UIViewController, UITableViewDelegate, UITable
         
         if let textFieldText = textField.text as String? {
             
-            if let searchText = textFieldText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) as String? {
+            if let searchText = textFieldText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) as String? {
                 if searchText != "" {
                     filterContentForSearchText(searchText)
                     searchBarBackButton.alpha = 1

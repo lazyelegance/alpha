@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Material
 import FirebaseAuth
 import FirebaseDatabase
 
@@ -25,23 +24,23 @@ class UserSettingsViewController: UIViewController {
 
     @IBOutlet weak var profileImage: AsyncImageView!
     
-    @IBAction func backToHome(sender: AnyObject) {
-        navigationController?.popViewControllerAnimated(true)
+    @IBAction func backToHome(_ sender: AnyObject) {
+        navigationController?.popViewController(animated: true)
     }
     
-    @IBAction func logOutAction(sender: AnyObject) {
+    @IBAction func logOutAction(_ sender: AnyObject) {
         try! FIRAuth.auth()!.signOut()
         GIDSignIn.sharedInstance().signOut()
-        navigationController?.popToRootViewControllerAnimated(true)
+        navigationController?.popToRootViewController(animated: true)
     }
     
     @IBOutlet weak var monthlyLimitLabel: UILabel!
     
-    @IBAction func increamentMontlyLimit(sender: AnyObject) {
+    @IBAction func increamentMontlyLimit(_ sender: AnyObject) {
         self.expensesRef.child("monthlyLimit").setValue(self.monthlyLimit + 50)
     }
     
-    @IBAction func decrementMonthlyLimit(sender: AnyObject) {
+    @IBAction func decrementMonthlyLimit(_ sender: AnyObject) {
         self.expensesRef.child("monthlyLimit").setValue(self.monthlyLimit - 50)
     }
     
@@ -61,18 +60,18 @@ class UserSettingsViewController: UIViewController {
     }
     
     
-    private func prepareView() {
+    fileprivate func prepareView() {
         view.backgroundColor = MaterialColor.lightBlue.base
         monthlyLimitLabel.text = String(monthlyLimit)
         userName.text = user.name
         if user.photoURL != "" {
-            profileImage.imageURL = NSURL(string: user.photoURL)
+            profileImage.imageURL = URL(string: user.photoURL)
         }
         
     }
     
     func prepareMonthlyLimit() {
-        self.expensesRef.child("monthlyLimit").observeEventType(.Value, withBlock: { (snapshot) in
+        self.expensesRef.child("monthlyLimit").observe(.value, with: { (snapshot) in
             if snapshot.exists() {
                 self.monthlyLimit = snapshot.value! as! Int
                 self.monthlyLimitLabel.text = String(self.monthlyLimit)

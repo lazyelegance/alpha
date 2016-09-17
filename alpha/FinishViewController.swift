@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Material
 import Firebase
 import FirebaseDatabase
 
@@ -45,12 +44,12 @@ class FinishViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    private func prepareView() {
+    fileprivate func prepareView() {
         view.backgroundColor = MaterialColor.blue.lighten1
 
 
     }
-    private func prepareLabels() {
+    fileprivate func prepareLabels() {
         
         
         
@@ -61,45 +60,45 @@ class FinishViewController: UIViewController {
             titleLabel.text = "\(newExpense.billAmount)"
             paritylabel.alpha = 0
 //            categoryLabel.text = newExpense.category.uppercaseString
-            categoryButton.setTitle(newExpense.category.uppercaseString, forState: .Normal)
+            categoryButton.setTitle(newExpense.category.uppercased(), for: .normal)
         case .group:
             descriptionLabel.text = newGroupExpense.description
             titleLabel.text = "\(newGroupExpense.billAmount)"
             paritylabel.text = parityText
 //            categoryLabel.text = newGroupExpense.category.uppercaseString
-            categoryButton.setTitle(newGroupExpense.category.uppercaseString, forState: .Normal)
+            categoryButton.setTitle(newGroupExpense.category.uppercased(), for: .normal)
         }
         categoryButton.backgroundColor = MaterialColor.clear
         
-        categoryButton.setTitleColor(MaterialColor.blueGrey.base, forState: .Normal)
+        categoryButton.setTitleColor(MaterialColor.blueGrey.base, for: .normal)
     }
-    private func prepareButtons() {
+    fileprivate func prepareButtons() {
         saveButton.backgroundColor = view.backgroundColor
-        saveButton.setTitle("SAVE EXPENSE", forState: .Normal)
-        backButton.setImage(MaterialIcon.arrowBack, forState: .Normal)
+        saveButton.setTitle("SAVE EXPENSE", for: .normal)
+        backButton.setImage(MaterialIcon.arrowBack, for: .normal)
         
-        backButton.addTarget(self, action: #selector(self.backOneStep), forControlEvents: .TouchUpInside)
+        backButton.addTarget(self, action: #selector(self.backOneStep), for: .touchUpInside)
         
         switch expenseType {
         case .user:
-            saveButton.addTarget(self, action: #selector(self.saveExpense), forControlEvents: .TouchUpInside)
+            saveButton.addTarget(self, action: #selector(self.saveExpense), for: .touchUpInside)
         case .group:
-            saveButton.addTarget(self, action: #selector(self.saveGroupExpense), forControlEvents: .TouchUpInside)
+            saveButton.addTarget(self, action: #selector(self.saveGroupExpense), for: .touchUpInside)
         }
         
-        saveButton.setTitleColor(MaterialColor.white, forState: .Normal)
+        saveButton.setTitleColor(MaterialColor.white, for: .normal)
         
-        restartButton.setTitleColor(MaterialColor.white, forState: .Normal)
-        restartButton.setTitle("START OVER", forState: .Normal)
+        restartButton.setTitleColor(MaterialColor.white, for: .normal)
+        restartButton.setTitle("START OVER", for: .normal)
     }
     
     // MARK: - Navigation
     
     func backOneStep() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
-    @IBAction func cancelAddingExpense(sender: AnyObject) {
+    @IBAction func cancelAddingExpense(_ sender: AnyObject) {
         goBacktoMainViewController()
     }
     
@@ -107,22 +106,22 @@ class FinishViewController: UIViewController {
         
         switch expenseType {
         case .user:
-            self.navigationController?.popToRootViewControllerAnimated(true)
+            self.navigationController?.popToRootViewController(animated: true)
         case .group:
-            if ((self.navigationController?.viewControllers[1].isKindOfClass(GroupMainViewController)) == true) {
+            if ((self.navigationController?.viewControllers[1].isKind(of: GroupMainViewController.self)) == true) {
                 self.navigationController?.popToViewController((self.navigationController?.viewControllers[1])!, animated: true)
             } else {
-                self.navigationController?.popToRootViewControllerAnimated(true)
+                self.navigationController?.popToRootViewController(animated: true)
             }
         }
         
     }
     
-    @IBAction func restartAddExpense(sender: AnyObject) {
-        if ((self.navigationController?.viewControllers[expenseType.firstStep()].isKindOfClass(AddExpenseController)) == true) {
+    @IBAction func restartAddExpense(_ sender: AnyObject) {
+        if ((self.navigationController?.viewControllers[expenseType.firstStep()].isKind(of: AddExpenseController.self)) == true) {
             self.navigationController?.popToViewController((self.navigationController?.viewControllers[expenseType.firstStep()])!, animated: true)
         } else {
-            self.navigationController?.popToRootViewControllerAnimated(true)
+            self.navigationController?.popToRootViewController(animated: true)
         }
     }
     
@@ -149,7 +148,7 @@ class FinishViewController: UIViewController {
                 }
             }
             
-            grpExpTotalsRef.observeSingleEventOfType(.Value, withBlock: { (grptotals) in
+            grpExpTotalsRef.observeSingleEvent(of: .value, with: { (grptotals) in
                 if grptotals.exists() {
                     if let totals = GroupExpense.totalsFromResults(grptotals.value! as! NSDictionary) as [String: AnyObject]? {
                         print(totals)
@@ -204,7 +203,7 @@ class FinishViewController: UIViewController {
             let category = self.newGroupExpense.category
             let categoryRef = groupExpensesRef.child("categories/\(category)")
             
-            categoryRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+            categoryRef.observeSingleEvent(of: .value, with: { (snapshot) in
                 if snapshot.exists() {
                     if let categoryDetail = GroupExpense.categoryFromResults(snapshot.value! as! NSDictionary) as? [String: Float] {
                         
@@ -298,7 +297,7 @@ class FinishViewController: UIViewController {
             
             
             
-            userExpensesRef.child("totals").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+            userExpensesRef.child("totals").observeSingleEvent(of: .value, with: { (snapshot) in
                 if snapshot.exists() {
                     if let totals = Expense.totalsFromResults(snapshot.value! as! NSDictionary) as [String: Float]? {
                         
@@ -338,7 +337,7 @@ class FinishViewController: UIViewController {
             let category = self.newExpense.category
             let categoryRef = userExpensesRef.child("categories/\(category)")
             
-            categoryRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+            categoryRef.observeSingleEvent(of: .value, with: { (snapshot) in
                 if snapshot.exists() {
                     if let categoryDetail = Expense.categoryFromResults(snapshot.value! as! NSDictionary) as [String: AnyObject]? {
                         

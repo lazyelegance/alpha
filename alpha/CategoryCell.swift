@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Material
+
 
 class CategoryCell: MaterialTableViewCell {
     
