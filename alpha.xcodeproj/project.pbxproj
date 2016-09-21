@@ -160,6 +160,7 @@
 		635F22E01D8CD0AC00CCF39D /* IconButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconButton.swift; sourceTree = "<group>"; };
 		635F22EB1D8CD19400CCF39D /* MaterialIcon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaterialIcon.swift; sourceTree = "<group>"; };
 		636610791D47B7B500D13CC3 /* CategoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		6381514C1D93152300814834 /* alpha.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = alpha.entitlements; sourceTree = "<group>"; };
 		63A04CD21D4E130D00657C0E /* ExpenseType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseType.swift; sourceTree = "<group>"; };
 		63B372AD1D6835690070DCF7 /* UserSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSettingsViewController.swift; sourceTree = "<group>"; };
 		63B71C471D3E3BA500087A8E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -310,6 +311,7 @@
 		63CBEBC81D38BACD0002DB65 /* alpha */ = {
 			isa = PBXGroup;
 			children = (
+				6381514C1D93152300814834 /* alpha.entitlements */,
 				63B762E81D8CBE73004B69BC /* Charts.xcodeproj */,
 				63B762C51D8CBE4D004B69BC /* Material */,
 				63CBEBC91D38BACD0002DB65 /* AppDelegate.swift */,
@@ -471,7 +473,13 @@
 				TargetAttributes = {
 					63CBEBC51D38BACD0002DB65 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 5SK3M6FYSQ;
 						LastSwiftMigration = 0800;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 					63CBEBD91D38BACD0002DB65 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -922,6 +930,8 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = alpha/alpha.entitlements;
+				DEVELOPMENT_TEAM = 5SK3M6FYSQ;
 				INFOPLIST_FILE = alpha/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ezrabathini.alpha;
@@ -937,6 +947,8 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = alpha/alpha.entitlements;
+				DEVELOPMENT_TEAM = 5SK3M6FYSQ;
 				INFOPLIST_FILE = alpha/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ezrabathini.alpha;
