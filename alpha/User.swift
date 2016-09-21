@@ -28,7 +28,7 @@ struct User {
         self.name = "New User"
     }
     
-    static func usersFromResults(results: NSDictionary) -> [User] {
+    static func usersFromResults(_ results: NSDictionary) -> [User] {
         var users = [User]()
         
         users.removeAll()
@@ -75,7 +75,7 @@ struct User {
         return users
     }
     
-    static func userFromFirebase(results: NSDictionary) -> User {
+    static func userFromFirebase(_ results: NSDictionary) -> User {
         var user = User()
         
         if results.count > 0 {

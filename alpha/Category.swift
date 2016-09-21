@@ -39,7 +39,7 @@ struct Category {
     
 
     
-    static func categoriesFromResults(results: NSDictionary) -> [Category] {
+    static func categoriesFromResults(_ results: NSDictionary) -> [Category] {
         var categories = [Category]()
         if results.count > 0 {
             categories.removeAll()
@@ -60,7 +60,7 @@ struct Category {
                         } else if value.0 == "imageName" {
                             category.imageName = value.1 as! String
                         } else if value.0.hasPrefix("m_") {
-                            let month = value.0.stringByReplacingOccurrencesOfString("m_", withString: "").stringByReplacingOccurrencesOfString("_", withString: " ")
+                            let month = value.0.replacingOccurrences(of: "m_", with: "").replacingOccurrences(of: "_", with: " ")
                             category.months[month] = (value.1 as! Float)
                             
                             if value.0 == currMonth {
@@ -71,7 +71,7 @@ struct Category {
                             
                             
                         } else if value.0.hasPrefix("w_") {
-                            let week = value.0.stringByReplacingOccurrencesOfString("w_", withString: "").stringByReplacingOccurrencesOfString("_", withString: " ")
+                            let week = value.0.replacingOccurrences(of: "w_", with: "").replacingOccurrences(of: "_", with: " ")
                             category.weeks[week] = (value.1 as! Float)
                             if value.0 == currWeek {
                                 category.thisWeek = (value.1 as! Float)
@@ -79,7 +79,7 @@ struct Category {
                                 category.thisWeek = 0.0
                             }
                         } else if value.0.hasPrefix("counter_m_") {
-                            let month = value.0.stringByReplacingOccurrencesOfString("counter_m_", withString: "").stringByReplacingOccurrencesOfString("_", withString: " ")
+                            let month = value.0.replacingOccurrences(of: "counter_m_", with: "").replacingOccurrences(of: "_", with: " ")
                             category.monthsCounter[month] = (value.1 as! Int)
                             
                             if value.0 == "counter_\(currMonth)" {
@@ -88,7 +88,7 @@ struct Category {
                                 category.thisMonthCounter = 0
                             }
                         } else if value.0.hasPrefix("counter_w_") {
-                            let week = value.0.stringByReplacingOccurrencesOfString("counter_w_", withString: "").stringByReplacingOccurrencesOfString("_", withString: " ")
+                            let week = value.0.replacingOccurrences(of: "counter_w_", with: "").replacingOccurrences(of: "_", with: " ")
                             category.weeksCounter[week] = (value.1 as! Int)
                             
                             if value.0 == "counter_\(currWeek)" {

@@ -4,7 +4,6 @@
 target 'alpha' do
   # Comment this line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
-  pod 'Material', '~> 1.0'
   pod 'Fabric'
   pod 'Crashlytics'
   pod 'TwitterCore'
@@ -13,7 +12,6 @@ target 'alpha' do
   pod 'Firebase/Auth'
   pod 'Firebase/RemoteConfig'
   pod 'GoogleSignIn'
-  pod 'Charts'
 
 
   # Pods for alpha

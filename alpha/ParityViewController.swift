@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Material
+
 
 class ParityViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var currentStep = AddExpenseStep.description
@@ -55,31 +55,31 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
         
         view.backgroundColor = currentStep.toColor()
         
-        option1.setTitleColor(MaterialColor.white, forState: .Normal)
-        option1.titleLabel?.font = RobotoFont.boldWithSize(15)
+        option1.setTitleColor(MaterialColor.white, for: .normal)
+        option1.titleLabel?.font = UIFont.systemFont(ofSize: 15) //UIFont.systemFont(ofSize: 15)
         option1.pulseColor = MaterialColor.blue.accent3
-        option1.setTitle("Equally".capitalizedString, forState: .Normal)
+        option1.setTitle("Equally".localizedCapitalized, for: .normal)
         option1.tag = 201
-        option1.addTarget(self, action: #selector(self.updateParityFromButton(_:)), forControlEvents: .TouchUpInside)
+        option1.addTarget(self, action: #selector(self.updateParityFromButton(_:)), for: .touchUpInside)
         
-        option2.setTitleColor(MaterialColor.white, forState: .Normal)
-        option2.titleLabel?.font = RobotoFont.boldWithSize(15)
+        option2.setTitleColor(MaterialColor.white, for: .normal)
+        option2.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         option2.pulseColor = MaterialColor.blue.accent3
-        option2.setTitle("Equally On All But You".capitalizedString, forState: .Normal)
+        option2.setTitle("Equally On All But You".localizedCapitalized, for: .normal)
         option2.tag = 202
-        option2.addTarget(self, action: #selector(self.updateParityFromButton(_:)), forControlEvents: .TouchUpInside)
+        option2.addTarget(self, action: #selector(self.updateParityFromButton(_:)), for: .touchUpInside)
         
-        option3.setTitleColor(MaterialColor.white, forState: .Normal)
-        option3.titleLabel?.font = RobotoFont.boldWithSize(15)
+        option3.setTitleColor(MaterialColor.white, for: .normal)
+        option3.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         option3.pulseColor = MaterialColor.blue.accent3
-        option3.setTitle("Select Group Members".capitalizedString, forState: .Normal)
+        option3.setTitle("Select Group Members".localizedCapitalized, for: .normal)
         option3.tag = 203
-        option3.addTarget(self, action: #selector(self.showTableView), forControlEvents: .TouchUpInside)
+        option3.addTarget(self, action: #selector(self.showTableView), for: .touchUpInside)
         
         if newGroupExpense.groupMembers.count == 2 {
             for member in newGroupExpense.groupMembers {
                 if member.userId != newGroupExpense.addedBy {
-                    option2.setTitle("Spent On \(member.name.capitalizedString) ", forState: .Normal)
+                    option2.setTitle("Spent On \(member.name.localizedCapitalized) ", for: .normal)
                 }
             }
             option3.alpha = 0
@@ -88,20 +88,20 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
         nextButton.backgroundColor = MaterialColor.red.lighten1
         
         nextButton.alpha = 0
-        nextButton.addTarget(self, action: #selector(self.toNextInAddExpenseCycle), forControlEvents: .TouchUpInside)
-        nextButton.setTitleColor(MaterialColor.white, forState: .Normal)
+        nextButton.addTarget(self, action: #selector(self.toNextInAddExpenseCycle), for: .touchUpInside)
+        nextButton.setTitleColor(MaterialColor.white, for: .normal)
         tableView.alpha = 0
         tableView.frame.size.height = CGFloat((Float(newGroupExpense.groupMembers.count) * 50))
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = currentStep.toColor()
         
-        backButton.setImage(MaterialIcon.arrowBack, forState: .Normal)
+        backButton.setImage(MaterialIcon.arrowBack, for: .normal)
         
         tableView.layer.cornerRadius = 5
         tableView.layer.shadowOpacity = 0.5
         
-        backButton.addTarget(self, action: #selector(AddExpenseController.backOneStep), forControlEvents: .TouchUpInside)
+        backButton.addTarget(self, action: #selector(AddExpenseController.backOneStep), for: .touchUpInside)
         
 //        shareEquallySwitch.frame.origin.x = view.frame.width - 60
 //        shareEquallySwitch.center.y = parityQuestionLabel.center.y
@@ -120,14 +120,14 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
 //        nextButton.backgroundColor = MaterialColor.white
 //        
 //        if currentStep == .finish {
-//            nextButton.setTitle("FINISH", forState: .Normal)
+//            nextButton.setTitle("FINISH", for: .normal)
 //        } else {
-//            nextButton.setTitle("NEXT", forState: .Normal)
+//            nextButton.setTitle("NEXT", for: .normal)
 //        }
 //        
 //        
 //        
-//        nextButton.setTitleColor(MaterialColor.blue.accent1, forState: .Normal)
+//        nextButton.setTitleColor(MaterialColor.blue.accent1, for: .normal)
 //        nextButton.titleLabel?.font = RobotoFont.regularWithSize(8)
 //        nextButton.pulseColor = MaterialColor.blue.accent3
 //        
@@ -137,25 +137,25 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
 //        
 //        nextButton.layer.shadowOpacity = 0.1
 //        
-//        nextButton.addTarget(self, action: #selector(ParityViewController.toNextInAddExpenseCycle), forControlEvents: .TouchUpInside)
+//        nextButton.addTarget(self, action: #selector(ParityViewController.toNextInAddExpenseCycle), for: .TouchUpInside)
 //        
 //        nextButton.alpha = 1
 //        
 //        backButton.backgroundColor = MaterialColor.white
 //        
-//        backButton.setTitle("BACK", forState: .Normal)
-//        backButton.setTitleColor(MaterialColor.blue.accent1, forState: .Normal)
+//        backButton.setTitle("BACK", for: .normal)
+//        backButton.setTitleColor(MaterialColor.blue.accent1, for: .normal)
 //        backButton.titleLabel?.font = RobotoFont.regularWithSize(8)
 //        backButton.layer.cornerRadius = 30
 //        
-//        backButton.addTarget(self, action: #selector(ParityViewController.backOneStep), forControlEvents: .TouchUpInside)
+//        backButton.addTarget(self, action: #selector(ParityViewController.backOneStep), for: .TouchUpInside)
         
-        let image = UIImage(named: "ic_close_white")?.imageWithRenderingMode(.Automatic)
+        let image = UIImage(named: "ic_close_white")?.withRenderingMode(.automatic)
         let clearButton: FlatButton = FlatButton()
         clearButton.pulseColor = MaterialColor.grey.base
         clearButton.tintColor = MaterialColor.grey.base
-        clearButton.setImage(image, forState: .Normal)
-        clearButton.setImage(image, forState: .Highlighted)
+        clearButton.setImage(image, for: .normal)
+        clearButton.setImage(image, for: .highlighted)
         
 //        view.addSubview(nextButton)
 //        view.addSubview(backButton)
@@ -214,7 +214,7 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
         self.tableView.alpha = 1
     }
     
-    func updateParityFromButton(sender: FlatButton) {
+    func updateParityFromButton(_ sender: FlatButton) {
         parity.removeAll()
         
         switch sender.tag {
@@ -237,17 +237,17 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
         toNextInAddExpenseCycle()
     }
     
-    func updateParityFromTable(indexPath: NSIndexPath) {
+    func updateParityFromTable(_ indexPath: IndexPath) {
         
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! ParitySelectionCell
+        let cell = tableView.cellForRow(at: indexPath) as! ParitySelectionCell
         
         
         cell.isClicked = !(cell.isClicked!)
         
         if cell.isClicked == true {
-            parity[indexPath.row] = 1
+            parity[(indexPath as NSIndexPath).row] = 1
         } else {
-            parity[indexPath.row] = 0
+            parity[(indexPath as NSIndexPath).row] = 0
         }
         
         print(parity)
@@ -321,7 +321,7 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
         
         
         
-        if let finishVC = self.storyboard?.instantiateViewControllerWithIdentifier("finishViewController") as? FinishViewController {
+        if let finishVC = self.storyboard?.instantiateViewController(withIdentifier: "finishViewController") as? FinishViewController {
             
             if paritySum == parity.count {
                 finishVC.parityText = "shared equally"
@@ -343,7 +343,7 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
     
     func backOneStep() {
         print("back button")
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
     
@@ -351,14 +351,14 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
     
     //MARK:- Table View
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return newGroupExpense.groupMembers.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("parityCell", forIndexPath: indexPath) as! ParitySelectionCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "parityCell", for: indexPath) as! ParitySelectionCell
         
-        if let user = newGroupExpense.groupMembers[indexPath.row] as User? {
+        if let user = newGroupExpense.groupMembers[(indexPath as NSIndexPath).row] as User? {
             cell.user = user
             cell.isClicked = false
         }
@@ -367,18 +367,18 @@ class ParityViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         updateParityFromTable(indexPath)
         
         
     }
     
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         updateParityFromTable(indexPath)
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70   
     }
     

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Material
 import Charts
 import FirebaseDatabase
 
@@ -76,12 +75,12 @@ class GroupMainViewController: UIViewController, UICollectionViewDataSource, UIC
     
     // MARK: - Prepare
     
-    private func prepareView() {
+    fileprivate func prepareView() {
         view.backgroundColor = MaterialColor.orange.darken1
 
     }
     
-    private func prepareGroupHeaderView() {
+    fileprivate func prepareGroupHeaderView() {
         groupName.alpha = 0
         groupOwing.alpha = 0
         groupIcon.alpha = 0
@@ -102,7 +101,7 @@ class GroupMainViewController: UIViewController, UICollectionViewDataSource, UIC
         
     }
     
-    private func prepareGroupMembersView() {
+    fileprivate func prepareGroupMembersView() {
         
         if groupMembers.count > 0 {
             
@@ -112,7 +111,7 @@ class GroupMainViewController: UIViewController, UICollectionViewDataSource, UIC
         }
     }
     
-    private func prepareLastExpenseView() {
+    fileprivate func prepareLastExpenseView() {
         lastExpenseDetail.text = "Loading.."
         lastExpenseAmount.alpha = 0
         lastExpenseAddedBy.alpha = 0
@@ -138,9 +137,9 @@ class GroupMainViewController: UIViewController, UICollectionViewDataSource, UIC
     
     // MARK: - Fetch
     
-    private func prepareExpenseCategories(expensesRef: FIRDatabaseReference) {
+    fileprivate func prepareExpenseCategories(_ expensesRef: FIRDatabaseReference) {
         self.expenseCategories.removeAll()
-        expensesRef.child("categories").observeEventType(.Value, withBlock: { (categoriessnapshot) in
+        expensesRef.child("categories").observe(.value, with: { (categoriessnapshot) in
             if categoriessnapshot.exists() {
                 self.expenseCategories = GroupExpense.categoriesFromResults(categoriessnapshot.value! as! NSDictionary)
                 self.updateGraphData()
@@ -150,8 +149,8 @@ class GroupMainViewController: UIViewController, UICollectionViewDataSource, UIC
         })
     }
     
-    private func prepareLastExpense(expensesRef: FIRDatabaseReference) {
-        expensesRef.observeSingleEventOfType(.Value, withBlock: { (expenseSnapshot) in
+    fileprivate func prepareLastExpense(_ expensesRef: FIRDatabaseReference) {
+        expensesRef.observeSingleEvent(of: .value, with: { (expenseSnapshot) in
             if expenseSnapshot.exists() {
                 self.lastExpense = GroupExpense.expenseFromResults(self.group.lastExpense, results: expenseSnapshot.value! as! NSDictionary)
                 self.prepareLastExpenseView()
@@ -159,10 +158,10 @@ class GroupMainViewController: UIViewController, UICollectionViewDataSource, UIC
         })
     }
     
-    private func getGroupData() {
+    fileprivate func getGroupData() {
         
         if let groupRef = firebaseRef.child("groups/\(groupId)") as FIRDatabaseReference? {
-            groupRef.observeSingleEventOfType(.Value, withBlock: { (groupSnapshot) in
+            groupRef.observeSingleEvent(of: .value, with: { (groupSnapshot) in
                 if groupSnapshot.exists() {
                     self.group = Group.groupFromFirebase(self.groupId, results: groupSnapshot.value! as! NSDictionary)
                     self.prepareGroupHeaderView()
@@ -170,7 +169,7 @@ class GroupMainViewController: UIViewController, UICollectionViewDataSource, UIC
                     for member in self.group.members {
                         var user = User()
                         if let userRef = self.firebaseRef.child("users/\(member)") as FIRDatabaseReference? {
-                            userRef.observeSingleEventOfType(.Value, withBlock: { (userSnapshot) in
+                            userRef.observeSingleEvent(of: .value, with: { (userSnapshot) in
                                 user = User.userFromFirebase(userSnapshot.value! as! NSDictionary)
                                 self.groupMembers.append(user)
                                 self.prepareGroupMembersView()
@@ -190,7 +189,7 @@ class GroupMainViewController: UIViewController, UICollectionViewDataSource, UIC
 
         if let groupExpensesTotalsRef = firebaseRef.child("groupExpenses/\(groupId)/totals") as FIRDatabaseReference? {
         
-            groupExpensesTotalsRef.observeSingleEventOfType(.Value, withBlock: { (expenseTotals) in
+            groupExpensesTotalsRef.observeSingleEvent(of: .value, with: { (expenseTotals) in
                 if expenseTotals.exists() {
                     self.groupExpenseTotals = GroupExpenseTotals.totalsFromResults(self.groupId, results: expenseTotals.value! as! NSDictionary)
                     self.prepareGroupHeaderView()
@@ -204,25 +203,25 @@ class GroupMainViewController: UIViewController, UICollectionViewDataSource, UIC
 
     // MARK: - CollectionView
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return groupMembers.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("memberCell", forIndexPath: indexPath) as! AlphaCollectionCell
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "memberCell", for: indexPath) as! AlphaCollectionCell
         cell.backgroundColor = MaterialColor.white
         
         cell.nameLabel.textColor = MaterialColor.black
         
         
-        let groupMember = groupMembers[indexPath.row]
+        let groupMember = groupMembers[(indexPath as NSIndexPath).row]
         
         cell.imageView.image = UIImage(named: "default_user")
 
         
         if let photoURL = groupMember.photoURL as String? {
             if photoURL != "" {
-                cell.imageView.imageURL = NSURL(string: photoURL)
+                cell.imageView.imageURL = URL(string: photoURL)
             } 
         }
         
@@ -232,20 +231,20 @@ class GroupMainViewController: UIViewController, UICollectionViewDataSource, UIC
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView,
+    func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
-                               sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSizeMake(100, 100)
+                               sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 100, height: 100)
         
     }
 
-    func collectionView(collectionView: UICollectionView,
+    func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                                minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 10.0
     }
     
-    func collectionView(collectionView: UICollectionView, layout
+    func collectionView(_ collectionView: UICollectionView, layout
         collectionViewLayout: UICollectionViewLayout,
         minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 10.0
@@ -253,8 +252,8 @@ class GroupMainViewController: UIViewController, UICollectionViewDataSource, UIC
     
     // MARK: - Buttons
     
-    @IBAction func seeAllGroupExpenses(sender: AnyObject) {
-        if let expensesListViewController = self.storyboard?.instantiateViewControllerWithIdentifier("expensesListViewController") as? ExpensesListViewController {
+    @IBAction func seeAllGroupExpenses(_ sender: AnyObject) {
+        if let expensesListViewController = self.storyboard?.instantiateViewController(withIdentifier: "expensesListViewController") as? ExpensesListViewController {
             expensesListViewController.expenseType = .group
             expensesListViewController.groupExpensesRef = self.firebaseRef.child("groupExpenses/\(groupId)")
             expensesListViewController.groupName = self.group.name
@@ -263,9 +262,9 @@ class GroupMainViewController: UIViewController, UICollectionViewDataSource, UIC
     }
     
     
-    @IBAction func addGroupExpense(sender: AnyObject) {
+    @IBAction func addGroupExpense(_ sender: AnyObject) {
         //to do
-        if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
+        if let addExpenseVC = self.storyboard?.instantiateViewController(withIdentifier: "addExpenseController") as? AddExpenseController {
 
             var owing = [String : Float]()
             owing.removeAll()
@@ -298,13 +297,13 @@ class GroupMainViewController: UIViewController, UICollectionViewDataSource, UIC
  
 
     // MARK: - ChartView
-    func chartValueSelected(chartView: ChartViewBase, entry: ChartDataEntry, dataSetIndex: Int, highlight: ChartHighlight) {
+    func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, dataSetIndex: Int, highlight: Highlight) {
         print(entry)
         print(dataSetIndex)
         print(highlight)
     }
     
-    private func prepareChartView() {
+    fileprivate func prepareChartView() {
         
         
         
@@ -319,60 +318,16 @@ class GroupMainViewController: UIViewController, UICollectionViewDataSource, UIC
         groupChartView.drawHoleEnabled = false
         groupChartView.usePercentValuesEnabled = true
         groupChartView.drawSlicesUnderHoleEnabled = true
-        groupChartView.legend.position = .RightOfChartCenter
+        groupChartView.legend.position = .rightOfChartCenter
         
-        groupChartView.legend.form = .Square
+        groupChartView.legend.form = .square
         groupChartView.drawSliceTextEnabled = false
         
         groupChartView.alpha = 0
     }
     
-    private func prepareChartViewData(chartData: [String: Float]) {
-        if chartData.count > 0 {
-            
-            xVals.removeAll()
-            yVals.removeAll()
-            
-            var i = 0
-            
-            for expense in chartData {
-                
-                if expense.1 > 0 {
-                    let entry = BarChartDataEntry(value: Double(expense.1), xIndex: i)
-                    yVals.append(entry)
-                    i = i + 1
-                    xVals.append(expense.0)
-                }
-                
-            }
-            
-            let dataSet = PieChartDataSet(yVals: yVals, label: "")
-            
-            dataSet.sliceSpace = 2.0
-            
-            let colors = [MaterialColor.red.darken1,MaterialColor.blue.darken1,MaterialColor.green.darken1,MaterialColor.orange.darken1,MaterialColor.amber.darken1,MaterialColor.indigo.darken1,MaterialColor.purple.darken1,MaterialColor.yellow.darken1]
-            
-            
-            dataSet.colors = colors.sort({_, _ in arc4random() % 2 == 0})
-            
-            //dataSet.colors = ChartColorTemplates.liberty()
-            let data = PieChartData(xVals: xVals, dataSets: [dataSet])
-            
-            let pFormatter = NSNumberFormatter()
-            pFormatter.numberStyle = .PercentStyle
-            pFormatter.maximumFractionDigits = 1
-            pFormatter.percentSymbol = " %"
-            pFormatter.multiplier = 1
-            data.setValueFormatter(pFormatter)
-            data.setValueFont(UIFont.systemFontOfSize(10))
-            data.setValueTextColor(MaterialColor.white)
-            
-            groupChartView.alpha = 1
-            groupChartView.data = data
-            groupChartView.animate(yAxisDuration: 0.5, easingOption: ChartEasingOption.EaseOutCirc)
-            
-            
-        }
+    fileprivate func prepareChartViewData(_ chartData: [String: Float]) {
+        
     }
     
     

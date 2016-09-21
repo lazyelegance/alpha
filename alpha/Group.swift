@@ -8,7 +8,7 @@
 
 import Foundation
 
-typealias CompletionHandler = (success:Bool) -> Void
+typealias CompletionHandler = (_ success:Bool) -> Void
 
 struct Group {
     var groupId: String
@@ -33,7 +33,7 @@ struct Group {
     }
     
     
-    static func membersFromResults(results: NSDictionary)  -> [String : String]
+    static func membersFromResults(_ results: NSDictionary)  -> [String : String]
     {
         var member = [String: String]()
         if results.count > 0 {
@@ -51,7 +51,7 @@ struct Group {
     }
     
     
-    static func groupFromFirebase(groupId: String, results: NSDictionary) -> Group {
+    static func groupFromFirebase(_ groupId: String, results: NSDictionary) -> Group {
         var group = Group()
         
         group.groupId = groupId

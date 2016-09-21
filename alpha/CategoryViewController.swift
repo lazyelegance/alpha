@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Material
+
 
 
 
@@ -49,15 +49,15 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         // Dispose of any resources that can be recreated.
     }
     
-    private func prepareView() {
+    fileprivate func prepareView() {
         view.backgroundColor = MaterialColor.indigo.accent1
-        backButton.setImage(MaterialIcon.arrowBack, forState: .Normal)
+        backButton.setImage(MaterialIcon.arrowBack, for: .normal)
         tableView.backgroundColor = MaterialColor.clear
     }
     
 
     
-    private func prepareItems() {
+    fileprivate func prepareItems() {
         defaultCategories.removeAll()
         defaultCategories.append(Category(name: "FOOD"))
         defaultCategories.append(Category(name: "ENTERTAINMENT"))
@@ -67,7 +67,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         defaultCategories.append(Category(name: "UTILITIES"))
         
         for defaultCategory in defaultCategories {
-           if categories.contains({ (category) -> Bool in category.name == defaultCategory.name }) {
+           if categories.contains(where: { (category) -> Bool in category.name == defaultCategory.name }) {
             print(defaultCategory)
             
            } else {
@@ -75,58 +75,58 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
             }
         }
         
-        categories.sortInPlace { (a, b) -> Bool in a.counter > b.counter }
+        categories.sort { (a, b) -> Bool in a.counter > b.counter }
                 
         tableView.reloadData()
         
     }
     
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categories.count + 1
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("categoryCell", forIndexPath: indexPath) as! CategoryCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "categoryCell", for: indexPath) as! CategoryCell
         cell.backgroundColor = MaterialColor.clear
         cell.contentView.backgroundColor = MaterialColor.clear
         
         cell.categoryLabel.font = categoryFont
         cell.categoryLabel.textColor = MaterialColor.white
-        if indexPath.row == categories.count {
+        if (indexPath as NSIndexPath).row == categories.count {
             cell.categoryLabel.text = addNewText
             return cell
         }
-        let category = categories[indexPath.row]
+        let category = categories[(indexPath as NSIndexPath).row]
         print(category)
-        cell.categoryLabel.text = category.name.uppercaseString
+        cell.categoryLabel.text = category.name.uppercased()
         return cell
         
     }
 
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 30
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return categories.count + 1
         
     }
     
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row != categories.count {
-            if let category = (categories[indexPath.row]).name as String? {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).row != categories.count {
+            if let category = (categories[(indexPath as NSIndexPath).row]).name as String? {
                 switch expenseType {
                 case .user:
-                    if let finishVC = self.storyboard?.instantiateViewControllerWithIdentifier("finishViewController") as? FinishViewController {
+                    if let finishVC = self.storyboard?.instantiateViewController(withIdentifier: "finishViewController") as? FinishViewController {
                         newExpense.category = category
                         finishVC.newExpense = newExpense
                         self.navigationController?.pushViewController(finishVC, animated: true)
                     }
                     
                 case .group:
-                    if let parityViewController = self.storyboard?.instantiateViewControllerWithIdentifier("parityViewController") as? ParityViewController {
+                    if let parityViewController = self.storyboard?.instantiateViewController(withIdentifier: "parityViewController") as? ParityViewController {
                         newGroupExpense.category = category
                         parityViewController.newGroupExpense = newGroupExpense
                         //                    ParityViewController.expenseType = .group //Defaulting to group for now
@@ -136,7 +136,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
             }
         } else {
             
-            if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
+            if let addExpenseVC = self.storyboard?.instantiateViewController(withIdentifier: "addExpenseController") as? AddExpenseController {
                 
                 addExpenseVC.currentStep = .category
                 addExpenseVC.expenseType = self.expenseType
@@ -154,9 +154,9 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAtIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("categoryCell", forIndexPath: indexPath) as! AlphaCollectionCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "categoryCell", for: indexPath) as! AlphaCollectionCell
         cell.backgroundColor = MaterialColor.clear
         
         cell.layer.masksToBounds = true
@@ -164,63 +164,63 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
 
         cell.categoryButton.titleLabel?.font = categoryFont
         
-        if indexPath.row == categories.count {
+        if (indexPath as NSIndexPath).row == categories.count {
 
             
-            cell.categoryButton.setTitle(addNewText.uppercaseString, forState: .Normal)
+            cell.categoryButton.setTitle(addNewText.uppercased(), for: .normal)
             
             return cell
         }
         
-        let category = categories[indexPath.row]
+        let category = categories[(indexPath as NSIndexPath).row]
 
-        cell.categoryButton.setTitle(category.name.uppercaseString, forState: .Normal)
+        cell.categoryButton.setTitle(category.name.uppercased(), for: .normal)
         
         
         return cell
         
     }
     
-    func collectionView(collectionView: UICollectionView,
+    func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
-                               sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        if indexPath.row == categories.count {
-            let categorySize = (addNewText.uppercaseString as NSString).sizeWithAttributes([NSFontAttributeName: categoryFont])
-            return CGSizeMake(categorySize.width + 40, 30)
+                               sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
+        if (indexPath as NSIndexPath).row == categories.count {
+            let categorySize = (addNewText.uppercased() as NSString).size(attributes: [NSFontAttributeName: categoryFont])
+            return CGSize(width: categorySize.width + 40, height: 30)
         } else {
-            let category = categories[indexPath.row]
-            let categorySize = (category.name.uppercaseString as NSString).sizeWithAttributes([NSFontAttributeName: categoryFont])
-            return CGSizeMake(categorySize.width + 40, 30)
+            let category = categories[(indexPath as NSIndexPath).row]
+            let categorySize = (category.name.uppercased() as NSString).size(attributes: [NSFontAttributeName: categoryFont])
+            return CGSize(width: categorySize.width + 40, height: 30)
         }
         
     }
     
-    func collectionView(collectionView: UICollectionView,
+    func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                                minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 5
     }
     
-    func collectionView(collectionView: UICollectionView, layout
+    func collectionView(_ collectionView: UICollectionView, layout
         collectionViewLayout: UICollectionViewLayout,
         minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 5
     }
     
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row != categories.count {
-            if let category = (categories[indexPath.row]).name as String? {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).row != categories.count {
+            if let category = (categories[(indexPath as NSIndexPath).row]).name as String? {
                 switch expenseType {
                 case .user:
-                    if let finishVC = self.storyboard?.instantiateViewControllerWithIdentifier("finishViewController") as? FinishViewController {
+                    if let finishVC = self.storyboard?.instantiateViewController(withIdentifier: "finishViewController") as? FinishViewController {
                         newExpense.category = category
                         finishVC.newExpense = newExpense
                         self.navigationController?.pushViewController(finishVC, animated: true)
                     }
                     
                 case .group:
-                    if let parityViewController = self.storyboard?.instantiateViewControllerWithIdentifier("parityViewController") as? ParityViewController {
+                    if let parityViewController = self.storyboard?.instantiateViewController(withIdentifier: "parityViewController") as? ParityViewController {
                         newGroupExpense.category = category
                         parityViewController.newGroupExpense = newGroupExpense
                         //                    ParityViewController.expenseType = .group //Defaulting to group for now
@@ -230,7 +230,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
             }
         } else {
             
-            if let addExpenseVC = self.storyboard?.instantiateViewControllerWithIdentifier("addExpenseController") as? AddExpenseController {
+            if let addExpenseVC = self.storyboard?.instantiateViewController(withIdentifier: "addExpenseController") as? AddExpenseController {
                 
                 addExpenseVC.currentStep = .category
                 addExpenseVC.expenseType = self.expenseType
@@ -247,8 +247,8 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
 
     }
     
-    @IBAction func backOneStep(sender: AnyObject) {
-        self.navigationController?.popViewControllerAnimated(true)
+    @IBAction func backOneStep(_ sender: AnyObject) {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func getMaxCellWidth() -> CGFloat {
@@ -256,14 +256,14 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         var categoryWidths = [CGFloat]()
         
         for category in self.categories {
-            let cellSize = (category.name.uppercaseString as NSString).sizeWithAttributes([NSFontAttributeName: categoryFont])
+            let cellSize = (category.name.uppercased() as NSString).size(attributes: [NSFontAttributeName: categoryFont])
             categoryWidths.append(cellSize.width)
         }
-        let cellSize = (addNewText.uppercaseString as NSString).sizeWithAttributes([NSFontAttributeName: categoryFont])
+        let cellSize = (addNewText.uppercased() as NSString).size(attributes: [NSFontAttributeName: categoryFont])
         categoryWidths.append(cellSize.width)
         
-        if categoryWidths.maxElement() != nil {
-            return categoryWidths.maxElement()! + 10
+        if categoryWidths.max() != nil {
+            return categoryWidths.max()! + 10
         } else {
             return 80
         }

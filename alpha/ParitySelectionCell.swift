@@ -8,7 +8,7 @@
 
 import UIKit
 import Firebase
-import Material
+
 
 class ParitySelectionCell: UITableViewCell {
     
@@ -21,10 +21,10 @@ class ParitySelectionCell: UITableViewCell {
             print("IS CLICKED DID SET")
             if let item = isClicked {
                 if item == true {
-                    profileImageView.layer.borderColor = MaterialColor.white.CGColor
+                    profileImageView.layer.borderColor = MaterialColor.white.cgColor
                     userNameLabel.textColor = MaterialColor.white
                 } else {
-                    profileImageView.layer.borderColor = MaterialColor.blueGrey.base.CGColor
+                    profileImageView.layer.borderColor = MaterialColor.blueGrey.base.cgColor
                     userNameLabel.textColor = MaterialColor.blueGrey.base
                 }
             }
@@ -37,14 +37,14 @@ class ParitySelectionCell: UITableViewCell {
     var user: User? {
         didSet {
             
-            self.selectionStyle = .None
+            self.selectionStyle = .none
             
             if let item = user {
                 self.backgroundColor = MaterialColor.clear
                 self.contentView.backgroundColor = MaterialColor.clear
                 
                 self.userNameLabel.textColor = MaterialColor.white
-                self.userNameLabel.font = RobotoFont.boldWithSize(20)
+                self.userNameLabel.font = UIFont.systemFont(ofSize: 20) //RobotoFont.boldWithSize(20)
                 self.userNameLabel.text = item.name
                 
                 
@@ -52,7 +52,7 @@ class ParitySelectionCell: UITableViewCell {
                 profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
                 
                 
-                profileImageView.imageURL = NSURL(string: "https://lh3.googleusercontent.com/-r0dVVRlY-DE/AAAAAAAAAAI/AAAAAAAAADw/F5ns-7HdrkE/photo.jpg")
+                profileImageView.imageURL = URL(string: "https://lh3.googleusercontent.com/-r0dVVRlY-DE/AAAAAAAAAAI/AAAAAAAAADw/F5ns-7HdrkE/photo.jpg")
                 
             }
         }
@@ -63,7 +63,7 @@ class ParitySelectionCell: UITableViewCell {
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state

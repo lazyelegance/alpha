@@ -7,10 +7,9 @@
 //
 
 import UIKit
-import Material
 
 protocol ExpenseCellDelegate {
-    func deleteUserExpense(expense: Expense)
+    func deleteUserExpense(_ expense: Expense)
 }
 
 class ExpenseCell: MaterialTableViewCell {
@@ -39,15 +38,15 @@ class ExpenseCell: MaterialTableViewCell {
                 expenseDescription.text = item.description
                 billAmountLabel.text = "\(item.billAmount)"
                 
-                categoryButton.setTitle(item.category.uppercaseString, forState: .Normal)
-                categoryButton.setTitleColor(MaterialColor.blueGrey.lighten1, forState: .Normal)
+                categoryButton.setTitle(item.category.uppercased(), for: .normal)
+                categoryButton.setTitleColor(MaterialColor.blueGrey.lighten1, for: .normal)
                 
-                let formatter = NSDateFormatter()
+                let formatter = DateFormatter()
                 formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
                 
-                if let itemdate = formatter.dateFromString(item.dateAdded) {
+                if let itemdate = formatter.date(from: item.dateAdded) {
                     formatter.dateFormat = "dd MMM yyyy"
-                    dateAddedLabel.text = formatter.stringFromDate(itemdate)
+                    dateAddedLabel.text = formatter.string(from: itemdate)
                 } else {
                     dateAddedLabel.alpha = 0
                 }
@@ -62,7 +61,7 @@ class ExpenseCell: MaterialTableViewCell {
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state

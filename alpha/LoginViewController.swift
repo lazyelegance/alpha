@@ -10,11 +10,38 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseDatabase
-import Material
 
 
 
 class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate {
+    public func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        if let error = error {
+            print(error.localizedDescription)
+            return
+        }
+        // ...
+        
+        let authentication = user.authentication
+        let credential = FIRGoogleAuthProvider.credential(withIDToken: (authentication?.idToken)!,
+                                                          accessToken: (authentication?.accessToken)!)
+        // ...
+        
+        print("signing in")
+        print(user.profile.email)
+        print(user.profile.imageURL(withDimension: 400))
+        
+        FIRAuth.auth()?.signIn(with: credential) { (firUser, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            } else {
+                //firUser?.photoURL = user.profile.imageURLWithDimension(400)
+                self.updateUserDBRecord(firUser!)
+                self.navigationController?.popToRootViewController(animated: true)
+            }
+        }
+    }
+
     
     var alphaRef = FIRDatabaseReference()
     
@@ -27,14 +54,14 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
         
-        let signInButton = GIDSignInButton(frame: CGRectMake(30, 50, 100, 50))
+        let signInButton = GIDSignInButton(frame: CGRect(x: 30, y: 50, width: 100, height: 50))
         
-        signInButton.style = .Wide
+        signInButton.style = .wide
         
         let signInButtonWidth = signInButton.frame.size.width
         print(signInButtonWidth)
         
-        signInButton.frame.origin = CGPointMake(view.bounds.width/2 - signInButtonWidth/2, view.bounds.height - 100)
+        signInButton.frame.origin = CGPoint(x: view.bounds.width/2 - signInButtonWidth/2, y: view.bounds.height - 100)
         
         view.addSubview(signInButton)
 
@@ -48,7 +75,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
     
     
     
-    func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!,
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!,
                 withError error: NSError!) {
         if let error = error {
             print(error.localizedDescription)
@@ -57,38 +84,38 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
         // ...
         
         let authentication = user.authentication
-        let credential = FIRGoogleAuthProvider.credentialWithIDToken(authentication.idToken,
-                                                                     accessToken: authentication.accessToken)
+        let credential = FIRGoogleAuthProvider.credential(withIDToken: (authentication?.idToken)!,
+                                                                     accessToken: (authentication?.accessToken)!)
         // ...
         
         print("signing in")
         print(user.profile.email)
-        print(user.profile.imageURLWithDimension(400))
+        print(user.profile.imageURL(withDimension: 400))
         
-        FIRAuth.auth()?.signInWithCredential(credential) { (firUser, error) in
+        FIRAuth.auth()?.signIn(with: credential) { (firUser, error) in
             if let error = error {
                 print(error.localizedDescription)
                 return
             } else {
                 //firUser?.photoURL = user.profile.imageURLWithDimension(400)
                 self.updateUserDBRecord(firUser!)
-                self.navigationController?.popToRootViewControllerAnimated(true)
+                self.navigationController?.popToRootViewController(animated: true)
             }
         }
     }
     
-    func signIn(signIn: GIDSignIn!, didDisconnectWithUser user:GIDGoogleUser!,
+    func sign(_ signIn: GIDSignIn!, didDisconnectWith user:GIDGoogleUser!,
                 withError error: NSError!) {
         // Perform any operations when the user disconnects from app here.
         // ...
     }
     
     
-    func updateUserDBRecord(user: FIRUser) {
+    func updateUserDBRecord(_ user: FIRUser) {
         print(user.photoURL)
         print("\(user.photoURL)")
         
-        alphaRef.child("users/\(user.uid)").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+        alphaRef.child("users/\(user.uid)").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
                 print(snapshot)
             } else {
@@ -100,7 +127,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
         })
         
         
-        alphaRef.child("groups").queryOrderedByChild("members").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+        alphaRef.child("groups").queryOrdered(byChild: "members").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
                 
                 var groups = [String : Bool]()
